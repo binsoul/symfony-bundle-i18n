@@ -7,3 +7,7 @@ services:
     BinSoul\Symfony\Bundle\I18n\Repository\:
         resource: '../../Repository/*'
         public: true
+
+    BinSoul\Symfony\Bundle\I18n\Translation\Translator:
+        arguments: ['@translator']
+        public: true

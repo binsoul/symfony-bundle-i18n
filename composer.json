@@ -26,6 +26,7 @@
         "symfony/dependency-injection": "^4|^5",
         "symfony/http-kernel": "^4|^5",
         "symfony/intl": "^4|^5",
+        "symfony/translation": "^4|^5",
         "doctrine/doctrine-fixtures-bundle": "^3"
     },
     "require-dev": {
