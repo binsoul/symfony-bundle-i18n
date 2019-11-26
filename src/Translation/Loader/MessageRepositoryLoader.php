@@ -24,6 +24,10 @@ class MessageRepositoryLoader implements LoaderInterface
      * @var LocaleRepository
      */
     private $localeRepository;
+    /**
+     * @var bool|null
+     */
+    private $tablesExist;
 
     /**
      * Constructs an instance of this class.
@@ -36,6 +40,10 @@ class MessageRepositoryLoader implements LoaderInterface
 
     public function load($resource, $locale, $domain = 'messages')
     {
+        if (!$this->isEnabled()) {
+            return new MessageCatalogue($locale);
+        }
+
         $localeEntity = null;
         $parsedLocale = DefaultLocale::fromString($locale, '_');
         while (!$parsedLocale->isRoot()) {
@@ -61,5 +69,17 @@ class MessageRepositoryLoader implements LoaderInterface
         $catalogue->add($messages, $domain);
 
         return $catalogue;
+    }
+
+    /**
+     * Indicates if translations can be loaded from the database.
+     */
+    private function isEnabled(): bool
+    {
+        if ($this->tablesExist === null) {
+            $this->tablesExist = $this->localeRepository->tableExists() && $this->messageRepository->tableExists();
+        }
+
+        return $this->tablesExist;
     }
 }
