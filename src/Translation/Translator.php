@@ -42,7 +42,7 @@ class Translator implements CommonTranslator
         }
 
         $this->translator = $translator;
-        $this->locale = $locale ?? DefaultLocale::fromString($translator->getLocale(), '_');
+        $this->locale = $locale ?? DefaultLocale::fromString(\Locale::getDefault());
     }
 
     public function translate($key, array $parameters = [], ?string $domain = null): TranslatedMessage
