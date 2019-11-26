@@ -20,14 +20,14 @@ class NumberFormatterExtension extends AbstractExtension
     /**
      * @var IntlNumberFormatter
      */
-    private $numberFormatter;
+    private $formatter;
 
     /**
      * Constructs an instance of this class.
      */
     public function __construct(IntlNumberFormatter $numberFormatter)
     {
-        $this->numberFormatter = $numberFormatter;
+        $this->formatter = $numberFormatter;
     }
 
     /**
@@ -98,13 +98,13 @@ class NumberFormatterExtension extends AbstractExtension
     private function getFormatter($locale): NumberFormatter
     {
         if ($locale === null) {
-            return $this->numberFormatter;
+            return $this->formatter;
         }
 
         if (!($locale instanceof Locale)) {
             $locale = DefaultLocale::fromString((string) $locale);
         }
 
-        return $this->numberFormatter->withLocale($locale);
+        return $this->formatter->withLocale($locale);
     }
 }
