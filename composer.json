@@ -20,6 +20,7 @@
     "require": {
         "php": "^7.2",
         "binsoul/common-i18n": "*@dev",
+        "binsoul/common-i18n-intl": "*@dev",
         "binsoul/symfony-bundle-doctrine": "*@dev",
         "doctrine/orm": "^2",
         "symfony/config": "^4|^5",
