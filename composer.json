@@ -27,7 +27,8 @@
         "symfony/http-kernel": "^4|^5",
         "symfony/intl": "^4|^5",
         "symfony/translation": "^4|^5",
-        "doctrine/doctrine-fixtures-bundle": "^3"
+        "doctrine/doctrine-fixtures-bundle": "^3",
+        "twig/twig": "^3.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2",
