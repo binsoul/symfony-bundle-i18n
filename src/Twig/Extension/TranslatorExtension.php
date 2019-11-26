@@ -19,6 +19,9 @@ use Twig\TwigFilter;
  */
 class TranslatorExtension extends AbstractExtension
 {
+    /**
+     * @var Translator
+     */
     private $translator;
 
     /**
