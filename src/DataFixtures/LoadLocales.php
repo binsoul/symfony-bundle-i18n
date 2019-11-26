@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
 class LoadLocales extends Fixture implements DependentFixtureInterface
 {
-    private static $rows = [
+    public static $rows = [
         //id, locale_code, lang_iso3, country_iso2
         [1, 'af', 'afr', null],
         [2, 'af-NA', 'afr', 'NA'],

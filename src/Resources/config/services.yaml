@@ -11,3 +11,11 @@ services:
     BinSoul\Symfony\Bundle\I18n\Translation\Translator:
         arguments: ['@translator']
         public: true
+
+    BinSoul\Symfony\Bundle\I18n\Translation\DatabaseTranslator:
+        autowire: false
+        autoconfigure: false
+
+    BinSoul\Symfony\Bundle\I18n\Translation\Loader\MessageRepositoryLoader:
+        tags:
+            - { name: translation.loader, alias: db }
