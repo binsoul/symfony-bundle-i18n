@@ -32,7 +32,7 @@ class AddMessageResourcesPass implements CompilerPassInterface
                 $options['resource_files'][$locale] = [];
             }
 
-            $options['resource_files'][$locale][] = ['messages.'.$locale.'.db'];
+            $options['resource_files'][$locale][] = 'messages.'.$locale.'.db';
         }
 
         $translator->replaceArgument(4, $options);
