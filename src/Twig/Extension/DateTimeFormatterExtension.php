@@ -4,28 +4,28 @@ declare(strict_types=1);
 
 namespace BinSoul\Symfony\Bundle\I18n\Twig\Extension;
 
-use BinSoul\Common\I18n\DateTimeFormatter;
+use BinSoul\Common\I18n\DateTimeFormatter as CommonDateTimeFormatter;
 use BinSoul\Common\I18n\DefaultLocale;
-use BinSoul\Common\I18n\Intl\IntlDateTimeFormatter;
 use BinSoul\Common\I18n\Locale;
+use BinSoul\Symfony\Bundle\I18n\Formatter\DateTimeFormatter;
 use DateTimeInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
 /**
- * Provides integration of the {@see IntlDateTimeFormatter} with Twig.
+ * Provides integration of the {@see DateTimeFormatter} with Twig.
  */
 class DateTimeFormatterExtension extends AbstractExtension
 {
     /**
-     * @var IntlDateTimeFormatter
+     * @var DateTimeFormatter
      */
     private $formatter;
 
     /**
      * Constructs an instance of this class.
      */
-    public function __construct(IntlDateTimeFormatter $dateTimeFormatter)
+    public function __construct(DateTimeFormatter $dateTimeFormatter)
     {
         $this->formatter = $dateTimeFormatter;
     }
@@ -117,7 +117,7 @@ class DateTimeFormatterExtension extends AbstractExtension
      *
      * @param Locale|string|null $locale
      */
-    private function getFormatter($locale): DateTimeFormatter
+    private function getFormatter($locale): CommonDateTimeFormatter
     {
         if ($locale === null) {
             return $this->formatter;

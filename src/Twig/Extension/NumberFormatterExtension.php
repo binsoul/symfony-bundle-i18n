@@ -5,27 +5,27 @@ declare(strict_types=1);
 namespace BinSoul\Symfony\Bundle\I18n\Twig\Extension;
 
 use BinSoul\Common\I18n\DefaultLocale;
-use BinSoul\Common\I18n\Intl\IntlNumberFormatter;
 use BinSoul\Common\I18n\Locale;
-use BinSoul\Common\I18n\NumberFormatter;
+use BinSoul\Common\I18n\NumberFormatter as CommonNumberFormatter;
 use BinSoul\Symfony\Bundle\I18n\Entity\CurrencyEntity;
+use BinSoul\Symfony\Bundle\I18n\Formatter\NumberFormatter;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
 /**
- * Provides integration of the {@see IntlNumberFormatter} with Twig.
+ * Provides integration of the {@see NumberFormatter} with Twig.
  */
 class NumberFormatterExtension extends AbstractExtension
 {
     /**
-     * @var IntlNumberFormatter
+     * @var NumberFormatter
      */
     private $formatter;
 
     /**
      * Constructs an instance of this class.
      */
-    public function __construct(IntlNumberFormatter $numberFormatter)
+    public function __construct(NumberFormatter $numberFormatter)
     {
         $this->formatter = $numberFormatter;
     }
@@ -95,7 +95,7 @@ class NumberFormatterExtension extends AbstractExtension
      *
      * @param Locale|string|null $locale
      */
-    private function getFormatter($locale): NumberFormatter
+    private function getFormatter($locale): CommonNumberFormatter
     {
         if ($locale === null) {
             return $this->formatter;
