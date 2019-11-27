@@ -27,3 +27,6 @@ services:
     BinSoul\Symfony\Bundle\I18n\Twig\Extension\:
         resource: '../../Twig/Extension/*'
         tags: ['twig.extension']
+
+    BinSoul\Symfony\Bundle\I18n\Service\Manager: ~
+    BinSoul\Symfony\Bundle\I18n\I18nManager: '@BinSoul\Symfony\Bundle\I18n\Service\Manager'
