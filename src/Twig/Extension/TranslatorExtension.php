@@ -10,6 +10,7 @@ use BinSoul\Common\I18n\Message;
 use BinSoul\Common\I18n\PluralizedMessage;
 use BinSoul\Common\I18n\TranslatedMessage;
 use BinSoul\Common\I18n\Translator as CommonTranslator;
+use BinSoul\Symfony\Bundle\I18n\I18nManager;
 use BinSoul\Symfony\Bundle\I18n\Translation\Translator;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -20,16 +21,16 @@ use Twig\TwigFilter;
 class TranslatorExtension extends AbstractExtension
 {
     /**
-     * @var Translator
+     * @var I18nManager
      */
-    private $translator;
+    private $i18nManager;
 
     /**
      * Constructs an instance of this class.
      */
-    public function __construct(Translator $translator)
+    public function __construct(I18nManager $i18nManager)
     {
-        $this->translator = $translator;
+        $this->i18nManager = $i18nManager;
     }
 
     /**
@@ -76,14 +77,15 @@ class TranslatorExtension extends AbstractExtension
      */
     private function getTranslator($locale): CommonTranslator
     {
+        $translator = $this->i18nManager->getEnvironment()->getTranslator();
         if ($locale === null) {
-            return $this->translator;
+            return $translator;
         }
 
         if (!($locale instanceof Locale)) {
             $locale = DefaultLocale::fromString((string) $locale);
         }
 
-        return $this->translator->withLocale($locale);
+        return $translator->withLocale($locale);
     }
 }

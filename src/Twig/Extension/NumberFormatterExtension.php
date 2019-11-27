@@ -9,6 +9,7 @@ use BinSoul\Common\I18n\Locale;
 use BinSoul\Common\I18n\NumberFormatter as CommonNumberFormatter;
 use BinSoul\Symfony\Bundle\I18n\Entity\CurrencyEntity;
 use BinSoul\Symfony\Bundle\I18n\Formatter\NumberFormatter;
+use BinSoul\Symfony\Bundle\I18n\I18nManager;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
@@ -18,16 +19,16 @@ use Twig\TwigFilter;
 class NumberFormatterExtension extends AbstractExtension
 {
     /**
-     * @var NumberFormatter
+     * @var I18nManager
      */
-    private $formatter;
+    private $i18nManager;
 
     /**
      * Constructs an instance of this class.
      */
-    public function __construct(NumberFormatter $numberFormatter)
+    public function __construct(I18nManager $i18nManager)
     {
-        $this->formatter = $numberFormatter;
+        $this->i18nManager = $i18nManager;
     }
 
     /**
@@ -97,14 +98,15 @@ class NumberFormatterExtension extends AbstractExtension
      */
     private function getFormatter($locale): CommonNumberFormatter
     {
+        $formatter = $this->i18nManager->getEnvironment()->getNumberFormatter();
         if ($locale === null) {
-            return $this->formatter;
+            return $formatter;
         }
 
         if (!($locale instanceof Locale)) {
             $locale = DefaultLocale::fromString((string) $locale);
         }
 
-        return $this->formatter->withLocale($locale);
+        return $formatter->withLocale($locale);
     }
 }

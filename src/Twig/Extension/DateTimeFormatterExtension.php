@@ -8,6 +8,7 @@ use BinSoul\Common\I18n\DateTimeFormatter as CommonDateTimeFormatter;
 use BinSoul\Common\I18n\DefaultLocale;
 use BinSoul\Common\I18n\Locale;
 use BinSoul\Symfony\Bundle\I18n\Formatter\DateTimeFormatter;
+use BinSoul\Symfony\Bundle\I18n\I18nManager;
 use DateTimeInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -18,16 +19,16 @@ use Twig\TwigFilter;
 class DateTimeFormatterExtension extends AbstractExtension
 {
     /**
-     * @var DateTimeFormatter
+     * @var I18nManager
      */
-    private $formatter;
+    private $i18nManager;
 
     /**
      * Constructs an instance of this class.
      */
-    public function __construct(DateTimeFormatter $dateTimeFormatter)
+    public function __construct(I18nManager $i18nManager)
     {
-        $this->formatter = $dateTimeFormatter;
+        $this->i18nManager = $i18nManager;
     }
 
     /**
@@ -119,14 +120,15 @@ class DateTimeFormatterExtension extends AbstractExtension
      */
     private function getFormatter($locale): CommonDateTimeFormatter
     {
+        $formatter = $this->i18nManager->getEnvironment()->getDateTimeFormatter();
         if ($locale === null) {
-            return $this->formatter;
+            return $formatter;
         }
 
         if (!($locale instanceof Locale)) {
             $locale = DefaultLocale::fromString((string) $locale);
         }
 
-        return $this->formatter->withLocale($locale);
+        return $formatter->withLocale($locale);
     }
 }
