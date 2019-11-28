@@ -8,6 +8,7 @@ use BinSoul\Common\I18n\AddressFormatter;
 use BinSoul\Common\I18n\DateTimeFormatter;
 use BinSoul\Common\I18n\Locale;
 use BinSoul\Common\I18n\NumberFormatter;
+use BinSoul\Common\I18n\SlugGenerator;
 use BinSoul\Common\I18n\Translator;
 
 /**
@@ -39,4 +40,9 @@ interface I18nEnvironment
      * Returns an object which can translate strings.
      */
     public function getTranslator(): Translator;
+
+    /**
+     * Returns an object which can generate slugs.
+     */
+    public function getSlugGenerator(): SlugGenerator;
 }

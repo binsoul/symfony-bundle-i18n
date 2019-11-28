@@ -8,12 +8,14 @@ use BinSoul\Common\I18n\AddressFormatter as CommonAddressFormatter;
 use BinSoul\Common\I18n\DateTimeFormatter as CommonDateTimeFormatter;
 use BinSoul\Common\I18n\Locale;
 use BinSoul\Common\I18n\NumberFormatter as CommonNumberFormatter;
+use BinSoul\Common\I18n\SlugGenerator as CommonSlugGenerator;
 use BinSoul\Common\I18n\Translator as CommonTranslator;
 use BinSoul\Symfony\Bundle\I18n\Formatter\AddressFormatter;
 use BinSoul\Symfony\Bundle\I18n\Formatter\DateTimeFormatter;
 use BinSoul\Symfony\Bundle\I18n\Formatter\NumberFormatter;
 use BinSoul\Symfony\Bundle\I18n\I18nEnvironment;
 use BinSoul\Symfony\Bundle\I18n\Translation\Translator;
+use BinSoul\Symfony\Bundle\I18n\Transliterator\SlugGenerator;
 
 class Environment implements I18nEnvironment
 {
@@ -37,6 +39,10 @@ class Environment implements I18nEnvironment
      * @var Translator
      */
     private $translator;
+    /**
+     * @var SlugGenerator|null
+     */
+    private $slugGenerator;
 
     /**
      * Constructs an instance of this class.
@@ -78,5 +84,14 @@ class Environment implements I18nEnvironment
     public function getTranslator(): CommonTranslator
     {
         return $this->translator;
+    }
+
+    public function getSlugGenerator(): CommonSlugGenerator
+    {
+        if ($this->slugGenerator === null) {
+            $this->slugGenerator = new SlugGenerator($this->locale);
+        }
+
+        return $this->slugGenerator;
     }
 }
