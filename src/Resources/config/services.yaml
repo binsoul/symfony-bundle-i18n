@@ -4,6 +4,10 @@ services:
         autoconfigure: true
         public: false
 
+    BinSoul\Symfony\Bundle\I18n\DataFixtures\:
+        resource: '../../DataFixtures/*'
+        tags: [doctrine.fixture.orm]
+
     BinSoul\Symfony\Bundle\I18n\Repository\:
         resource: '../../Repository/*'
         public: true
