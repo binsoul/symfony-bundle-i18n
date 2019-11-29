@@ -7,12 +7,13 @@ namespace BinSoul\Symfony\Bundle\I18n\DataFixtures;
 use BinSoul\Symfony\Bundle\I18n\Entity\CountryEntity;
 use BinSoul\Symfony\Bundle\I18n\Repository\ContinentRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Id\AssignedGenerator;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
-class LoadCountries extends Fixture implements DependentFixtureInterface
+class LoadCountries extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
     private static $rows = [
         [1, 3, 'Afghanistan', 'AF', 'AFG', '004', 'AFG', 0.000000, 0.000000],
@@ -316,5 +317,10 @@ class LoadCountries extends Fixture implements DependentFixtureInterface
     public function getDependencies(): array
     {
         return [LoadContinents::class];
+    }
+
+    public static function getGroups(): array
+    {
+        return ['binsoul/symfony-bundle-i18n'];
     }
 }

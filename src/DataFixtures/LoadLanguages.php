@@ -6,11 +6,12 @@ namespace BinSoul\Symfony\Bundle\I18n\DataFixtures;
 
 use BinSoul\Symfony\Bundle\I18n\Entity\LanguageEntity;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Id\AssignedGenerator;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
-class LoadLanguages extends Fixture
+class LoadLanguages extends Fixture implements FixtureGroupInterface
 {
     private static $rows = [
         [1, 'Abkhaz', 'ab', 'abk', 'ltr'],
@@ -214,5 +215,10 @@ class LoadLanguages extends Fixture
         }
 
         $manager->flush();
+    }
+
+    public static function getGroups(): array
+    {
+        return ['binsoul/symfony-bundle-i18n'];
     }
 }

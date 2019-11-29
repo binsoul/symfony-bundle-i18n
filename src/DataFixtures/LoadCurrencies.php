@@ -6,11 +6,12 @@ namespace BinSoul\Symfony\Bundle\I18n\DataFixtures;
 
 use BinSoul\Symfony\Bundle\I18n\Entity\CurrencyEntity;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Id\AssignedGenerator;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
-class LoadCurrencies extends Fixture
+class LoadCurrencies extends Fixture implements FixtureGroupInterface
 {
     private static $rows = [
         [1, 'EUR', 978],
@@ -192,5 +193,10 @@ class LoadCurrencies extends Fixture
         }
 
         $manager->flush();
+    }
+
+    public static function getGroups(): array
+    {
+        return ['binsoul/symfony-bundle-i18n'];
     }
 }

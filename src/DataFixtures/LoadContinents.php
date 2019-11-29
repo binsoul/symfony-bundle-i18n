@@ -6,11 +6,12 @@ namespace BinSoul\Symfony\Bundle\I18n\DataFixtures;
 
 use BinSoul\Symfony\Bundle\I18n\Entity\ContinentEntity;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Id\AssignedGenerator;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
-class LoadContinents extends Fixture
+class LoadContinents extends Fixture implements FixtureGroupInterface
 {
     private static $rows = [
         [1, 'AF', '002', 0.000000, 0.000000],
@@ -39,5 +40,10 @@ class LoadContinents extends Fixture
         }
 
         $manager->flush();
+    }
+
+    public static function getGroups(): array
+    {
+        return ['binsoul/symfony-bundle-i18n'];
     }
 }

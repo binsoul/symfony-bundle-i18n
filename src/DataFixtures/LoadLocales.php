@@ -8,12 +8,13 @@ use BinSoul\Symfony\Bundle\I18n\Entity\LocaleEntity;
 use BinSoul\Symfony\Bundle\I18n\Repository\CountryRepository;
 use BinSoul\Symfony\Bundle\I18n\Repository\LanguageRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Id\AssignedGenerator;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
-class LoadLocales extends Fixture implements DependentFixtureInterface
+class LoadLocales extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
     public static $rows = [
         //id, locale_code, lang_iso3, country_iso2
@@ -536,5 +537,10 @@ class LoadLocales extends Fixture implements DependentFixtureInterface
     public function getDependencies(): array
     {
         return [LoadLanguages::class, LoadCountries::class];
+    }
+
+    public static function getGroups(): array
+    {
+        return ['binsoul/symfony-bundle-i18n'];
     }
 }
