@@ -14,7 +14,7 @@ use Symfony\Component\Intl\Languages;
  *
  * @ORM\Entity()
  * @ORM\Table(
- *     name="system_language",
+ *     name="language",
  *     uniqueConstraints={
  *        @ORM\UniqueConstraint(columns={"iso2"}),
  *        @ORM\UniqueConstraint(columns={"iso3"}),

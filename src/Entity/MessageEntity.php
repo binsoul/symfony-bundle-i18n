@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity()
  * @ORM\Table(
- *     name="system_message",
+ *     name="message",
  *     uniqueConstraints={
  *        @ORM\UniqueConstraint(columns={"locale_id", "key", "domain"})
  *     },

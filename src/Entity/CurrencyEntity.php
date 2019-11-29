@@ -14,7 +14,7 @@ use Symfony\Component\Intl\Exception\MissingResourceException;
  *
  * @ORM\Entity()
  * @ORM\Table(
- *     name="system_currency",
+ *     name="currency",
  *     uniqueConstraints={
  *        @ORM\UniqueConstraint(columns={"iso3"}),
  *     },
