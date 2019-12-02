@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BinSoul\Symfony\Bundle\I18n\Entity;
 
+use BinSoul\Common\I18n\Language;
 use BinSoul\Common\I18n\Locale;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Intl\Exception\MissingResourceException;
@@ -21,7 +22,7 @@ use Symfony\Component\Intl\Languages;
  *     },
  * )
  */
-class LanguageEntity
+class LanguageEntity implements Language
 {
     /**
      * @var int|null ID of the language

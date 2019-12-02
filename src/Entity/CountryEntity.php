@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BinSoul\Symfony\Bundle\I18n\Entity;
 
+use BinSoul\Common\I18n\Country;
 use BinSoul\Common\I18n\Locale;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Intl\Countries;
@@ -23,7 +24,7 @@ use Symfony\Component\Intl\Exception\MissingResourceException;
  *     },
  * )
  */
-class CountryEntity
+class CountryEntity implements Country
 {
     /**
      * @var int|null ID of the country

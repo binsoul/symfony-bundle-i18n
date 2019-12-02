@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BinSoul\Symfony\Bundle\I18n\Entity;
 
+use BinSoul\Common\I18n\Currency;
 use BinSoul\Common\I18n\Locale;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Intl\Currencies;
@@ -20,7 +21,7 @@ use Symfony\Component\Intl\Exception\MissingResourceException;
  *     },
  * )
  */
-class CurrencyEntity
+class CurrencyEntity implements Currency
 {
     /**
      * @var int|null ID of the currency
