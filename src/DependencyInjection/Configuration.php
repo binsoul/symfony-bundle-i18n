@@ -12,7 +12,7 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder('binsoul_symfony_bundle_i18n');
+        $treeBuilder = new TreeBuilder('binsoul_i18n');
 
         /** @var ArrayNodeDefinition $rootNode */
         $rootNode = $treeBuilder->getRootNode();

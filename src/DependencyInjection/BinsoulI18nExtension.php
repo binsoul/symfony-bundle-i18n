@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-class I18nExtension extends Extension
+class BinsoulI18nExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container): void
     {

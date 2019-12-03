@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class I18nBundle extends Bundle
+class BinsoulI18nBundle extends Bundle
 {
     public function build(ContainerBuilder $container)
     {
