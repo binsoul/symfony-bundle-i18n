@@ -21,6 +21,6 @@ class BinsoulI18nExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $definition = $container->getDefinition(TablePrefixListener::class);
-        $definition->replaceArgument(0, $config['prefix']);
+        $definition->addArgument(0, $config['prefix']);
     }
 }
