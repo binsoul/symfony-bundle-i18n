@@ -12,6 +12,12 @@ Via composer:
 $ composer require binsoul/symfony-bundle-i18n
 ```
 
+Load fixtures:
+
+``` bash
+$ php bin/console doctrine:fixtures:load --group=binsoul/symfony-bundle-i18n
+```
+
 ## Testing
 
 ``` bash
