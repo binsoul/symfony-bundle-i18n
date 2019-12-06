@@ -59,8 +59,13 @@ class MessageRepositoryLoader implements LoaderInterface
             throw new NotFoundResourceException(sprintf('The locale "%s" does not exist.', $locale));
         }
 
+        try {
+            $entities = $this->messageRepository->findAllByLocaleAndDomain($localeEntity, $domain);
+        } catch (\Exception $e) {
+            return new MessageCatalogue($locale);
+        }
+
         $messages = [];
-        $entities = $this->messageRepository->findAllByLocaleAndDomain($localeEntity, $domain);
         foreach ($entities as $entity) {
             $messages[$entity->getKey()] = $entity->getFormat();
         }
