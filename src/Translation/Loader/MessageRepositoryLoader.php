@@ -38,7 +38,7 @@ class MessageRepositoryLoader implements LoaderInterface
         $this->localeRepository = $localeRepository;
     }
 
-    public function load($resource, $locale, $domain = 'messages')
+    public function load($resource, $locale, $domain = 'messages'): MessageCatalogue
     {
         if (!$this->isEnabled()) {
             return new MessageCatalogue($locale);

@@ -41,7 +41,7 @@ class Manager implements I18nManager, LocaleAwareInterface
         $this->stack[0] = $this->createEnvironment($this->defaultLocale);
     }
 
-    public function setLocale(string $locale)
+    public function setLocale(string $locale): void
     {
         $this->defaultLocale = DefaultLocale::fromString($locale, '_');
         $this->stack[0] = $this->createEnvironment($this->defaultLocale);
@@ -50,7 +50,7 @@ class Manager implements I18nManager, LocaleAwareInterface
         }
     }
 
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->defaultLocale->getCode('_');
     }

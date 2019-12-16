@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Translation\Translator as BaseTranslator;
  */
 class DatabaseTranslator extends BaseTranslator
 {
-    public function addResource($format, $resource, $locale, $domain = null)
+    public function addResource($format, $resource, $locale, string $domain = null)
     {
         parent::addResource($format, $resource, $locale, $domain);
 
