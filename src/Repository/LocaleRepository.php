@@ -7,7 +7,7 @@ namespace BinSoul\Symfony\Bundle\I18n\Repository;
 use BinSoul\Common\I18n\DefaultLocale;
 use BinSoul\Symfony\Bundle\Doctrine\Repository\AbstractRepository;
 use BinSoul\Symfony\Bundle\I18n\Entity\LocaleEntity;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 class LocaleRepository extends AbstractRepository
 {
