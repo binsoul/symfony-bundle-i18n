@@ -6,9 +6,7 @@ use BinSoul\Common\I18n\DefaultLocale;
 use BinSoul\Symfony\Bundle\I18n\I18nEnvironment;
 use BinSoul\Symfony\Bundle\I18n\Service\Manager;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Translation\TranslatorBagInterface;
-use Symfony\Contracts\Translation\LocaleAwareInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Translation\Translator;
 
 class ManagerTest extends TestCase
 {
@@ -84,10 +82,8 @@ class ManagerTest extends TestCase
 
     private function buildManager(): Manager
     {
-        /** @var TranslatorInterface $translator */
-        $translator = $this->createMock(
-            [TranslatorInterface::class, TranslatorBagInterface::class, LocaleAwareInterface::class]
-        );
+        /** @var Translator $translator */
+        $translator = $this->createMock(Translator::class);
 
         return new Manager($translator);
     }
