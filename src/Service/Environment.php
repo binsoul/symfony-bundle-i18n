@@ -23,22 +23,27 @@ class Environment implements I18nEnvironment
      * @var Locale
      */
     private $locale;
+
     /**
      * @var NumberFormatter
      */
     private $numberFormatter;
+
     /**
      * @var DateTimeFormatter
      */
     private $dateTimeFormatter;
+
     /**
      * @var AddressFormatter
      */
     private $addressFormatter;
+
     /**
      * @var Translator
      */
     private $translator;
+
     /**
      * @var SlugGenerator|null
      */

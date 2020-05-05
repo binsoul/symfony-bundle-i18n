@@ -20,10 +20,12 @@ class MessageRepositoryLoader implements LoaderInterface
      * @var MessageRepository
      */
     private $messageRepository;
+
     /**
      * @var LocaleRepository
      */
     private $localeRepository;
+
     /**
      * @var bool|null
      */
@@ -40,14 +42,16 @@ class MessageRepositoryLoader implements LoaderInterface
 
     public function load($resource, $locale, $domain = 'messages'): MessageCatalogue
     {
-        if (!$this->isEnabled()) {
+        if (! $this->isEnabled()) {
             return new MessageCatalogue($locale);
         }
 
         $localeEntity = null;
         $parsedLocale = DefaultLocale::fromString($locale, '_');
-        while (!$parsedLocale->isRoot()) {
+
+        while (! $parsedLocale->isRoot()) {
             $localeEntity = $this->localeRepository->findByCode($parsedLocale->getCode('-'));
+
             if ($localeEntity !== null) {
                 break;
             }
@@ -61,11 +65,12 @@ class MessageRepositoryLoader implements LoaderInterface
 
         try {
             $entities = $this->messageRepository->findAllByLocaleAndDomain($localeEntity, $domain);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return new MessageCatalogue($locale);
         }
 
         $messages = [];
+
         foreach ($entities as $entity) {
             $messages[$entity->getKey()] = $entity->getFormat();
         }

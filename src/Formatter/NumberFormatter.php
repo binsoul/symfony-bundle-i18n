@@ -18,6 +18,7 @@ class NumberFormatter implements CommonNumberFormatter
      * @var Locale
      */
     private $locale;
+
     /**
      * @var IntlNumberFormatter
      */
@@ -32,12 +33,12 @@ class NumberFormatter implements CommonNumberFormatter
         $this->formatter = new IntlNumberFormatter($this->locale);
     }
 
-    public function formatDecimal(float $value, int $decimals = null): string
+    public function formatDecimal(float $value, ?int $decimals = null): string
     {
         return $this->formatter->formatDecimal($value, $decimals);
     }
 
-    public function formatPercent(float $value, int $decimals = null): string
+    public function formatPercent(float $value, ?int $decimals = null): string
     {
         return $this->formatter->formatPercent($value, $decimals);
     }

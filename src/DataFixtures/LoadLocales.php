@@ -10,12 +10,15 @@ use BinSoul\Symfony\Bundle\I18n\Repository\LanguageRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Id\AssignedGenerator;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\Persistence\ObjectManager;
 
 class LoadLocales extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
+    /**
+     * @var mixed[][]
+     */
     public static $rows = [
         //id, locale_code, lang_iso3, country_iso2
         [1, 'af', 'afr', null],
@@ -491,10 +494,12 @@ class LoadLocales extends Fixture implements DependentFixtureInterface, FixtureG
         [471, 'zu', 'zul', null],
         [472, 'zu-ZA', 'zul', 'ZA'],
     ];
+
     /**
      * @var LanguageRepository
      */
     private $languageRepository;
+
     /**
      * @var CountryRepository
      */
@@ -518,6 +523,7 @@ class LoadLocales extends Fixture implements DependentFixtureInterface, FixtureG
 
         foreach (self::$rows as $row) {
             $language = $this->languageRepository->findByIso3($row[2]);
+
             if ($language === null) {
                 continue;
             }

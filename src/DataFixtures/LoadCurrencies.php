@@ -7,12 +7,15 @@ namespace BinSoul\Symfony\Bundle\I18n\DataFixtures;
 use BinSoul\Symfony\Bundle\I18n\Entity\CurrencyEntity;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Id\AssignedGenerator;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\Persistence\ObjectManager;
 
 class LoadCurrencies extends Fixture implements FixtureGroupInterface
 {
+    /**
+     * @var mixed[][]
+     */
     private static $rows = [
         [1, 'EUR', 978],
         [2, 'PLN', 985],

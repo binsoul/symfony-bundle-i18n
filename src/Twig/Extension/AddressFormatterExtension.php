@@ -60,11 +60,12 @@ class AddressFormatterExtension extends AbstractExtension
     private function getFormatter($locale): CommonAddressFormatter
     {
         $formatter = $this->i18nManager->getEnvironment()->getAddressFormatter();
+
         if ($locale === null) {
             return $formatter;
         }
 
-        if (!($locale instanceof Locale)) {
+        if (! ($locale instanceof Locale)) {
             $locale = DefaultLocale::fromString((string) $locale);
         }
 

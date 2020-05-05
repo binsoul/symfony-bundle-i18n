@@ -9,12 +9,15 @@ use BinSoul\Symfony\Bundle\I18n\Repository\ContinentRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Id\AssignedGenerator;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\Persistence\ObjectManager;
 
 class LoadCountries extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
+    /**
+     * @var mixed[][]
+     */
     private static $rows = [
         [1, 3, 'Afghanistan', 'AF', 'AFG', '004', 'AFG', 0.000000, 0.000000],
         [2, 4, 'Albania', 'AL', 'ALB', '008', 'AL', 0.000000, 0.000000],
@@ -274,6 +277,7 @@ class LoadCountries extends Fixture implements DependentFixtureInterface, Fixtur
         [258, 6, 'Äußeres Ozeanien', 'QO', null, null, null, 0.000000, 0.000000],
         [259, 1, 'Tristan da Cunha', 'TA', 'TAA', null, null, 0.000000, 0.000000],
     ];
+
     /**
      * @var ContinentRepository
      */
@@ -296,7 +300,8 @@ class LoadCountries extends Fixture implements DependentFixtureInterface, Fixtur
 
         foreach (self::$rows as $row) {
             $continent = $this->continentRepository->load($row[1]);
-            if (!$continent) {
+
+            if (! $continent) {
                 continue;
             }
 

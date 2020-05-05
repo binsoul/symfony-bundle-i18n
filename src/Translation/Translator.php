@@ -25,6 +25,7 @@ class Translator implements CommonTranslator
      * @var Locale
      */
     private $locale;
+
     /**
      * @var TranslatorInterface|TranslatorBagInterface|LocaleAwareInterface
      */
@@ -37,7 +38,7 @@ class Translator implements CommonTranslator
      */
     public function __construct($translator, ?Locale $locale = null)
     {
-        if (!$translator instanceof TranslatorInterface || !$translator instanceof TranslatorBagInterface || !$translator instanceof LocaleAwareInterface) {
+        if (! $translator instanceof TranslatorInterface || ! $translator instanceof TranslatorBagInterface || ! $translator instanceof LocaleAwareInterface) {
             throw new \InvalidArgumentException(sprintf('The Translator "%s" must implement TranslatorInterface, TranslatorBagInterface and LocaleAwareInterface.', \get_class($translator)));
         }
 
@@ -54,6 +55,7 @@ class Translator implements CommonTranslator
         if ($key instanceof Message) {
             $targetDomain = ($domain ?? $key->getDomain()) ?? 'messages';
             $parameters = array_merge($key->getParameters(), $parameters);
+
             if ($key instanceof PluralizedMessage) {
                 $parameters['%count%'] = $key->getQuantity();
             }
@@ -118,6 +120,6 @@ class Translator implements CommonTranslator
             return $this;
         }
 
-        return new Translator($this->translator, $locale);
+        return new self($this->translator, $locale);
     }
 }

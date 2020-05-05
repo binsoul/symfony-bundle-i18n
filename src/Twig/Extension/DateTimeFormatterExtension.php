@@ -121,11 +121,12 @@ class DateTimeFormatterExtension extends AbstractExtension
     private function getFormatter($locale): CommonDateTimeFormatter
     {
         $formatter = $this->i18nManager->getEnvironment()->getDateTimeFormatter();
+
         if ($locale === null) {
             return $formatter;
         }
 
-        if (!($locale instanceof Locale)) {
+        if (! ($locale instanceof Locale)) {
             $locale = DefaultLocale::fromString((string) $locale);
         }
 

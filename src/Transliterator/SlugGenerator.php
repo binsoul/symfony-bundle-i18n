@@ -18,6 +18,7 @@ class SlugGenerator implements CommonSlugGenerator
      * @var Locale
      */
     private $locale;
+
     /**
      * @var IntlSlugGenerator
      */

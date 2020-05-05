@@ -78,11 +78,12 @@ class TranslatorExtension extends AbstractExtension
     private function getTranslator($locale): CommonTranslator
     {
         $translator = $this->i18nManager->getEnvironment()->getTranslator();
+
         if ($locale === null) {
             return $translator;
         }
 
-        if (!($locale instanceof Locale)) {
+        if (! ($locale instanceof Locale)) {
             $locale = DefaultLocale::fromString((string) $locale);
         }
 

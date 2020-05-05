@@ -26,6 +26,7 @@ class Manager implements I18nManager, LocaleAwareInterface
      * @var Locale
      */
     private $defaultLocale;
+
     /**
      * @var TranslatorInterface
      */
@@ -45,6 +46,7 @@ class Manager implements I18nManager, LocaleAwareInterface
     {
         $this->defaultLocale = DefaultLocale::fromString($locale, '_');
         $this->stack[0] = $this->createEnvironment($this->defaultLocale);
+
         if (count($this->stack) === 1) {
             \Locale::setDefault($this->defaultLocale->getCode());
         }

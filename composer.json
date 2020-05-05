@@ -23,18 +23,19 @@
         "binsoul/common-i18n-intl": "*@dev",
         "binsoul/symfony-bundle-doctrine": "*@dev",
         "doctrine/orm": "^2",
-        "symfony/config": "^4|^5",
-        "symfony/dependency-injection": "^4|^5",
-        "symfony/http-kernel": "^4|^5",
-        "symfony/intl": "^4|^5",
-        "symfony/translation": "^4|^5",
+        "symfony/config": "^5",
+        "symfony/dependency-injection": "^5",
+        "symfony/http-kernel": "^5",
+        "symfony/intl": "^5",
+        "symfony/translation": "^5",
         "doctrine/doctrine-fixtures-bundle": "^3",
-        "twig/twig": "^3.0"
+        "twig/twig": "^3"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2",
+        "binsoul/coding-standard": "*@dev",
         "phpstan/phpstan": "^0.12",
-        "phpunit/phpunit": "^8"
+        "phpunit/phpunit": "^8",
+        "symplify/easy-coding-standard-prefixed": "^7"
     },
     "autoload": {
         "psr-4": {
@@ -48,11 +49,8 @@
     },
     "scripts": {
         "test": "phpunit",
-        "fix-style": [
-            "php-cs-fixer fix src --rules=@Symfony,-yoda_style",
-            "php-cs-fixer fix tests --rules=@Symfony,-yoda_style"
-        ],
-        "analyze": "phpstan analyse -l 7 src"
+        "fix-style": "ecs check src tests --config vendor/binsoul/coding-standard/easy-coding-standard.yaml --fix",
+        "analyze": "phpstan analyse -l max src"
     },
     "extra": {
         "branch-alias": {

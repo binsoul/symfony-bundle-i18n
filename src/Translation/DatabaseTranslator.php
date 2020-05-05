@@ -11,13 +11,13 @@ use Symfony\Bundle\FrameworkBundle\Translation\Translator as BaseTranslator;
  */
 class DatabaseTranslator extends BaseTranslator
 {
-    public function addResource($format, $resource, $locale, string $domain = null)
+    public function addResource(string $format, $resource, string $locale, ?string $domain = null): void
     {
         parent::addResource($format, $resource, $locale, $domain);
 
         if ($domain !== null && $domain !== 'messages') {
             // add an additional resource to trigger the database loader
-            parent::addResource('db', $domain.'.'.$locale.'.db', $locale, $domain);
+            parent::addResource('db', $domain . '.' . $locale . '.db', $locale, $domain);
         }
     }
 }

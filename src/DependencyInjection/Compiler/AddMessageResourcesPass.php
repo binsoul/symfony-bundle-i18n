@@ -15,24 +15,25 @@ class AddMessageResourcesPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        if (!$container->hasDefinition('translator.default')) {
+        if (! $container->hasDefinition('translator.default')) {
             return;
         }
 
         $translator = $container->findDefinition('translator.default');
         $options = $translator->getArgument(4);
-        if (!isset($options['resource_files'])) {
+
+        if (! isset($options['resource_files'])) {
             $options['resource_files'] = [];
         }
 
         foreach (LoadLocales::$rows as $row) {
             $locale = str_replace('-', '_', $row[1]);
 
-            if (!isset($options['resource_files'][$locale])) {
+            if (! isset($options['resource_files'][$locale])) {
                 $options['resource_files'][$locale] = [];
             }
 
-            $options['resource_files'][$locale][] = 'messages.'.$locale.'.db';
+            $options['resource_files'][$locale][] = 'messages.' . $locale . '.db';
         }
 
         $translator->replaceArgument(4, $options);

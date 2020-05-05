@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BinSoul\Test\Symfony\Bundle\I18n\Service;
 
 use BinSoul\Common\I18n\DefaultLocale;
@@ -64,7 +66,7 @@ class ManagerTest extends TestCase
 
         $called = false;
         $calledLocale = null;
-        $operation = function (I18nEnvironment $environment) use (&$called, &$calledLocale) {
+        $operation = static function (I18nEnvironment $environment) use (&$called, &$calledLocale) {
             $called = true;
             $calledLocale = $environment->getLocale()->getCode();
 

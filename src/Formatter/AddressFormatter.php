@@ -19,6 +19,7 @@ class AddressFormatter implements CommonAddressFormatter
      * @var Locale
      */
     private $locale;
+
     /**
      * @var IntlAddressFormatter
      */

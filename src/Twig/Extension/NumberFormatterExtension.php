@@ -51,7 +51,7 @@ class NumberFormatterExtension extends AbstractExtension
      * @param int                $decimals Maximum number of fractional digits
      * @param Locale|string|null $locale   The locale or null to use the default
      */
-    public function formatDecimal($value, int $decimals = null, $locale = null): string
+    public function formatDecimal($value, ?int $decimals = null, $locale = null): string
     {
         return $this->getFormatter($locale)->formatDecimal((float) $value, $decimals);
     }
@@ -63,7 +63,7 @@ class NumberFormatterExtension extends AbstractExtension
      * @param int                $decimals Maximum number of fractional digits
      * @param Locale|string|null $locale   The locale or null to use the default
      */
-    public function formatPercent($value, int $decimals = null, $locale = null): string
+    public function formatPercent($value, ?int $decimals = null, $locale = null): string
     {
         return $this->getFormatter($locale)->formatPercent((float) $value, $decimals);
     }
@@ -99,11 +99,12 @@ class NumberFormatterExtension extends AbstractExtension
     private function getFormatter($locale): CommonNumberFormatter
     {
         $formatter = $this->i18nManager->getEnvironment()->getNumberFormatter();
+
         if ($locale === null) {
             return $formatter;
         }
 
-        if (!($locale instanceof Locale)) {
+        if (! ($locale instanceof Locale)) {
             $locale = DefaultLocale::fromString((string) $locale);
         }
 

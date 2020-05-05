@@ -53,6 +53,7 @@ class LocaleRepository extends AbstractRepository
     {
         $parsedLocale = DefaultLocale::fromString($locale->getCode());
         $parentLocale = $parsedLocale->getParent();
+
         if ($parentLocale->isRoot()) {
             return null;
         }

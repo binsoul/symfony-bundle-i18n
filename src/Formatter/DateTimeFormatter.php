@@ -19,6 +19,7 @@ class DateTimeFormatter implements CommonDateTimeFormatter
      * @var Locale
      */
     private $locale;
+
     /**
      * @var IntlDateTimeFormatter
      */

@@ -15,7 +15,7 @@ class OverrideTranslatorPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        if (!$container->hasDefinition('translator.default')) {
+        if (! $container->hasDefinition('translator.default')) {
             return;
         }
 
