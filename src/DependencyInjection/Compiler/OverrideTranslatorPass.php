@@ -23,5 +23,7 @@ class OverrideTranslatorPass implements CompilerPassInterface
         $defaultTranslator->setClass(DatabaseTranslator::class);
 
         $container->removeDefinition(DatabaseTranslator::class);
+
+        $container->getDefinition('translation.warmer')->addTag('kernel.cache_warmer', ['priority' => -1024]);
     }
 }
