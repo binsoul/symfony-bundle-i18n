@@ -16,7 +16,7 @@ use Symfony\Component\Intl\Exception\MissingResourceException;
  * @ORM\Table(
  *     name="continent",
  *     uniqueConstraints={
- *        @ORM\UniqueConstraint(columns={"code"})
+ *         @ORM\UniqueConstraint(columns={"code"})
  *     },
  * )
  */

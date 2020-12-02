@@ -14,10 +14,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *     name="message",
  *     uniqueConstraints={
- *        @ORM\UniqueConstraint(columns={"locale_id", "key", "domain"})
+ *         @ORM\UniqueConstraint(columns={"locale_id", "key", "domain"})
  *     },
  *     indexes={
- *        @ORM\Index(columns={"locale_id", "domain"})
+ *         @ORM\Index(columns={"locale_id", "domain"})
  *     },
  * )
  */

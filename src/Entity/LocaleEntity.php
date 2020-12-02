@@ -17,7 +17,7 @@ use Symfony\Component\Intl\Locales;
  * @ORM\Table(
  *     name="locale",
  *     uniqueConstraints={
- *        @ORM\UniqueConstraint(columns={"code"})
+ *         @ORM\UniqueConstraint(columns={"code"})
  *     },
  * )
  */

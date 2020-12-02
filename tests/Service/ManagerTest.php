@@ -7,6 +7,7 @@ namespace BinSoul\Test\Symfony\Bundle\I18n\Service;
 use BinSoul\Common\I18n\DefaultLocale;
 use BinSoul\Symfony\Bundle\I18n\I18nEnvironment;
 use BinSoul\Symfony\Bundle\I18n\Service\Manager;
+use Locale;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\Translator;
 
@@ -16,8 +17,8 @@ class ManagerTest extends TestCase
     {
         $manager = $this->buildManager();
 
-        $this->assertEquals(DefaultLocale::fromString(\Locale::getDefault())->getCode('_'), $manager->getLocale());
-        $this->assertEquals(DefaultLocale::fromString(\Locale::getDefault())->getCode('_'), $manager->getEnvironment()->getLocale()->getCode('_'));
+        $this->assertEquals(DefaultLocale::fromString(Locale::getDefault())->getCode('_'), $manager->getLocale());
+        $this->assertEquals(DefaultLocale::fromString(Locale::getDefault())->getCode('_'), $manager->getEnvironment()->getLocale()->getCode('_'));
 
         $manager->setLocale('ar_EG');
 

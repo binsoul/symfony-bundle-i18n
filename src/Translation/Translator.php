@@ -12,6 +12,7 @@ use BinSoul\Common\I18n\Message;
 use BinSoul\Common\I18n\PluralizedMessage;
 use BinSoul\Common\I18n\TranslatedMessage;
 use BinSoul\Common\I18n\Translator as CommonTranslator;
+use InvalidArgumentException;
 use Symfony\Component\Translation\TranslatorBagInterface;
 use Symfony\Contracts\Translation\LocaleAwareInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -39,7 +40,7 @@ class Translator implements CommonTranslator
     public function __construct($translator, ?Locale $locale = null)
     {
         if (! $translator instanceof TranslatorInterface || ! $translator instanceof TranslatorBagInterface || ! $translator instanceof LocaleAwareInterface) {
-            throw new \InvalidArgumentException(sprintf('The Translator "%s" must implement TranslatorInterface, TranslatorBagInterface and LocaleAwareInterface.', \get_class($translator)));
+            throw new InvalidArgumentException(sprintf('The Translator "%s" must implement TranslatorInterface, TranslatorBagInterface and LocaleAwareInterface.', \get_class($translator)));
         }
 
         $this->translator = $translator;

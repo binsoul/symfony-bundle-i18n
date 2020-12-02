@@ -17,10 +17,10 @@ use Symfony\Component\Intl\Exception\MissingResourceException;
  * @ORM\Table(
  *     name="country",
  *     uniqueConstraints={
- *        @ORM\UniqueConstraint(columns={"iso2"}),
+ *         @ORM\UniqueConstraint(columns={"iso2"}),
  *     },
  *     indexes={
- *        @ORM\Index(columns={"iso3"}),
+ *         @ORM\Index(columns={"iso3"}),
  *     },
  * )
  */

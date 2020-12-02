@@ -10,6 +10,7 @@ use BinSoul\Symfony\Bundle\I18n\Repository\MessageRepository;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 use Symfony\Component\Translation\Loader\LoaderInterface;
 use Symfony\Component\Translation\MessageCatalogue;
+use Throwable;
 
 /**
  * Loads translations using the {@see MessageRepository}.
@@ -65,7 +66,7 @@ class MessageRepositoryLoader implements LoaderInterface
 
         try {
             $entities = $this->messageRepository->findAllByLocaleAndDomain($localeEntity, $domain);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return new MessageCatalogue($locale);
         }
 
