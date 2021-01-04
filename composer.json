@@ -35,7 +35,7 @@
         "binsoul/coding-standard": "*@dev",
         "phpstan/phpstan": "^0.12",
         "phpunit/phpunit": "^8|^9",
-        "symplify/easy-coding-standard-prefixed": "^8"
+        "symplify/easy-coding-standard-prefixed": "^9"
     },
     "autoload": {
         "psr-4": {
