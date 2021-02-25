@@ -44,6 +44,11 @@ class DatabaseTranslator extends BaseTranslator
      */
     private $defaultLocale;
 
+    /**
+     * @var bool[][]
+     */
+    private $loadedCatalogues = [];
+
     public function __construct(
         ContainerInterface $container,
         MessageFormatterInterface $formatter,
@@ -103,7 +108,7 @@ class DatabaseTranslator extends BaseTranslator
             return new MessageCatalogue($locale);
         }
 
-        if (isset($this->catalogues[$locale]) && in_array($domain, $this->catalogues[$locale]->getDomains(), true)) {
+        if (isset($this->loadedCatalogues[$locale][$domain])) {
             return $this->catalogues[$locale];
         }
 
@@ -136,8 +141,17 @@ class DatabaseTranslator extends BaseTranslator
             $messages[$entity->getKey()] = $entity->getFormat();
         }
 
-        $this->catalogues[$locale] = new MessageCatalogue($locale);
+        if (! isset($this->catalogues[$locale])) {
+            $this->catalogues[$locale] = new MessageCatalogue($locale);
+        }
+
         $this->catalogues[$locale]->add($messages, $domain);
+
+        if (! isset($this->loadedCatalogues[$locale])) {
+            $this->loadedCatalogues[$locale] = [];
+        }
+
+        $this->loadedCatalogues[$locale][$domain] = true;
 
         return $this->catalogues[$locale];
     }
