@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Translation\Translator as BaseTranslator;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 use Symfony\Component\Translation\Formatter\MessageFormatterInterface;
 use Symfony\Component\Translation\MessageCatalogue;
+use Symfony\Component\Translation\MessageCatalogueInterface;
 use Throwable;
 
 /**
@@ -63,7 +64,7 @@ class DatabaseTranslator extends BaseTranslator
 
     public function trans($id, array $parameters = [], $domain = null, $locale = null)
     {
-        if ($id === null || $id === '') {
+        if ((string) $id === '') {
             return '';
         }
 
