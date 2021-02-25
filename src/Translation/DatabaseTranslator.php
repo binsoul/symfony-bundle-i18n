@@ -40,11 +40,6 @@ class DatabaseTranslator extends BaseTranslator
     private $messageFormatter;
 
     /**
-     * @var string
-     */
-    private $defaultLocale;
-
-    /**
      * @var bool[][]
      */
     private $loadedCatalogues = [];
@@ -64,7 +59,6 @@ class DatabaseTranslator extends BaseTranslator
         $this->messageRepository = $messageRepository;
         $this->localeRepository = $localeRepository;
         $this->messageFormatter = $formatter;
-        $this->defaultLocale = $defaultLocale;
     }
 
     public function trans($id, array $parameters = [], $domain = null, $locale = null)
@@ -82,7 +76,7 @@ class DatabaseTranslator extends BaseTranslator
         $isUntranslated = $result === $id || mb_strtolower($result) === mb_strtolower($id);
 
         if ($isUntranslated) {
-            $catalogue = $this->load($locale ?? $this->defaultLocale, $domain);
+            $catalogue = $this->load($locale ?? $this->getLocale(), $domain);
             $locale = $catalogue->getLocale();
 
             while (! $catalogue->defines($id, $domain)) {
@@ -96,7 +90,7 @@ class DatabaseTranslator extends BaseTranslator
                 $locale = $catalogue->getLocale();
             }
 
-            $result = $this->messageFormatter->format($catalogue->get($id, $domain), $locale ?? $this->defaultLocale, $parameters);
+            $result = $this->messageFormatter->format($catalogue->get($id, $domain), $locale ?? $this->getLocale(), $parameters);
         }
 
         return $result;
