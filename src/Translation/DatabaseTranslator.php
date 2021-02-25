@@ -96,7 +96,7 @@ class DatabaseTranslator extends BaseTranslator
         return $result;
     }
 
-    public function load(string $locale, string $domain): MessageCatalogue
+    public function load(string $locale, string $domain): MessageCatalogueInterface
     {
         if (! $this->isEnabled()) {
             return new MessageCatalogue($locale);
