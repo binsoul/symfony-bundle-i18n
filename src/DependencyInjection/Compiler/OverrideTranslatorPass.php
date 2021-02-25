@@ -24,8 +24,11 @@ class OverrideTranslatorPass implements CompilerPassInterface
 
         $defaultTranslator = $container->getDefinition('translator.default');
         $defaultTranslator->setClass(DatabaseTranslator::class);
-        $defaultTranslator->setArgument('$messageRepository', new Reference(MessageRepository::class));
-        $defaultTranslator->setArgument('$localeRepository', new Reference(LocaleRepository::class));
+
+        $arguments = $defaultTranslator->getArguments();
+        array_unshift($arguments, new Reference(LocaleRepository::class));
+        array_unshift($arguments, new Reference(MessageRepository::class));
+        $defaultTranslator->setArguments($arguments);
 
         $container->removeDefinition(DatabaseTranslator::class);
     }
