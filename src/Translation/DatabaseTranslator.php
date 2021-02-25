@@ -97,10 +97,14 @@ class DatabaseTranslator extends BaseTranslator
         return $result;
     }
 
-    public function load($locale, $domain = 'messages'): MessageCatalogue
+    public function load(string $locale, string $domain): MessageCatalogue
     {
         if (! $this->isEnabled()) {
             return new MessageCatalogue($locale);
+        }
+
+        if (isset($this->catalogues[$locale]) && in_array($domain, $this->catalogues[$locale]->getDomains(), true)) {
+            return $this->catalogues[$locale];
         }
 
         $localeEntity = null;
@@ -132,10 +136,10 @@ class DatabaseTranslator extends BaseTranslator
             $messages[$entity->getKey()] = $entity->getFormat();
         }
 
-        $catalogue = new MessageCatalogue($locale);
-        $catalogue->add($messages, $domain);
+        $this->catalogues[$locale] = new MessageCatalogue($locale);
+        $this->catalogues[$locale]->add($messages, $domain);
 
-        return $catalogue;
+        return $this->catalogues[$locale];
     }
 
     /**
