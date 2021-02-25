@@ -20,12 +20,12 @@ use Throwable;
 class DatabaseTranslator extends BaseTranslator
 {
     /**
-     * @var MessageRepository|null
+     * @var MessageRepository
      */
     private $messageRepository;
 
     /**
-     * @var LocaleRepository|null
+     * @var LocaleRepository
      */
     private $localeRepository;
 
@@ -50,10 +50,14 @@ class DatabaseTranslator extends BaseTranslator
         string $defaultLocale,
         array $loaderIds = [],
         array $options = [],
-        array $enabledLocales = []
+        array $enabledLocales = [],
+        MessageRepository $messageRepository,
+        LocaleRepository $localeRepository
     ) {
         parent::__construct($container, $formatter, $defaultLocale, $loaderIds, $options, $enabledLocales);
 
+        $this->messageRepository = $messageRepository;
+        $this->localeRepository = $localeRepository;
         $this->messageFormatter = $formatter;
         $this->defaultLocale = $defaultLocale;
     }
@@ -139,14 +143,6 @@ class DatabaseTranslator extends BaseTranslator
      */
     private function isEnabled(): bool
     {
-        if ($this->messageRepository === null) {
-            $this->messageRepository = $this->container->get(MessageRepository::class);
-        }
-
-        if ($this->localeRepository === null) {
-            $this->localeRepository = $this->container->get(LocaleRepository::class);
-        }
-
         if ($this->tablesExist === null) {
             $this->tablesExist = $this->localeRepository->tableExists() && $this->messageRepository->tableExists();
         }
