@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace BinSoul\Symfony\Bundle\I18n\Translation;
 
-use BinSoul\Symfony\Bundle\I18n\Translation\Loader\MessageRepositoryLoader;
+use BinSoul\Common\I18n\DefaultLocale;
+use BinSoul\Symfony\Bundle\I18n\Repository\LocaleRepository;
+use BinSoul\Symfony\Bundle\I18n\Repository\MessageRepository;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator as BaseTranslator;
+use Symfony\Component\Translation\Exception\NotFoundResourceException;
 use Symfony\Component\Translation\Formatter\MessageFormatterInterface;
+use Symfony\Component\Translation\MessageCatalogue;
+use Throwable;
 
 /**
  * Replaces the original Symfony FrameworkBundle translator.
@@ -15,14 +20,29 @@ use Symfony\Component\Translation\Formatter\MessageFormatterInterface;
 class DatabaseTranslator extends BaseTranslator
 {
     /**
-     * @var MessageRepositoryLoader
+     * @var MessageRepository|null
      */
-    private $messageRepositoryLoader;
+    private $messageRepository;
+
+    /**
+     * @var LocaleRepository|null
+     */
+    private $localeRepository;
+
+    /**
+     * @var bool|null
+     */
+    private $tablesExist;
 
     /**
      * @var MessageFormatterInterface
      */
     private $messageFormatter;
+
+    /**
+     * @var string
+     */
+    private $defaultLocale;
 
     public function __construct(
         ContainerInterface $container,
@@ -34,21 +54,12 @@ class DatabaseTranslator extends BaseTranslator
     ) {
         parent::__construct($container, $formatter, $defaultLocale, $loaderIds, $options, $enabledLocales);
 
-        $this->messageRepositoryLoader = $container->get(MessageRepositoryLoader::class);
         $this->messageFormatter = $formatter;
+        $this->defaultLocale = $defaultLocale;
     }
 
-    public function addResource(string $format, $resource, string $locale, ?string $domain = null): void
+    public function trans($id, array $parameters = [], $domain = null, $locale = null)
     {
-        parent::addResource($format, $resource, $locale, $domain);
-
-        if ($domain !== null && $domain !== 'messages') {
-            // add an additional resource to trigger the database loader
-            parent::addResource('db', $domain . '.' . $locale . '.db', $locale, $domain);
-        }
-    }
-
-    public function trans($id, array $parameters = array(), $domain = null, $locale = null){
         if ($id === null || $id === '') {
             return '';
         }
@@ -62,10 +73,12 @@ class DatabaseTranslator extends BaseTranslator
         $isUntranslated = $result === $id || mb_strtolower($result) === mb_strtolower($id);
 
         if ($isUntranslated) {
-            $catalogue = $this->messageRepositoryLoader->load('', $locale ?? 'de_DE', $domain);
+            $catalogue = $this->load($locale ?? $this->defaultLocale, $domain);
             $locale = $catalogue->getLocale();
-            while (!$catalogue->defines($id, $domain)) {
+
+            while (! $catalogue->defines($id, $domain)) {
                 $fallbackCatalogue = $catalogue->getFallbackCatalogue();
+
                 if ($fallbackCatalogue === null) {
                     break;
                 }
@@ -74,9 +87,70 @@ class DatabaseTranslator extends BaseTranslator
                 $locale = $catalogue->getLocale();
             }
 
-            $result = $this->messageFormatter->format($catalogue->get($id, $domain), $locale ?? 'de_DE', $parameters);
+            $result = $this->messageFormatter->format($catalogue->get($id, $domain), $locale ?? $this->defaultLocale, $parameters);
         }
 
         return $result;
+    }
+
+    public function load($locale, $domain = 'messages'): MessageCatalogue
+    {
+        if (! $this->isEnabled()) {
+            return new MessageCatalogue($locale);
+        }
+
+        $localeEntity = null;
+        $parsedLocale = DefaultLocale::fromString($locale, '_');
+
+        while (! $parsedLocale->isRoot()) {
+            $localeEntity = $this->localeRepository->findByCode($parsedLocale->getCode('-'));
+
+            if ($localeEntity !== null) {
+                break;
+            }
+
+            $parsedLocale = $parsedLocale->getParent();
+        }
+
+        if ($localeEntity === null) {
+            throw new NotFoundResourceException(sprintf('The locale "%s" does not exist.', $locale));
+        }
+
+        try {
+            $entities = $this->messageRepository->findAllByLocaleAndDomain($localeEntity, $domain);
+        } catch (Throwable $e) {
+            return new MessageCatalogue($locale);
+        }
+
+        $messages = [];
+
+        foreach ($entities as $entity) {
+            $messages[$entity->getKey()] = $entity->getFormat();
+        }
+
+        $catalogue = new MessageCatalogue($locale);
+        $catalogue->add($messages, $domain);
+
+        return $catalogue;
+    }
+
+    /**
+     * Indicates if translations can be loaded from the database.
+     */
+    private function isEnabled(): bool
+    {
+        if ($this->messageRepository === null) {
+            $this->messageRepository = $this->container->get(MessageRepository::class);
+        }
+
+        if ($this->localeRepository === null) {
+            $this->localeRepository = $this->container->get(LocaleRepository::class);
+        }
+
+        if ($this->tablesExist === null) {
+            $this->tablesExist = $this->localeRepository->tableExists() && $this->messageRepository->tableExists();
+        }
+
+        return $this->tablesExist;
     }
 }
