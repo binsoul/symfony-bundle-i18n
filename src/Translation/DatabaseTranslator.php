@@ -45,14 +45,14 @@ class DatabaseTranslator extends BaseTranslator
     private $defaultLocale;
 
     public function __construct(
+        MessageRepository $messageRepository,
+        LocaleRepository $localeRepository,
         ContainerInterface $container,
         MessageFormatterInterface $formatter,
         string $defaultLocale,
         array $loaderIds = [],
         array $options = [],
-        array $enabledLocales = [],
-        MessageRepository $messageRepository,
-        LocaleRepository $localeRepository
+        array $enabledLocales = []
     ) {
         parent::__construct($container, $formatter, $defaultLocale, $loaderIds, $options, $enabledLocales);
 
