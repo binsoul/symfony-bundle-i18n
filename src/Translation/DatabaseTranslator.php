@@ -59,7 +59,7 @@ class DatabaseTranslator extends BaseTranslator
 
         $result = parent::trans($id, $parameters, $domain, $locale);
 
-        $isUntranslated = strtolower($id) === $result;
+        $isUntranslated = $result === $id || mb_strtolower($result) === mb_strtolower($id);
 
         if ($isUntranslated) {
             $catalogue = $this->messageRepositoryLoader->load('', $locale ?? 'de_DE', $domain);
