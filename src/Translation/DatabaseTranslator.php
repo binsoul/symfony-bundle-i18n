@@ -156,11 +156,9 @@ class DatabaseTranslator extends BaseTranslator
         $parsedLocale = DefaultLocale::fromString($localeEntity->getCode());
         $parsedLocale = $parsedLocale->getParent();
 
-        while (! $parsedLocale->isRoot()) {
+        if (! $parsedLocale->isRoot()) {
             $fallbackCatalogue = $this->load($parsedLocale->getCode('_'), $domain);
             $this->catalogues[$locale]->addFallbackCatalogue($fallbackCatalogue);
-
-            $parsedLocale = $parsedLocale->getParent();
         }
 
         return $this->catalogues[$locale];
