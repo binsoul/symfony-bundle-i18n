@@ -73,38 +73,29 @@ class DatabaseTranslator extends BaseTranslator
             $domain = 'messages';
         }
 
-        $result = parent::trans($id, $parameters, $domain, $locale);
+        $catalogue = $this->load($locale ?? $this->getLocale(), $domain);
+        $locale = $catalogue->getLocale();
 
-        $isUntranslated = $result === $id || mb_strtolower($result) === mb_strtolower($id);
+        while (! $catalogue->defines($id, $domain)) {
+            $fallbackCatalogue = $catalogue->getFallbackCatalogue();
 
-        if ($isUntranslated) {
-            $catalogue = $this->load($locale ?? $this->getLocale(), $domain);
+            if ($fallbackCatalogue === null) {
+                break;
+            }
+
+            $catalogue = $fallbackCatalogue;
             $locale = $catalogue->getLocale();
-
-            while (! $catalogue->defines($id, $domain)) {
-                $fallbackCatalogue = $catalogue->getFallbackCatalogue();
-
-                if ($fallbackCatalogue === null) {
-                    break;
-                }
-
-                $catalogue = $fallbackCatalogue;
-                $locale = $catalogue->getLocale();
-            }
-
-            $len = strlen(MessageCatalogue::INTL_DOMAIN_SUFFIX);
-
-            if ($this->messageFormatter instanceof IntlFormatterInterface
-                && ($catalogue->defines($id, $domain)
-                    || (strlen($domain) > $len && substr_compare($domain, MessageCatalogue::INTL_DOMAIN_SUFFIX, -$len, $len) === 0))
-            ) {
-                $result = $this->messageFormatter->formatIntl($catalogue->get($id, $domain), $locale ?? $this->getLocale(), $parameters);
-            } else {
-                $result = $this->messageFormatter->format($catalogue->get($id, $domain), $locale ?? $this->getLocale(), $parameters);
-            }
         }
 
-        return $result;
+        if (! $catalogue->defines($id, $domain)) {
+            return parent::trans($id, $parameters, $domain, $locale);
+        }
+
+        if ($this->messageFormatter instanceof IntlFormatterInterface) {
+            return $this->messageFormatter->formatIntl($catalogue->get($id, $domain), $locale, $parameters);
+        }
+
+        return $this->messageFormatter->format($catalogue->get($id, $domain), $locale, $parameters);
     }
 
     public function load(string $locale, string $domain): MessageCatalogueInterface
