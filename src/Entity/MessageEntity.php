@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BinSoul\Symfony\Bundle\I18n\Entity;
 
 use BinSoul\Common\I18n\Message;
+use BinSoul\Common\I18n\StoredMessage;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -21,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     },
  * )
  */
-class MessageEntity implements Message
+class MessageEntity implements StoredMessage
 {
     /**
      * @var int|null ID of the message
@@ -55,11 +56,6 @@ class MessageEntity implements Message
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $locale;
-
-    /**
-     * @var mixed[] Parameters of the message
-     */
-    private $parameters;
 
     /**
      * Constructs an instance of this class.
@@ -114,19 +110,12 @@ class MessageEntity implements Message
         $this->locale = $locale;
     }
 
-    /**
-     * @return mixed[]
-     */
-    public function getParameters(): array
+    public function withDomain(?string $domain): Message
     {
-        return $this->parameters;
-    }
-
-    /**
-     * @param mixed[] $parameters
-     */
-    public function setParameters(array $parameters): void
-    {
-        $this->parameters = $parameters;
+        $result = new self();
+        $result->key = $this->key;
+        $result->format = $this->format;
+        $result->domain = $domain;
+        $result->locale = $this->locale;
     }
 }
