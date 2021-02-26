@@ -10,6 +10,7 @@ use BinSoul\Symfony\Bundle\I18n\Repository\MessageRepository;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator as BaseTranslator;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
+use Symfony\Component\Translation\Formatter\IntlFormatterInterface;
 use Symfony\Component\Translation\Formatter\MessageFormatterInterface;
 use Symfony\Component\Translation\MessageCatalogue;
 use Symfony\Component\Translation\MessageCatalogueInterface;
@@ -91,7 +92,16 @@ class DatabaseTranslator extends BaseTranslator
                 $locale = $catalogue->getLocale();
             }
 
-            $result = $this->messageFormatter->format($catalogue->get($id, $domain), $locale ?? $this->getLocale(), $parameters);
+            $len = strlen(MessageCatalogue::INTL_DOMAIN_SUFFIX);
+
+            if ($this->messageFormatter instanceof IntlFormatterInterface
+                && ($catalogue->defines($id, $domain)
+                    || (strlen($domain) > $len && substr_compare($domain, MessageCatalogue::INTL_DOMAIN_SUFFIX, -$len, $len) === 0))
+            ) {
+                $result = $this->messageFormatter->formatIntl($catalogue->get($id, $domain), $locale ?? $this->getLocale(), $parameters);
+            } else {
+                $result = $this->messageFormatter->format($catalogue->get($id, $domain), $locale ?? $this->getLocale(), $parameters);
+            }
         }
 
         return $result;
