@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BinSoul\Symfony\Bundle\I18n\Twig\Extension;
 
 use BinSoul\Common\I18n\DefaultLocale;
+use BinSoul\Common\I18n\DefaultMessage;
 use BinSoul\Common\I18n\Locale;
 use BinSoul\Common\I18n\Message;
 use BinSoul\Common\I18n\PluralizedMessage;
@@ -41,6 +42,7 @@ class TranslatorExtension extends AbstractExtension
         return [
             new TwigFilter('translate', [$this, 'translate']),
             new TwigFilter('pluralize', [$this, 'pluralize']),
+            new TwigFilter('inDomain', [$this, 'inDomain']),
         ];
     }
 
@@ -68,6 +70,21 @@ class TranslatorExtension extends AbstractExtension
     public function pluralize($key, $quantity, ?string $domain = null, $locale = null): PluralizedMessage
     {
         return $this->getTranslator($locale)->pluralize($key, $quantity, $domain);
+    }
+
+    /**
+     * Sets the domain for a key.
+     *
+     * @param string|Message $key    The message key
+     * @param string|null    $domain The domain for the message or null to use the default
+     */
+    public function inDomain($key, ?string $domain = null): Message
+    {
+        if ($key instanceof Message) {
+            return $key->withDomain($domain);
+        }
+
+        return new DefaultMessage($key, $domain);
     }
 
     /**
