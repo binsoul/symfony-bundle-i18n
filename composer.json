@@ -32,7 +32,7 @@
         "twig/twig": "^3"
     },
     "require-dev": {
-        "binsoul/coding-standard": "*@dev",
+        "binsoul/coding-standard": "^1",
         "phpstan/phpstan": "^0.12",
         "phpunit/phpunit": "^8|^9",
         "symplify/easy-coding-standard-prefixed": "^9"
