@@ -17,13 +17,13 @@ class ManagerTest extends TestCase
     {
         $manager = $this->buildManager();
 
-        $this->assertEquals(DefaultLocale::fromString(Locale::getDefault())->getCode('_'), $manager->getLocale());
-        $this->assertEquals(DefaultLocale::fromString(Locale::getDefault())->getCode('_'), $manager->getEnvironment()->getLocale()->getCode('_'));
+        self::assertEquals(DefaultLocale::fromString(Locale::getDefault())->getCode('_'), $manager->getLocale());
+        self::assertEquals(DefaultLocale::fromString(Locale::getDefault())->getCode('_'), $manager->getEnvironment()->getLocale()->getCode('_'));
 
         $manager->setLocale('ar_EG');
 
-        $this->assertEquals('ar_EG', $manager->getLocale());
-        $this->assertEquals('ar_EG', $manager->getEnvironment()->getLocale()->getCode('_'));
+        self::assertEquals('ar_EG', $manager->getLocale());
+        self::assertEquals('ar_EG', $manager->getEnvironment()->getLocale()->getCode('_'));
     }
 
     public function test_handles_stack(): void
@@ -31,31 +31,31 @@ class ManagerTest extends TestCase
         $manager = $this->buildManager();
 
         $manager->setLocale('de_DE');
-        $this->assertEquals('de-DE', $manager->getEnvironment()->getLocale()->getCode());
+        self::assertEquals('de-DE', $manager->getEnvironment()->getLocale()->getCode());
 
         $environment = $manager->enterEnvironment(DefaultLocale::fromString('en-US'));
-        $this->assertEquals('en-US', $environment->getLocale()->getCode());
-        $this->assertEquals('en-US', $manager->getEnvironment()->getLocale()->getCode());
+        self::assertEquals('en-US', $environment->getLocale()->getCode());
+        self::assertEquals('en-US', $manager->getEnvironment()->getLocale()->getCode());
 
         $environment = $manager->enterEnvironment(DefaultLocale::fromString('fr'));
-        $this->assertEquals('fr', $environment->getLocale()->getCode());
-        $this->assertEquals('fr', $manager->getEnvironment()->getLocale()->getCode());
+        self::assertEquals('fr', $environment->getLocale()->getCode());
+        self::assertEquals('fr', $manager->getEnvironment()->getLocale()->getCode());
 
         $manager->leaveEnvironment();
-        $this->assertEquals('en-US', $manager->getEnvironment()->getLocale()->getCode());
+        self::assertEquals('en-US', $manager->getEnvironment()->getLocale()->getCode());
 
         $environment = $manager->enterDefaultEnvironment();
-        $this->assertEquals('de-DE', $environment->getLocale()->getCode());
-        $this->assertEquals('de-DE', $manager->getEnvironment()->getLocale()->getCode());
+        self::assertEquals('de-DE', $environment->getLocale()->getCode());
+        self::assertEquals('de-DE', $manager->getEnvironment()->getLocale()->getCode());
 
         $manager->leaveEnvironment();
-        $this->assertEquals('en-US', $manager->getEnvironment()->getLocale()->getCode());
+        self::assertEquals('en-US', $manager->getEnvironment()->getLocale()->getCode());
 
         $manager->leaveEnvironment();
-        $this->assertEquals('de-DE', $manager->getEnvironment()->getLocale()->getCode());
+        self::assertEquals('de-DE', $manager->getEnvironment()->getLocale()->getCode());
 
         $manager->leaveEnvironment();
-        $this->assertEquals('de-DE', $manager->getEnvironment()->getLocale()->getCode());
+        self::assertEquals('de-DE', $manager->getEnvironment()->getLocale()->getCode());
     }
 
     public function test_executes_operations(): void
@@ -63,7 +63,7 @@ class ManagerTest extends TestCase
         $manager = $this->buildManager();
 
         $manager->setLocale('de_DE');
-        $this->assertEquals('de-DE', $manager->getEnvironment()->getLocale()->getCode());
+        self::assertEquals('de-DE', $manager->getEnvironment()->getLocale()->getCode());
 
         $called = false;
         $calledLocale = null;
@@ -76,11 +76,11 @@ class ManagerTest extends TestCase
 
         $result = $manager->execute(DefaultLocale::fromString('en-US'), $operation);
 
-        $this->assertTrue($called);
-        $this->assertEquals('en-US', $calledLocale);
-        $this->assertEquals('test', $result);
+        self::assertTrue($called);
+        self::assertEquals('en-US', $calledLocale);
+        self::assertEquals('test', $result);
 
-        $this->assertEquals('de-DE', $manager->getEnvironment()->getLocale()->getCode());
+        self::assertEquals('de-DE', $manager->getEnvironment()->getLocale()->getCode());
     }
 
     private function buildManager(): Manager
