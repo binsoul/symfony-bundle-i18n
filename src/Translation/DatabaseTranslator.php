@@ -46,6 +46,11 @@ class DatabaseTranslator extends BaseTranslator
      */
     private $loadedCatalogues = [];
 
+    /**
+     * @var MessageCatalogueInterface[]
+     */
+    private $databaseCatalogues = [];
+
     public function __construct(
         ContainerInterface $container,
         MessageFormatterInterface $formatter,
@@ -105,7 +110,7 @@ class DatabaseTranslator extends BaseTranslator
         }
 
         if (isset($this->loadedCatalogues[$locale][$domain])) {
-            return $this->catalogues[$locale];
+            return $this->databaseCatalogues[$locale];
         }
 
         $localeEntity = null;
@@ -137,11 +142,11 @@ class DatabaseTranslator extends BaseTranslator
             $messages[$entity->getKey()] = $entity->getFormat();
         }
 
-        if (! isset($this->catalogues[$locale])) {
-            $this->catalogues[$locale] = new MessageCatalogue($locale);
+        if (! isset($this->databaseCatalogues[$locale])) {
+            $this->databaseCatalogues[$locale] = new MessageCatalogue($locale);
         }
 
-        $this->catalogues[$locale]->add($messages, $domain);
+        $this->databaseCatalogues[$locale]->add($messages, $domain);
 
         if (! isset($this->loadedCatalogues[$locale])) {
             $this->loadedCatalogues[$locale] = [];
@@ -154,10 +159,10 @@ class DatabaseTranslator extends BaseTranslator
 
         if (! $parsedLocale->isRoot()) {
             $fallbackCatalogue = $this->load($parsedLocale->getCode('_'), $domain);
-            $this->catalogues[$locale]->addFallbackCatalogue($fallbackCatalogue);
+            $this->databaseCatalogues[$locale]->addFallbackCatalogue($fallbackCatalogue);
         }
 
-        return $this->catalogues[$locale];
+        return $this->databaseCatalogues[$locale];
     }
 
     /**
