@@ -10,6 +10,8 @@ use BinSoul\Common\I18n\Locale;
 use BinSoul\Common\I18n\NumberFormatter;
 use BinSoul\Common\I18n\SlugGenerator;
 use BinSoul\Common\I18n\Translator;
+use BinSoul\Symfony\Bundle\I18n\Formatter\ListFormatter;
+use BinSoul\Symfony\Bundle\I18n\Formatter\QuoteFormatter;
 
 /**
  * Represent an environment configured for a specific locale.
@@ -40,6 +42,16 @@ interface I18nEnvironment
      * Returns an object which can translate strings.
      */
     public function getTranslator(): Translator;
+
+    /**
+     * Returns an object which can format lists.
+     */
+    public function getListFormatter(): ListFormatter;
+
+    /**
+     * Returns an object which can format quotes.
+     */
+    public function getQuoteFormatter(): QuoteFormatter;
 
     /**
      * Returns an object which can generate slugs.
