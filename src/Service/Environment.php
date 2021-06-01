@@ -12,7 +12,9 @@ use BinSoul\Common\I18n\SlugGenerator as CommonSlugGenerator;
 use BinSoul\Common\I18n\Translator as CommonTranslator;
 use BinSoul\Symfony\Bundle\I18n\Formatter\AddressFormatter;
 use BinSoul\Symfony\Bundle\I18n\Formatter\DateTimeFormatter;
+use BinSoul\Symfony\Bundle\I18n\Formatter\ListFormatter;
 use BinSoul\Symfony\Bundle\I18n\Formatter\NumberFormatter;
+use BinSoul\Symfony\Bundle\I18n\Formatter\QuoteFormatter;
 use BinSoul\Symfony\Bundle\I18n\I18nEnvironment;
 use BinSoul\Symfony\Bundle\I18n\Translation\Translator;
 use BinSoul\Symfony\Bundle\I18n\Transliterator\SlugGenerator;
@@ -50,6 +52,16 @@ class Environment implements I18nEnvironment
     private $slugGenerator;
 
     /**
+     * @var ListFormatter
+     */
+    private $listFormatter;
+
+    /**
+     * @var QuoteFormatter
+     */
+    private $quoteFormatter;
+
+    /**
      * Constructs an instance of this class.
      */
     public function __construct(
@@ -57,13 +69,17 @@ class Environment implements I18nEnvironment
         NumberFormatter $numberFormatter,
         DateTimeFormatter $dateTimeFormatter,
         AddressFormatter $addressFormatter,
-        Translator $translator
+        Translator $translator,
+        ListFormatter $listFormatter,
+        QuoteFormatter $quoteFormatter
     ) {
         $this->locale = $locale;
         $this->numberFormatter = $numberFormatter;
         $this->dateTimeFormatter = $dateTimeFormatter;
         $this->addressFormatter = $addressFormatter;
         $this->translator = $translator;
+        $this->listFormatter = $listFormatter;
+        $this->quoteFormatter = $quoteFormatter;
     }
 
     public function getLocale(): Locale
@@ -89,6 +105,16 @@ class Environment implements I18nEnvironment
     public function getTranslator(): CommonTranslator
     {
         return $this->translator;
+    }
+
+    public function getListFormatter(): ListFormatter
+    {
+        return $this->listFormatter;
+    }
+
+    public function getQuoteFormatter(): QuoteFormatter
+    {
+        return $this->quoteFormatter;
     }
 
     public function getSlugGenerator(): CommonSlugGenerator

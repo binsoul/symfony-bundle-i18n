@@ -8,7 +8,9 @@ use BinSoul\Common\I18n\DefaultLocale;
 use BinSoul\Common\I18n\Locale;
 use BinSoul\Symfony\Bundle\I18n\Formatter\AddressFormatter;
 use BinSoul\Symfony\Bundle\I18n\Formatter\DateTimeFormatter;
+use BinSoul\Symfony\Bundle\I18n\Formatter\ListFormatter;
 use BinSoul\Symfony\Bundle\I18n\Formatter\NumberFormatter;
+use BinSoul\Symfony\Bundle\I18n\Formatter\QuoteFormatter;
 use BinSoul\Symfony\Bundle\I18n\I18nEnvironment;
 use BinSoul\Symfony\Bundle\I18n\I18nManager;
 use BinSoul\Symfony\Bundle\I18n\Translation\Translator;
@@ -110,7 +112,9 @@ class Manager implements I18nManager, LocaleAwareInterface
             new NumberFormatter($locale),
             new DateTimeFormatter($locale),
             new AddressFormatter($locale),
-            new Translator($this->translator, $locale)
+            new Translator($this->translator, $locale),
+            new ListFormatter($locale),
+            new QuoteFormatter($locale)
         );
     }
 }
