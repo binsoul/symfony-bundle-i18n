@@ -25,3 +25,6 @@ services:
 
     BinSoul\Symfony\Bundle\I18n\EventListener\TablePrefixListener:
         tags: ['doctrine.event_subscriber']
+
+    BinSoul\Symfony\Bundle\I18n\EventListener\TwigGlobalsListener:
+        tags: ['kernel.event_subscriber']
