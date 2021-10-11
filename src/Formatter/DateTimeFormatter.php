@@ -72,4 +72,29 @@ class DateTimeFormatter implements CommonDateTimeFormatter
 
         return new self($locale);
     }
+
+    public function getTimePattern(): string
+    {
+        return $this->formatter->getTimePattern();
+    }
+
+    public function getTimeWithSecondsPattern(): string
+    {
+        return $this->formatter->getDateTimeWithSecondsPattern();
+    }
+
+    public function getDatePattern(): string
+    {
+        return $this->formatter->getDatePattern();
+    }
+
+    public function getDateTimePattern(): string
+    {
+        return $this->formatter->getDateTimePattern();
+    }
+
+    public function getDateTimeWithSecondsPattern(): string
+    {
+        return $this->formatter->getDateTimeWithSecondsPattern();
+    }
 }
