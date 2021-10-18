@@ -7,6 +7,7 @@ namespace BinSoul\Symfony\Bundle\I18n\Translation;
 use BinSoul\Common\I18n\DefaultLocale;
 use BinSoul\Symfony\Bundle\I18n\Repository\LocaleRepository;
 use BinSoul\Symfony\Bundle\I18n\Repository\MessageRepository;
+use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator as BaseTranslator;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
@@ -58,14 +59,23 @@ class DatabaseTranslator extends BaseTranslator
         array $loaderIds = [],
         array $options = [],
         array $enabledLocales = [],
-        MessageRepository $messageRepository,
-        LocaleRepository $localeRepository
+        ?MessageRepository $messageRepository = null,
+        ?LocaleRepository $localeRepository = null
     ) {
         parent::__construct($container, $formatter, $defaultLocale, $loaderIds, $options, $enabledLocales);
 
-        $this->messageRepository = $messageRepository;
-        $this->localeRepository = $localeRepository;
         $this->messageFormatter = $formatter;
+
+        if ($messageRepository === null) {
+            throw new InvalidArgumentException('A message repository is required.');
+        }
+        $this->messageRepository = $messageRepository;
+
+        if ($localeRepository === null) {
+            throw new InvalidArgumentException('A locale repository is required.');
+        }
+
+        $this->localeRepository = $localeRepository;
     }
 
     public function trans($id, array $parameters = [], $domain = null, $locale = null)
