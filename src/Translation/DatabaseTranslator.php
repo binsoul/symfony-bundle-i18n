@@ -78,7 +78,7 @@ class DatabaseTranslator extends BaseTranslator
         $this->localeRepository = $localeRepository;
     }
 
-    public function trans($id, array $parameters = [], $domain = null, $locale = null)
+    public function trans($id, array $parameters = [], $domain = null, $locale = null): string
     {
         if ((string) $id === '') {
             return '';
