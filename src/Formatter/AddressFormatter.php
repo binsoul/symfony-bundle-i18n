@@ -39,9 +39,19 @@ class AddressFormatter implements CommonAddressFormatter
         return $this->formatter->format($address);
     }
 
-    public function generateTemplate(string $countryCode): Address
+    public function generateUsageTemplate(string $countryCode): Address
     {
-        return $this->formatter->generateTemplate($countryCode);
+        return $this->formatter->generateUsageTemplate($countryCode);
+    }
+
+    public function generateLabelTemplate(string $countryCode): Address
+    {
+        return $this->formatter->generateLabelTemplate($countryCode);
+    }
+
+    public function generateRegexTemplate(string $countryCode): Address
+    {
+        return $this->formatter->generateRegexTemplate($countryCode);
     }
 
     public function withLocale(Locale $locale): CommonAddressFormatter
