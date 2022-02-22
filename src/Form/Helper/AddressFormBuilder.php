@@ -288,9 +288,17 @@ class AddressFormBuilder
 
     private function modifyForm(FormInterface $builder, MutableAddress $object, ?array $data): array
     {
-        $usageTemplate = $this->addressFormatter->generateUsageTemplate($data[$this->countryOptions['field']] ?? $object->getCountryCode() ?? $this->defaultCountry);
-        $regexTemplate = $this->addressFormatter->generateRegexTemplate($data[$this->countryOptions['field']] ?? $object->getCountryCode() ?? $this->defaultCountry);
-        $labelTemplate = $this->addressFormatter->generateLabelTemplate($data[$this->countryOptions['field']] ?? $object->getCountryCode() ?? $this->defaultCountry);
+        $countryCode = $this->defaultCountry;
+
+        if (trim((string) $data[$this->countryOptions['field']]) !== '') {
+            $countryCode = trim((string) $data[$this->countryOptions['field']]);
+        } elseif (trim((string) $object->getCountryCode()) !== '') {
+            $countryCode = trim((string) $object->getCountryCode());
+        }
+
+        $usageTemplate = $this->addressFormatter->generateUsageTemplate($countryCode);
+        $regexTemplate = $this->addressFormatter->generateRegexTemplate($countryCode);
+        $labelTemplate = $this->addressFormatter->generateLabelTemplate($countryCode);
         $translator = $this->labelTranslator;
 
         if ($usageTemplate->getAddressLine1()) {
