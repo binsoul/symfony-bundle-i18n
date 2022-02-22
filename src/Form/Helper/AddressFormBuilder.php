@@ -290,7 +290,7 @@ class AddressFormBuilder
     {
         $countryCode = $this->defaultCountry;
 
-        if (trim((string) $data[$this->countryOptions['field']]) !== '') {
+        if (trim((string) ($data[$this->countryOptions['field']] ?? '')) !== '') {
             $countryCode = trim((string) $data[$this->countryOptions['field']]);
         } elseif (trim((string) $object->getCountryCode()) !== '') {
             $countryCode = trim((string) $object->getCountryCode());
