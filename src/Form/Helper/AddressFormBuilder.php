@@ -163,6 +163,8 @@ class AddressFormBuilder
     public function makeAllFieldsOptional(): self
     {
         $this->allFieldsOptional = true;
+
+        return $this;
     }
 
     public function withCountry(string $fieldName, $fieldType, array $fieldOptions): self
