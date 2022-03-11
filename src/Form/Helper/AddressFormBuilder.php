@@ -36,7 +36,7 @@ class AddressFormBuilder
         'type' => ChoiceType::class,
         'attr' => [
             'label' => 'Country',
-            'required' => true,
+            'required' => false,
             'attr' => [
                 'autocomplete' => 'country',
             ],
@@ -171,13 +171,6 @@ class AddressFormBuilder
     {
         $this->countryOptions['field'] = $fieldName;
         $this->countryOptions['type'] = $fieldType;
-
-        $fieldOptions['required'] = true;
-
-        if (count($fieldOptions['constraints'] ?? []) === 0) {
-            $fieldOptions['constraints'] = [new NotBlank()];
-        }
-
         $this->countryOptions['attr'] = $this->merge($this->countryOptions['attr'], $fieldOptions);
 
         return $this;
@@ -273,7 +266,16 @@ class AddressFormBuilder
 
     public function build(FormBuilderInterface $builder): void
     {
-        $builder->add($this->countryOptions['field'], $this->countryOptions['type'], $this->countryOptions['attr']);
+        $attr = $this->countryOptions['attr'];
+
+        if (! $this->allFieldsOptional) {
+            $attr['required'] = true;
+            $constraints = $attr['constraints'] ?? [];
+            $constraints[] = new NotBlank();
+            $attr['constraints'] = $constraints;
+        }
+
+        $builder->add($this->countryOptions['field'], $this->countryOptions['type'], $attr);
 
         $builder->addEventListener(
             FormEvents::PRE_SET_DATA,
