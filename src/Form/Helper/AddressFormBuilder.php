@@ -29,6 +29,8 @@ class AddressFormBuilder
      */
     private $labelTranslator;
 
+    private bool $allFieldsOptional = false;
+
     private array $countryOptions = [
         'field' => 'countryCode',
         'type' => ChoiceType::class,
@@ -156,6 +158,11 @@ class AddressFormBuilder
         $this->labelTranslator = $translator;
 
         return $this;
+    }
+
+    public function makeAllFieldsOptional(): self
+    {
+        $this->allFieldsOptional = true;
     }
 
     public function withCountry(string $fieldName, $fieldType, array $fieldOptions): self
@@ -305,7 +312,7 @@ class AddressFormBuilder
             $attr = $this->addressLine1Options['attr'];
             $constraints = $attr['constraints'] ?? [];
 
-            if ($usageTemplate->getAddressLine1() === 'required') {
+            if (! $this->allFieldsOptional && $usageTemplate->getAddressLine1() === 'required') {
                 $constraints[] = new NotBlank();
                 $attr['required'] = true;
             }
@@ -332,7 +339,7 @@ class AddressFormBuilder
             $attr = $this->addressLine2Options['attr'];
             $constraints = $attr['constraints'] ?? [];
 
-            if ($usageTemplate->getAddressLine2() === 'required') {
+            if (! $this->allFieldsOptional && $usageTemplate->getAddressLine2() === 'required') {
                 $constraints[] = new NotBlank();
                 $attr['required'] = true;
             }
@@ -359,7 +366,7 @@ class AddressFormBuilder
             $attr = $this->addressLine3Options['attr'];
             $constraints = $attr['constraints'] ?? [];
 
-            if ($usageTemplate->getAddressLine3() === 'required') {
+            if (! $this->allFieldsOptional && $usageTemplate->getAddressLine3() === 'required') {
                 $constraints[] = new NotBlank();
                 $attr['required'] = true;
             }
@@ -386,7 +393,7 @@ class AddressFormBuilder
             $attr = $this->postalCodeOptions['attr'];
             $constraints = $attr['constraints'] ?? [];
 
-            if ($usageTemplate->getPostalCode() === 'required') {
+            if (! $this->allFieldsOptional && $usageTemplate->getPostalCode() === 'required') {
                 $constraints[] = new NotBlank();
                 $attr['required'] = true;
             }
@@ -413,7 +420,7 @@ class AddressFormBuilder
             $attr = $this->stateOptions['attr'];
             $constraints = $attr['constraints'] ?? [];
 
-            if ($usageTemplate->getState() === 'required') {
+            if (! $this->allFieldsOptional && $usageTemplate->getState() === 'required') {
                 $constraints[] = new NotBlank();
                 $attr['required'] = true;
             }
@@ -440,7 +447,7 @@ class AddressFormBuilder
             $attr = $this->localityOptions['attr'];
             $constraints = $attr['constraints'] ?? [];
 
-            if ($usageTemplate->getLocality() === 'required') {
+            if (! $this->allFieldsOptional && $usageTemplate->getLocality() === 'required') {
                 $constraints[] = new NotBlank();
                 $attr['required'] = true;
             }
@@ -467,7 +474,7 @@ class AddressFormBuilder
             $attr = $this->subLocalityOptions['attr'];
             $constraints = $attr['constraints'] ?? [];
 
-            if ($usageTemplate->getSubLocality() === 'required') {
+            if (! $this->allFieldsOptional && $usageTemplate->getSubLocality() === 'required') {
                 $constraints[] = new NotBlank();
                 $attr['required'] = true;
             }
@@ -494,7 +501,7 @@ class AddressFormBuilder
             $attr = $this->sortingCodeOptions['attr'];
             $constraints = $attr['constraints'] ?? [];
 
-            if ($usageTemplate->getSortingCode() === 'required') {
+            if (! $this->allFieldsOptional && $usageTemplate->getSortingCode() === 'required') {
                 $constraints[] = new NotBlank();
                 $attr['required'] = true;
             }
