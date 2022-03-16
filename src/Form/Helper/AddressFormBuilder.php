@@ -31,6 +31,8 @@ class AddressFormBuilder
 
     private bool $allFieldsOptional = false;
 
+    private ?array $constraintOptions = null;
+
     private array $countryOptions = [
         'field' => 'countryCode',
         'type' => ChoiceType::class,
@@ -167,6 +169,13 @@ class AddressFormBuilder
         return $this;
     }
 
+    public function withConstraintOptions(array $constraintOptions): self
+    {
+        $this->constraintOptions = $constraintOptions;
+
+        return $this;
+    }
+
     public function withCountry(string $fieldName, $fieldType, array $fieldOptions): self
     {
         $this->countryOptions['field'] = $fieldName;
@@ -271,7 +280,7 @@ class AddressFormBuilder
         if (! $this->allFieldsOptional) {
             $attr['required'] = true;
             $constraints = $attr['constraints'] ?? [];
-            $constraints[] = new NotBlank();
+            $constraints[] = new NotBlank($this->constraintOptions);
             $attr['constraints'] = $constraints;
         }
 
@@ -317,12 +326,12 @@ class AddressFormBuilder
             $constraints = $attr['constraints'] ?? [];
 
             if (! $this->allFieldsOptional && $usageTemplate->getAddressLine1() === 'required') {
-                $constraints[] = new NotBlank();
+                $constraints[] = new NotBlank($this->constraintOptions);
                 $attr['required'] = true;
             }
 
             if ($regexTemplate->getAddressLine1()) {
-                $constraints[] = new Regex('/' . $regexTemplate->getAddressLine1() . '/');
+                $constraints[] = new Regex(array_merge(['pattern' => '/' . $regexTemplate->getAddressLine1() . '/'], $this->constraintOptions));
             }
 
             $attr['constraints'] = $constraints;
@@ -344,12 +353,12 @@ class AddressFormBuilder
             $constraints = $attr['constraints'] ?? [];
 
             if (! $this->allFieldsOptional && $usageTemplate->getAddressLine2() === 'required') {
-                $constraints[] = new NotBlank();
+                $constraints[] = new NotBlank($this->constraintOptions);
                 $attr['required'] = true;
             }
 
             if ($regexTemplate->getAddressLine2()) {
-                $constraints[] = new Regex('/' . $regexTemplate->getAddressLine2() . '/');
+                $constraints[] = new Regex(array_merge(['pattern' => '/' . $regexTemplate->getAddressLine2() . '/'], $this->constraintOptions));
             }
 
             $attr['constraints'] = $constraints;
@@ -371,12 +380,12 @@ class AddressFormBuilder
             $constraints = $attr['constraints'] ?? [];
 
             if (! $this->allFieldsOptional && $usageTemplate->getAddressLine3() === 'required') {
-                $constraints[] = new NotBlank();
+                $constraints[] = new NotBlank($this->constraintOptions);
                 $attr['required'] = true;
             }
 
             if ($regexTemplate->getAddressLine3()) {
-                $constraints[] = new Regex('/' . $regexTemplate->getAddressLine3() . '/');
+                $constraints[] = new Regex(array_merge(['pattern' => '/' . $regexTemplate->getAddressLine3() . '/'], $this->constraintOptions));
             }
 
             $attr['constraints'] = $constraints;
@@ -398,12 +407,12 @@ class AddressFormBuilder
             $constraints = $attr['constraints'] ?? [];
 
             if (! $this->allFieldsOptional && $usageTemplate->getPostalCode() === 'required') {
-                $constraints[] = new NotBlank();
+                $constraints[] = new NotBlank($this->constraintOptions);
                 $attr['required'] = true;
             }
 
             if ($regexTemplate->getPostalCode()) {
-                $constraints[] = new Regex('/' . $regexTemplate->getPostalCode() . '/');
+                $constraints[] = new Regex(array_merge(['pattern' => '/' . $regexTemplate->getPostalCode() . '/'], $this->constraintOptions));
             }
 
             $attr['constraints'] = $constraints;
@@ -425,12 +434,12 @@ class AddressFormBuilder
             $constraints = $attr['constraints'] ?? [];
 
             if (! $this->allFieldsOptional && $usageTemplate->getState() === 'required') {
-                $constraints[] = new NotBlank();
+                $constraints[] = new NotBlank($this->constraintOptions);
                 $attr['required'] = true;
             }
 
             if ($regexTemplate->getState()) {
-                $constraints[] = new Regex('/' . $regexTemplate->getState() . '/');
+                $constraints[] = new Regex(array_merge(['pattern' => '/' . $regexTemplate->getState() . '/'], $this->constraintOptions));
             }
 
             $attr['constraints'] = $constraints;
@@ -452,12 +461,12 @@ class AddressFormBuilder
             $constraints = $attr['constraints'] ?? [];
 
             if (! $this->allFieldsOptional && $usageTemplate->getLocality() === 'required') {
-                $constraints[] = new NotBlank();
+                $constraints[] = new NotBlank($this->constraintOptions);
                 $attr['required'] = true;
             }
 
             if ($regexTemplate->getLocality()) {
-                $constraints[] = new Regex('/' . $regexTemplate->getLocality() . '/');
+                $constraints[] = new Regex(array_merge(['pattern' => '/' . $regexTemplate->getLocality() . '/'], $this->constraintOptions));
             }
 
             $attr['constraints'] = $constraints;
@@ -479,12 +488,12 @@ class AddressFormBuilder
             $constraints = $attr['constraints'] ?? [];
 
             if (! $this->allFieldsOptional && $usageTemplate->getSubLocality() === 'required') {
-                $constraints[] = new NotBlank();
+                $constraints[] = new NotBlank($this->constraintOptions);
                 $attr['required'] = true;
             }
 
             if ($regexTemplate->getSubLocality()) {
-                $constraints[] = new Regex('/' . $regexTemplate->getSubLocality() . '/');
+                $constraints[] = new Regex(array_merge(['pattern' => '/' . $regexTemplate->getSubLocality() . '/'], $this->constraintOptions));
             }
 
             $attr['constraints'] = $constraints;
@@ -506,12 +515,12 @@ class AddressFormBuilder
             $constraints = $attr['constraints'] ?? [];
 
             if (! $this->allFieldsOptional && $usageTemplate->getSortingCode() === 'required') {
-                $constraints[] = new NotBlank();
+                $constraints[] = new NotBlank($this->constraintOptions);
                 $attr['required'] = true;
             }
 
             if ($regexTemplate->getSortingCode()) {
-                $constraints[] = new Regex('/' . $regexTemplate->getSortingCode() . '/');
+                $constraints[] = new Regex(array_merge(['pattern' => '/' . $regexTemplate->getSortingCode() . '/'], $this->constraintOptions));
             }
 
             $attr['constraints'] = $constraints;
