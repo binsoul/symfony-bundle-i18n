@@ -331,7 +331,7 @@ class AddressFormBuilder
             }
 
             if ($regexTemplate->getAddressLine1()) {
-                $constraints[] = new Regex(array_merge(['pattern' => '/' . $regexTemplate->getAddressLine1() . '/'], $this->constraintOptions));
+                $constraints[] = new Regex(array_merge(['pattern' => '/' . $regexTemplate->getAddressLine1() . '/'], $this->constraintOptions ?? []));
             }
 
             $attr['constraints'] = $constraints;
@@ -358,7 +358,7 @@ class AddressFormBuilder
             }
 
             if ($regexTemplate->getAddressLine2()) {
-                $constraints[] = new Regex(array_merge(['pattern' => '/' . $regexTemplate->getAddressLine2() . '/'], $this->constraintOptions));
+                $constraints[] = new Regex(array_merge(['pattern' => '/' . $regexTemplate->getAddressLine2() . '/'], $this->constraintOptions ?? []));
             }
 
             $attr['constraints'] = $constraints;
@@ -385,7 +385,7 @@ class AddressFormBuilder
             }
 
             if ($regexTemplate->getAddressLine3()) {
-                $constraints[] = new Regex(array_merge(['pattern' => '/' . $regexTemplate->getAddressLine3() . '/'], $this->constraintOptions));
+                $constraints[] = new Regex(array_merge(['pattern' => '/' . $regexTemplate->getAddressLine3() . '/'], $this->constraintOptions ?? []));
             }
 
             $attr['constraints'] = $constraints;
@@ -412,7 +412,7 @@ class AddressFormBuilder
             }
 
             if ($regexTemplate->getPostalCode()) {
-                $constraints[] = new Regex(array_merge(['pattern' => '/' . $regexTemplate->getPostalCode() . '/'], $this->constraintOptions));
+                $constraints[] = new Regex(array_merge(['pattern' => '/' . $regexTemplate->getPostalCode() . '/'], $this->constraintOptions ?? []));
             }
 
             $attr['constraints'] = $constraints;
@@ -439,7 +439,7 @@ class AddressFormBuilder
             }
 
             if ($regexTemplate->getState()) {
-                $constraints[] = new Regex(array_merge(['pattern' => '/' . $regexTemplate->getState() . '/'], $this->constraintOptions));
+                $constraints[] = new Regex(array_merge(['pattern' => '/' . $regexTemplate->getState() . '/'], $this->constraintOptions ?? []));
             }
 
             $attr['constraints'] = $constraints;
@@ -466,7 +466,7 @@ class AddressFormBuilder
             }
 
             if ($regexTemplate->getLocality()) {
-                $constraints[] = new Regex(array_merge(['pattern' => '/' . $regexTemplate->getLocality() . '/'], $this->constraintOptions));
+                $constraints[] = new Regex(array_merge(['pattern' => '/' . $regexTemplate->getLocality() . '/'], $this->constraintOptions ?? []));
             }
 
             $attr['constraints'] = $constraints;
@@ -493,7 +493,7 @@ class AddressFormBuilder
             }
 
             if ($regexTemplate->getSubLocality()) {
-                $constraints[] = new Regex(array_merge(['pattern' => '/' . $regexTemplate->getSubLocality() . '/'], $this->constraintOptions));
+                $constraints[] = new Regex(array_merge(['pattern' => '/' . $regexTemplate->getSubLocality() . '/'], $this->constraintOptions ?? []));
             }
 
             $attr['constraints'] = $constraints;
@@ -520,7 +520,7 @@ class AddressFormBuilder
             }
 
             if ($regexTemplate->getSortingCode()) {
-                $constraints[] = new Regex(array_merge(['pattern' => '/' . $regexTemplate->getSortingCode() . '/'], $this->constraintOptions));
+                $constraints[] = new Regex(array_merge(['pattern' => '/' . $regexTemplate->getSortingCode() . '/'], $this->constraintOptions ?? []));
             }
 
             $attr['constraints'] = $constraints;
