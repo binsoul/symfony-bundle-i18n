@@ -61,7 +61,7 @@ class DateTimeFormatter implements CommonDateTimeFormatter
 
     public function formatDateTimeWithSeconds(DateTimeInterface $datetime): string
     {
-        return $this->formatter->formatTimeWithSeconds($datetime);
+        return $this->formatter->formatDateTimeWithSeconds($datetime);
     }
 
     public function withLocale(Locale $locale): CommonDateTimeFormatter
