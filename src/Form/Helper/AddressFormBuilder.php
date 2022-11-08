@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BinSoul\Symfony\Bundle\I18n\Form\Helper;
 
 use BinSoul\Common\I18n\AddressFormatter;
+use BinSoul\Common\I18n\Data\StateData;
 use BinSoul\Common\I18n\MutableAddress;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -96,6 +97,7 @@ class AddressFormBuilder
     ];
 
     private array $stateOptions = [
+        'enableChoice' => true,
         'field' => 'state',
         'type' => TextType::class,
         'attr' => [
@@ -242,6 +244,13 @@ class AddressFormBuilder
         $this->stateOptions['field'] = $fieldName;
         $this->stateOptions['type'] = $fieldType;
         $this->stateOptions['attr'] = $this->merge($this->stateOptions['attr'], $fieldOptions);
+
+        return $this;
+    }
+
+    public function withoutStateChoice(): self
+    {
+        $this->stateOptions['enableChoice'] = false;
 
         return $this;
     }
@@ -448,7 +457,15 @@ class AddressFormBuilder
                 $attr['label'] = $translator($this->stateOptions['field'], $labelTemplate->getState());
             }
 
-            $builder->add($this->stateOptions['field'], $this->stateOptions['type'], $attr);
+            $names = $this->stateOptions['enableChoice'] ? StateData::names($countryCode) : [];
+
+            if (count($names) > 0) {
+                $attr['choices'] = array_combine($names, $names);
+                $builder->add($this->stateOptions['field'], ChoiceType::class, $attr);
+            } else {
+                $builder->add($this->stateOptions['field'], $this->stateOptions['type'], $attr);
+            }
+
             $data[$this->stateOptions['field']] = $data[$this->stateOptions['field']] ?? null;
         } else {
             $builder->remove($this->stateOptions['field']);
