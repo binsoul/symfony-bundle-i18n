@@ -98,6 +98,7 @@ class AddressFormBuilder
 
     private array $stateOptions = [
         'enableChoice' => true,
+        'forceDisplay' => false,
         'field' => 'state',
         'type' => TextType::class,
         'attr' => [
@@ -251,6 +252,13 @@ class AddressFormBuilder
     public function withoutStateChoice(): self
     {
         $this->stateOptions['enableChoice'] = false;
+
+        return $this;
+    }
+
+    public function forceStateDisplay(): self
+    {
+        $this->stateOptions['forceDisplay'] = true;
 
         return $this;
     }
@@ -438,7 +446,9 @@ class AddressFormBuilder
             unset($data[$this->postalCodeOptions['field']]);
         }
 
-        if ($usageTemplate->getState()) {
+        $forceState = $this->stateOptions['forceDisplay'] && (StateData::type($countryCode) !== null);
+
+        if ($forceState || $usageTemplate->getState()) {
             $attr = $this->stateOptions['attr'];
             $constraints = $attr['constraints'] ?? [];
 
