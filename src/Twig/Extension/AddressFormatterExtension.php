@@ -115,6 +115,7 @@ class AddressFormatterExtension extends AbstractExtension
 
     /**
      * @param array<string, string|null> $layout
+     *
      * @return array{0: int, 1: int}
      */
     private function getDimensions(array $layout): array
@@ -144,10 +145,6 @@ class AddressFormatterExtension extends AbstractExtension
         $layoutTemplate = $formatter->generateLayoutTemplate($countryCode);
 
         return [
-            'organization' => $layoutTemplate->getOrganization(),
-            'namePrefix' => $layoutTemplate->getNamePrefix(),
-            'firstName' => $layoutTemplate->getFirstName(),
-            'lastName' => $layoutTemplate->getLastName(),
             'addressLine1' => $layoutTemplate->getAddressLine1(),
             'addressLine2' => $layoutTemplate->getAddressLine2(),
             'addressLine3' => $layoutTemplate->getAddressLine3(),
