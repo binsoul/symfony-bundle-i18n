@@ -16,7 +16,7 @@ class AddressFormatterExtensionTest extends TestCase
         $extension = new AddressFormatterExtension($this->buildManager());
 
         $classes = $extension->addressContainerClasses('de');
-        $this->assertEquals('rows-7 columns-3', $classes);
+        $this->assertEquals('rows-7 columns-2', $classes);
     }
 
     public function test_generates_field_classes(): void
@@ -24,11 +24,11 @@ class AddressFormatterExtensionTest extends TestCase
         $extension = new AddressFormatterExtension($this->buildManager());
 
         $classes = $extension->addressFieldClasses('addressLine1', 'de');
-        $this->assertEquals('visible row-3 column-1 span-3', $classes);
+        $this->assertEquals('visible row-3 column-1 span-2', $classes);
         $classes = $extension->addressFieldClasses('postalCode', 'de');
         $this->assertEquals('visible row-6 column-1 span-1', $classes);
         $classes = $extension->addressFieldClasses('locality', 'de');
-        $this->assertEquals('visible row-6 column-2 span-2', $classes);
+        $this->assertEquals('visible row-6 column-2 span-1', $classes);
         $classes = $extension->addressFieldClasses('state', 'de');
         $this->assertEquals('invisible', $classes);
     }
