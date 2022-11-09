@@ -54,6 +54,11 @@ class AddressFormatter implements CommonAddressFormatter
         return $this->formatter->generateRegexTemplate($countryCode);
     }
 
+    public function generateLayoutTemplate(string $countryCode): Address
+    {
+        return $this->formatter->generateLayoutTemplate($countryCode);
+    }
+
     public function withLocale(Locale $locale): CommonAddressFormatter
     {
         if ($locale->getCode() === $this->locale->getCode()) {
