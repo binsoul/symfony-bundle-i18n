@@ -64,6 +64,9 @@ class AddressFormatterExtensionTest extends TestCase
         $this->assertEquals('visible row-4 column-2 span-1', $classes);
         $classes = $extension->addressFieldClasses('state', 'de');
         $this->assertEquals('invisible', $classes);
+
+        $classes = $extension->addressFieldClasses('sortingCode', 'nc');
+        $this->assertEquals('visible row-4 column-3 span-1', $classes);
     }
 
     public function test_generates_field_classes_with_options(): void

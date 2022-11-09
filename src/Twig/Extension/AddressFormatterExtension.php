@@ -190,6 +190,7 @@ class AddressFormatterExtension extends AbstractExtension
             }
         }
 
+        ksort($layout);
         $layout = array_values($layout);
 
         foreach ($includedFields as $field) {
@@ -199,6 +200,8 @@ class AddressFormatterExtension extends AbstractExtension
         $result = [];
 
         foreach ($layout as $row => $columns) {
+            ksort($columns);
+
             foreach (array_values($columns) as $column => $field) {
                 $result[$field] = [$row + 1, $column + 1];
             }
