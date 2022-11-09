@@ -32,9 +32,12 @@ class AddressFormBuilder
 
     private bool $allFieldsOptional = false;
 
+    private bool $allFieldsVisible = false;
+
     private ?array $constraintOptions = null;
 
     private array $countryOptions = [
+        'enabled' => true,
         'field' => 'countryCode',
         'type' => ChoiceType::class,
         'attr' => [
@@ -47,6 +50,7 @@ class AddressFormBuilder
     ];
 
     private array $addressLine1Options = [
+        'enabled' => true,
         'field' => 'addressLine1',
         'type' => TextType::class,
         'attr' => [
@@ -85,6 +89,7 @@ class AddressFormBuilder
     ];
 
     private array $postalCodeOptions = [
+        'enabled' => true,
         'field' => 'postalCode',
         'type' => TextType::class,
         'attr' => [
@@ -97,6 +102,7 @@ class AddressFormBuilder
     ];
 
     private array $stateOptions = [
+        'enabled' => true,
         'enableChoice' => true,
         'forceDisplay' => false,
         'field' => 'state',
@@ -111,6 +117,7 @@ class AddressFormBuilder
     ];
 
     private array $localityOptions = [
+        'enabled' => true,
         'field' => 'locality',
         'type' => TextType::class,
         'attr' => [
@@ -123,6 +130,7 @@ class AddressFormBuilder
     ];
 
     private array $subLocalityOptions = [
+        'enabled' => true,
         'field' => 'subLocality',
         'type' => TextType::class,
         'attr' => [
@@ -135,6 +143,7 @@ class AddressFormBuilder
     ];
 
     private array $sortingCodeOptions = [
+        'enabled' => true,
         'field' => 'sortingCode',
         'type' => TextType::class,
         'attr' => [
@@ -165,9 +174,26 @@ class AddressFormBuilder
         return $this;
     }
 
+    /**
+     * Marks all fields as optional.
+     *
+     * @return $this
+     */
     public function makeAllFieldsOptional(): self
     {
         $this->allFieldsOptional = true;
+
+        return $this;
+    }
+
+    /**
+     * Marks all fields as visible except when they are disabled explicitly.
+     *
+     * @return $this
+     */
+    public function makeAllFieldsVisible(): self
+    {
+        $this->allFieldsVisible = true;
 
         return $this;
     }
@@ -188,11 +214,25 @@ class AddressFormBuilder
         return $this;
     }
 
+    public function withoutCountry(): self
+    {
+        $this->countryOptions['enabled'] = false;
+
+        return $this;
+    }
+
     public function withAddressLine1(string $fieldName, $fieldType, array $fieldOptions): self
     {
         $this->addressLine1Options['field'] = $fieldName;
         $this->addressLine1Options['type'] = $fieldType;
         $this->addressLine1Options['attr'] = $this->merge($this->addressLine1Options['attr'], $fieldOptions);
+
+        return $this;
+    }
+
+    public function withoutAddressLine1(): self
+    {
+        $this->addressLine1Options['enabled'] = false;
 
         return $this;
     }
@@ -240,11 +280,25 @@ class AddressFormBuilder
         return $this;
     }
 
+    public function withoutPostalCode(): self
+    {
+        $this->postalCodeOptions['enabled'] = false;
+
+        return $this;
+    }
+
     public function withState(string $fieldName, $fieldType, array $fieldOptions): self
     {
         $this->stateOptions['field'] = $fieldName;
         $this->stateOptions['type'] = $fieldType;
         $this->stateOptions['attr'] = $this->merge($this->stateOptions['attr'], $fieldOptions);
+
+        return $this;
+    }
+
+    public function withoutState(): self
+    {
+        $this->stateOptions['enabled'] = false;
 
         return $this;
     }
@@ -272,6 +326,13 @@ class AddressFormBuilder
         return $this;
     }
 
+    public function withoutLocality(): self
+    {
+        $this->localityOptions['enabled'] = false;
+
+        return $this;
+    }
+
     public function withSubLocality(string $fieldName, $fieldType, array $fieldOptions): self
     {
         $this->subLocalityOptions['field'] = $fieldName;
@@ -281,11 +342,25 @@ class AddressFormBuilder
         return $this;
     }
 
+    public function withoutSubLocality(): self
+    {
+        $this->subLocalityOptions['enabled'] = false;
+
+        return $this;
+    }
+
     public function withSortingCode(string $fieldName, $fieldType, array $fieldOptions): self
     {
         $this->sortingCodeOptions['field'] = $fieldName;
         $this->sortingCodeOptions['type'] = $fieldType;
         $this->sortingCodeOptions['attr'] = $this->merge($this->sortingCodeOptions['attr'], $fieldOptions);
+
+        return $this;
+    }
+
+    public function withoutSortingCode(): self
+    {
+        $this->sortingCodeOptions['enabled'] = false;
 
         return $this;
     }
@@ -338,7 +413,7 @@ class AddressFormBuilder
         $labelTemplate = $this->addressFormatter->generateLabelTemplate($countryCode);
         $translator = $this->labelTranslator;
 
-        if ($usageTemplate->getAddressLine1()) {
+        if ($this->addressLine1Options['enabled'] && ($this->allFieldsVisible || $usageTemplate->getAddressLine1())) {
             $attr = $this->addressLine1Options['attr'];
             $constraints = $attr['constraints'] ?? [];
 
@@ -365,7 +440,7 @@ class AddressFormBuilder
             unset($data[$this->addressLine1Options['field']]);
         }
 
-        if ($this->addressLine2Options['enabled'] && $usageTemplate->getAddressLine2()) {
+        if ($this->addressLine2Options['enabled'] && ($this->allFieldsVisible || $usageTemplate->getAddressLine2())) {
             $attr = $this->addressLine2Options['attr'];
             $constraints = $attr['constraints'] ?? [];
 
@@ -392,7 +467,7 @@ class AddressFormBuilder
             unset($data[$this->addressLine2Options['field']]);
         }
 
-        if ($this->addressLine3Options['enabled'] && $usageTemplate->getAddressLine3()) {
+        if ($this->addressLine3Options['enabled'] && ($this->allFieldsVisible || $usageTemplate->getAddressLine3())) {
             $attr = $this->addressLine3Options['attr'];
             $constraints = $attr['constraints'] ?? [];
 
@@ -419,7 +494,7 @@ class AddressFormBuilder
             unset($data[$this->addressLine3Options['field']]);
         }
 
-        if ($usageTemplate->getPostalCode()) {
+        if ($this->postalCodeOptions['enabled'] && ($this->allFieldsVisible || $usageTemplate->getPostalCode())) {
             $attr = $this->postalCodeOptions['attr'];
             $constraints = $attr['constraints'] ?? [];
 
@@ -448,7 +523,7 @@ class AddressFormBuilder
 
         $forceState = $this->stateOptions['forceDisplay'] && (StateData::type($countryCode) !== null);
 
-        if ($forceState || $usageTemplate->getState()) {
+        if ($forceState || ($this->stateOptions['enabled'] && ($this->allFieldsVisible || $usageTemplate->getState()))) {
             $attr = $this->stateOptions['attr'];
             $constraints = $attr['constraints'] ?? [];
 
@@ -483,7 +558,7 @@ class AddressFormBuilder
             unset($data[$this->stateOptions['field']]);
         }
 
-        if ($usageTemplate->getLocality()) {
+        if ($this->localityOptions['enabled'] && ($this->allFieldsVisible || $usageTemplate->getLocality())) {
             $attr = $this->localityOptions['attr'];
             $constraints = $attr['constraints'] ?? [];
 
@@ -510,7 +585,7 @@ class AddressFormBuilder
             unset($data[$this->localityOptions['field']]);
         }
 
-        if ($usageTemplate->getSubLocality()) {
+        if ($this->subLocalityOptions['enabled'] && ($this->allFieldsVisible || $usageTemplate->getSubLocality())) {
             $attr = $this->subLocalityOptions['attr'];
             $constraints = $attr['constraints'] ?? [];
 
@@ -537,7 +612,7 @@ class AddressFormBuilder
             unset($data[$this->subLocalityOptions['field']]);
         }
 
-        if ($usageTemplate->getSortingCode()) {
+        if ($this->sortingCodeOptions['enabled'] && ($this->allFieldsVisible || $usageTemplate->getSortingCode())) {
             $attr = $this->sortingCodeOptions['attr'];
             $constraints = $attr['constraints'] ?? [];
 
