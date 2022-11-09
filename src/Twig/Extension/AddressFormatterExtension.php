@@ -6,6 +6,7 @@ namespace BinSoul\Symfony\Bundle\I18n\Twig\Extension;
 
 use BinSoul\Common\I18n\Address;
 use BinSoul\Common\I18n\AddressFormatter as CommonAddressFormatter;
+use BinSoul\Common\I18n\Data\StateData;
 use BinSoul\Common\I18n\DefaultLocale;
 use BinSoul\Common\I18n\Locale;
 use BinSoul\Symfony\Bundle\I18n\Formatter\AddressFormatter;
@@ -194,6 +195,10 @@ class AddressFormatterExtension extends AbstractExtension
         $layout = array_values($layout);
 
         foreach ($includedFields as $field) {
+            if ($field === 'state' && StateData::type($countryCode) === null) {
+                continue;
+            }
+
             $layout[] = [$field];
         }
 
