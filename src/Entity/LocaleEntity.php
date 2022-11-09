@@ -25,6 +25,7 @@ class LocaleEntity implements Locale
 {
     /**
      * @var int|null ID of the locale
+     *
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -33,12 +34,14 @@ class LocaleEntity implements Locale
 
     /**
      * @var string Code of the locale
+     *
      * @ORM\Column(type="string", length=32, nullable=false)
      */
     private $code;
 
     /**
      * @var LanguageEntity Language of the locale
+     *
      * @ORM\ManyToOne(targetEntity="\BinSoul\Symfony\Bundle\I18n\Entity\LanguageEntity")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
@@ -46,6 +49,7 @@ class LocaleEntity implements Locale
 
     /**
      * @var CountryEntity|null Country of the locale
+     *
      * @ORM\ManyToOne(targetEntity="\BinSoul\Symfony\Bundle\I18n\Entity\CountryEntity")
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */

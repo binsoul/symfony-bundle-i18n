@@ -26,6 +26,7 @@ class LanguageEntity implements Language
 {
     /**
      * @var int|null ID of the language
+     *
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -34,18 +35,21 @@ class LanguageEntity implements Language
 
     /**
      * @var string ISO2 code of the language
+     *
      * @ORM\Column(type="string", length=2, nullable=false)
      */
     private $iso2;
 
     /**
      * @var string ISO3 code of the language
+     *
      * @ORM\Column(type="string", length=3, nullable=false)
      */
     private $iso3;
 
     /**
      * @var string Directionality of the language
+     *
      * @ORM\Column(type="string", length=3, nullable=false)
      */
     private $directionality;

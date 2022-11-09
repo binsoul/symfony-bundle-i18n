@@ -26,6 +26,7 @@ class MessageEntity implements StoredMessage
 {
     /**
      * @var int|null ID of the message
+     *
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -34,24 +35,28 @@ class MessageEntity implements StoredMessage
 
     /**
      * @var string Key of the message
+     *
      * @ORM\Column(type="string", length=256, nullable=false)
      */
     private $key;
 
     /**
      * @var string Format of the message
+     *
      * @ORM\Column(type="string", length=8192, nullable=false)
      */
     private $format;
 
     /**
      * @var string Domain of the message
+     *
      * @ORM\Column(type="string", length=256, nullable=false)
      */
     private $domain = 'messages';
 
     /**
      * @var LocaleEntity Locale of the message
+     *
      * @ORM\ManyToOne(targetEntity="\BinSoul\Symfony\Bundle\I18n\Entity\LocaleEntity")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */

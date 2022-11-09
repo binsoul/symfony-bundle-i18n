@@ -28,6 +28,7 @@ class CountryEntity implements Country
 {
     /**
      * @var int|null ID of the country
+     *
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -36,42 +37,49 @@ class CountryEntity implements Country
 
     /**
      * @var string ISO2 code of the country
+     *
      * @ORM\Column(type="string", length=2, nullable=false)
      */
     private $iso2;
 
     /**
      * @var string|null ISO3 code of the country
+     *
      * @ORM\Column(type="string", length=3, nullable=true)
      */
     private $iso3;
 
     /**
      * @var string|null Numeric ISO code of the country
+     *
      * @ORM\Column(type="string", length=3, nullable=true)
      */
     private $isoNumeric;
 
     /**
      * @var string|null DSIT code of the country
+     *
      * @ORM\Column(type="string", length=3, nullable=true)
      */
     private $dsit;
 
     /**
      * @var float|string|null Latitude of the center of the country
+     *
      * @ORM\Column(type="decimal", precision=10, scale=6, nullable=true)
      */
     private $centerLatitude;
 
     /**
      * @var float|string|null Longitude of the center of the country
+     *
      * @ORM\Column(type="decimal", precision=10, scale=6, nullable=true)
      */
     private $centerLongitude;
 
     /**
      * @var ContinentEntity
+     *
      * @ORM\ManyToOne(targetEntity="\BinSoul\Symfony\Bundle\I18n\Entity\ContinentEntity")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */

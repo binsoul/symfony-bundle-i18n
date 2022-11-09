@@ -25,6 +25,7 @@ class CurrencyEntity implements Currency
 {
     /**
      * @var int|null ID of the currency
+     *
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -33,12 +34,14 @@ class CurrencyEntity implements Currency
 
     /**
      * @var string ISO3 code of the currency
+     *
      * @ORM\Column(type="string", length=3, nullable=false)
      */
     private $iso3;
 
     /**
      * @var string Numeric ISO code of the currency
+     *
      * @ORM\Column(type="string", length=3, nullable=false)
      */
     private $isoNumeric;

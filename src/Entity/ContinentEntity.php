@@ -24,6 +24,7 @@ class ContinentEntity
 {
     /**
      * @var int|null ID of the continent
+     *
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -32,24 +33,28 @@ class ContinentEntity
 
     /**
      * @var string Code of the continent
+     *
      * @ORM\Column(type="string", length=2, nullable=false)
      */
     private $code;
 
     /**
      * @var string Country code of the continent
+     *
      * @ORM\Column(type="string", length=3, nullable=false)
      */
     private $countryCode;
 
     /**
      * @var float|string|null Latitude of the center of the continent
+     *
      * @ORM\Column(type="decimal", precision=10, scale=6, nullable=true)
      */
     private $centerLatitude;
 
     /**
      * @var float|string|null Longitude of the center of the continent
+     *
      * @ORM\Column(type="decimal", precision=10, scale=6, nullable=true)
      */
     private $centerLongitude;

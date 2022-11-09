@@ -16,6 +16,7 @@ class TwigGlobalsListener implements EventSubscriberInterface
      * @var Environment
      */
     private $twig;
+
     /**
      * @var I18nManager
      */
