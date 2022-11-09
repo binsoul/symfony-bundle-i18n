@@ -65,30 +65,33 @@ class AddressFormatterExtension extends AbstractExtension
     }
 
     /**
-     * @param string $countryCode ISO2 code of the country
+     * @param string                                                                          $countryCode ISO2 code of the country
+     * @param array{'includeFields': array<int, string>, 'excludeFields': array<int, string>} $options
      */
-    public function addressContainerClasses(string $countryCode): string
+    public function addressContainerClasses(string $countryCode, array $options = []): string
     {
-        $layout = $this->getLayout($countryCode);
+        $layout = $this->getLayout($countryCode, $options);
         [$numberOfRows, $numberOfColumns] = $this->getDimensions($layout);
 
         return 'rows-' . $numberOfRows . ' columns-' . $numberOfColumns;
     }
 
     /**
-     * @param string $fieldName   Name of the field
-     * @param string $countryCode ISO2 code of the country
+     * @param string                                                                          $fieldName   Name of the field
+     * @param string                                                                          $countryCode ISO2 code of the country
+     * @param array{'includeFields': array<int, string>, 'excludeFields': array<int, string>} $options
      */
-    public function addressFieldClasses(string $fieldName, string $countryCode): string
+    public function addressFieldClasses(string $fieldName, string $countryCode, array $options = []): string
     {
-        $layout = $this->getLayout($countryCode);
+        $layout = $this->getLayout($countryCode, $options);
         [, $numberOfColumns] = $this->getDimensions($layout);
 
         if (! isset($layout[$fieldName])) {
             return 'invisible';
         }
 
-        [$targetRow, $targetColumn] = explode(',', $layout[$fieldName]);
+        [$targetRow, $targetColumn] = $layout[$fieldName];
+
         $span = 1;
         $rowLayout = [];
 
@@ -97,7 +100,7 @@ class AddressFormatterExtension extends AbstractExtension
                 continue;
             }
 
-            [$row, $column] = explode(',', $position);
+            [$row, $column] = $position;
 
             if ($row === $targetRow) {
                 $rowLayout[((int) $column - 1)] = $field;
@@ -114,7 +117,7 @@ class AddressFormatterExtension extends AbstractExtension
     }
 
     /**
-     * @param array<string, string|null> $layout
+     * @param array<string, array{0: int, 1: int}> $layout
      *
      * @return array{0: int, 1: int}
      */
@@ -128,7 +131,7 @@ class AddressFormatterExtension extends AbstractExtension
                 continue;
             }
 
-            [$row, $column] = explode(',', $position);
+            [$row, $column] = $position;
             $numberOfRows = max($numberOfRows, (int) $row);
             $numberOfColumns = max($numberOfColumns, (int) $column);
         }
@@ -137,14 +140,19 @@ class AddressFormatterExtension extends AbstractExtension
     }
 
     /**
-     * @return array<string, string|null>
+     * @param array{'includeFields': array<int, string>, 'excludeFields': array<int, string>} $options
+     *
+     * @return array<string, array{0: int, 1: int}>
      */
-    private function getLayout(string $countryCode): array
+    private function getLayout(string $countryCode, array $options): array
     {
         $formatter = $this->getFormatter(null);
         $layoutTemplate = $formatter->generateLayoutTemplate($countryCode);
 
-        return [
+        $excludedFields = $options['excludeFields'] ?? [];
+        $includedFields = $options['includeFields'] ?? [];
+
+        $data = [
             'addressLine1' => $layoutTemplate->getAddressLine1(),
             'addressLine2' => $layoutTemplate->getAddressLine2(),
             'addressLine3' => $layoutTemplate->getAddressLine3(),
@@ -155,6 +163,48 @@ class AddressFormatterExtension extends AbstractExtension
             'state' => $layoutTemplate->getState(),
             'countryCode' => $layoutTemplate->getCountryCode(),
         ];
+
+        $layout = [];
+
+        foreach ($data as $field => $position) {
+            if (in_array($field, $excludedFields, true)) {
+                continue;
+            }
+
+            if ($position === null) {
+                continue;
+            }
+
+            [$row, $column] = explode(',', $position);
+
+            if (! isset($layout[(int) $row])) {
+                $layout[(int) $row] = [];
+            }
+
+            $layout[(int) $row][(int) $column] = $field;
+
+            $key = array_search($field, $includedFields, true);
+
+            if ($key !== false) {
+                unset($includedFields[$key]);
+            }
+        }
+
+        $layout = array_values($layout);
+
+        foreach ($includedFields as $field) {
+            $layout[] = [$field];
+        }
+
+        $result = [];
+
+        foreach ($layout as $row => $columns) {
+            foreach (array_values($columns) as $column => $field) {
+                $result[$field] = [$row + 1, $column + 1];
+            }
+        }
+
+        return $result;
     }
 
     /**
