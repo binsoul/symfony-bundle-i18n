@@ -391,6 +391,10 @@ class AddressFormBuilder
             $attr['constraints'] = $constraints;
         }
 
+        if ($this->allFieldsDisabled) {
+            $attr['disabled'] = true;
+        }
+
         $builder->add($this->countryOptions['field'], $this->countryOptions['type'], $attr);
 
         $builder->addEventListener(
