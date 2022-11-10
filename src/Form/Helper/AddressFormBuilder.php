@@ -398,13 +398,13 @@ class AddressFormBuilder
         );
     }
 
-    private function modifyForm(FormInterface $builder, MutableAddress $object, ?array $data): array
+    private function modifyForm(FormInterface $builder, ?MutableAddress $object, ?array $data): array
     {
         $countryCode = $this->defaultCountry;
 
-        if (trim((string) ($data[$this->countryOptions['field']] ?? '')) !== '') {
+        if ($data !== null && trim((string) ($data[$this->countryOptions['field']] ?? '')) !== '') {
             $countryCode = trim((string) $data[$this->countryOptions['field']]);
-        } elseif (trim((string) $object->getCountryCode()) !== '') {
+        } elseif ($object !== null && trim((string) $object->getCountryCode()) !== '') {
             $countryCode = trim((string) $object->getCountryCode());
         }
 
