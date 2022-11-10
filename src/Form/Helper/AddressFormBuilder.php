@@ -6,6 +6,7 @@ namespace BinSoul\Symfony\Bundle\I18n\Form\Helper;
 
 use BinSoul\Common\I18n\AddressFormatter;
 use BinSoul\Common\I18n\Data\StateData;
+use BinSoul\Common\I18n\DefaultAddress;
 use BinSoul\Common\I18n\MutableAddress;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -402,9 +403,12 @@ class AddressFormBuilder
     {
         $countryCode = $this->defaultCountry;
 
-        if ($data !== null && trim((string) ($data[$this->countryOptions['field']] ?? '')) !== '') {
+        $data = $data ?? [];
+        $object = $object ?? new DefaultAddress();
+
+        if (trim((string) ($data[$this->countryOptions['field']] ?? '')) !== '') {
             $countryCode = trim((string) $data[$this->countryOptions['field']]);
-        } elseif ($object !== null && trim((string) $object->getCountryCode()) !== '') {
+        } elseif (trim((string) $object->getCountryCode()) !== '') {
             $countryCode = trim((string) $object->getCountryCode());
         }
 
