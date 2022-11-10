@@ -6,6 +6,7 @@ namespace BinSoul\Symfony\Bundle\I18n\Twig\Extension;
 
 use BinSoul\Common\I18n\Address;
 use BinSoul\Common\I18n\AddressFormatter as CommonAddressFormatter;
+use BinSoul\Common\I18n\Country;
 use BinSoul\Common\I18n\Data\StateData;
 use BinSoul\Common\I18n\DefaultLocale;
 use BinSoul\Common\I18n\Locale;
@@ -20,10 +21,7 @@ use Twig\TwigFunction;
  */
 class AddressFormatterExtension extends AbstractExtension
 {
-    /**
-     * @var I18nManager
-     */
-    private $i18nManager;
+    private I18nManager $i18nManager;
 
     /**
      * Constructs an instance of this class.
@@ -66,25 +64,25 @@ class AddressFormatterExtension extends AbstractExtension
     }
 
     /**
-     * @param string                                                                          $countryCode ISO2 code of the country
+     * @param Country|string                                                                  $country Country or ISO2 code of the country
      * @param array{'includeFields': array<int, string>, 'excludeFields': array<int, string>} $options
      */
-    public function addressContainerClasses(string $countryCode, array $options = []): string
+    public function addressContainerClasses($country, array $options = []): string
     {
-        $layout = $this->getLayout($countryCode, $options);
+        $layout = $this->getLayout($country instanceof Country ? $country->getIso2() : $country, $options);
         [$numberOfRows, $numberOfColumns] = $this->getDimensions($layout);
 
         return 'rows-' . $numberOfRows . ' columns-' . $numberOfColumns;
     }
 
     /**
-     * @param string                                                                          $fieldName   Name of the field
-     * @param string                                                                          $countryCode ISO2 code of the country
+     * @param string                                                                          $fieldName Name of the field
+     * @param Country|string                                                                  $country   Country or ISO2 code of the country
      * @param array{'includeFields': array<int, string>, 'excludeFields': array<int, string>} $options
      */
-    public function addressFieldClasses(string $fieldName, string $countryCode, array $options = []): string
+    public function addressFieldClasses(string $fieldName, $country, array $options = []): string
     {
-        $layout = $this->getLayout($countryCode, $options);
+        $layout = $this->getLayout($country instanceof Country ? $country->getIso2() : $country, $options);
         [, $numberOfColumns] = $this->getDimensions($layout);
 
         if (! isset($layout[$fieldName])) {
