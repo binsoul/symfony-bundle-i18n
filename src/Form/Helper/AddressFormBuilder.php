@@ -35,6 +35,8 @@ class AddressFormBuilder
 
     private bool $allFieldsVisible = false;
 
+    private bool $allFieldsDisabled = false;
+
     private ?array $constraintOptions = null;
 
     private array $countryOptions = [
@@ -195,6 +197,18 @@ class AddressFormBuilder
     public function makeAllFieldsVisible(): self
     {
         $this->allFieldsVisible = true;
+
+        return $this;
+    }
+
+    /**
+     * Marks all fields as disabled.
+     *
+     * @return $this
+     */
+    public function makeAllFieldsDisabled(): self
+    {
+        $this->allFieldsDisabled = true;
 
         return $this;
     }
@@ -436,6 +450,10 @@ class AddressFormBuilder
                 $attr['label'] = $translator($this->addressLine1Options['field'], $labelTemplate->getAddressLine1());
             }
 
+            if ($this->allFieldsDisabled) {
+                $attr['disabled'] = true;
+            }
+
             $builder->add($this->addressLine1Options['field'], $this->addressLine1Options['type'], $attr);
             $data[$this->addressLine1Options['field']] = $data[$this->addressLine1Options['field']] ?? null;
         } else {
@@ -461,6 +479,10 @@ class AddressFormBuilder
 
             if ($translator !== null && $labelTemplate->getAddressLine2()) {
                 $attr['label'] = $translator($this->addressLine2Options['field'], $labelTemplate->getAddressLine2());
+            }
+
+            if ($this->allFieldsDisabled) {
+                $attr['disabled'] = true;
             }
 
             $builder->add($this->addressLine2Options['field'], $this->addressLine2Options['type'], $attr);
@@ -490,6 +512,10 @@ class AddressFormBuilder
                 $attr['label'] = $translator($this->addressLine3Options['field'], $labelTemplate->getAddressLine3());
             }
 
+            if ($this->allFieldsDisabled) {
+                $attr['disabled'] = true;
+            }
+
             $builder->add($this->addressLine3Options['field'], $this->addressLine3Options['type'], $attr);
             $data[$this->addressLine3Options['field']] = $data[$this->addressLine3Options['field']] ?? null;
         } else {
@@ -515,6 +541,10 @@ class AddressFormBuilder
 
             if ($translator !== null && $labelTemplate->getPostalCode()) {
                 $attr['label'] = $translator($this->postalCodeOptions['field'], $labelTemplate->getPostalCode());
+            }
+
+            if ($this->allFieldsDisabled) {
+                $attr['disabled'] = true;
             }
 
             $builder->add($this->postalCodeOptions['field'], $this->postalCodeOptions['type'], $attr);
@@ -544,6 +574,10 @@ class AddressFormBuilder
 
             if ($translator !== null && $labelTemplate->getState()) {
                 $attr['label'] = $translator($this->stateOptions['field'], $labelTemplate->getState());
+            }
+
+            if ($this->allFieldsDisabled) {
+                $attr['disabled'] = true;
             }
 
             $names = $this->stateOptions['enableChoice'] ? StateData::names($countryCode) : [];
@@ -581,6 +615,10 @@ class AddressFormBuilder
                 $attr['label'] = $translator($this->localityOptions['field'], $labelTemplate->getLocality());
             }
 
+            if ($this->allFieldsDisabled) {
+                $attr['disabled'] = true;
+            }
+
             $builder->add($this->localityOptions['field'], $this->localityOptions['type'], $attr);
             $data[$this->localityOptions['field']] = $data[$this->localityOptions['field']] ?? null;
         } else {
@@ -608,6 +646,10 @@ class AddressFormBuilder
                 $attr['label'] = $translator($this->subLocalityOptions['field'], $labelTemplate->getSubLocality());
             }
 
+            if ($this->allFieldsDisabled) {
+                $attr['disabled'] = true;
+            }
+
             $builder->add($this->subLocalityOptions['field'], $this->subLocalityOptions['type'], $attr);
             $data[$this->subLocalityOptions['field']] = $data[$this->subLocalityOptions['field']] ?? null;
         } else {
@@ -633,6 +675,10 @@ class AddressFormBuilder
 
             if ($translator !== null && $labelTemplate->getSortingCode()) {
                 $attr['label'] = $translator($this->sortingCodeOptions['field'], $labelTemplate->getSortingCode());
+            }
+
+            if ($this->allFieldsDisabled) {
+                $attr['disabled'] = true;
             }
 
             $builder->add($this->sortingCodeOptions['field'], $this->sortingCodeOptions['type'], $attr);
