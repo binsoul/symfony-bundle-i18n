@@ -403,7 +403,7 @@ class AddressFormBuilder
                 $object = $event->getData();
                 $data = [];
 
-                $this->modifyForm($event->getForm(), $object, $data);
+                $this->modifyForm($event->getForm(), $object instanceof MutableAddress ? $object : null, $data);
             }
         );
 
@@ -412,7 +412,9 @@ class AddressFormBuilder
             function (FormEvent $event) {
                 $object = $event->getForm()->getData();
                 $data = $event->getData();
-                $event->setData($this->modifyForm($event->getForm(), $object, $data));
+
+                $modifiedData = $this->modifyForm($event->getForm(), $object instanceof MutableAddress ? $object : null, $data);
+                $event->setData($modifiedData);
             }
         );
     }
