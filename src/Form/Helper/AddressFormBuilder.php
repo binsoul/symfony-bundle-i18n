@@ -464,7 +464,7 @@ class AddressFormBuilder
             $attr = $this->addressLine1Options['attr'];
             $constraints = $attr['constraints'] ?? [];
 
-            if (! $this->allFieldsOptional && $usageTemplate->getAddressLine1() === 'required') {
+            if (! $this->allFieldsOptional && ($usageTemplate->getAddressLine1() === 'required' || $this->addressLine1Options['attr']['required'])) {
                 $constraints[] = new NotBlank($this->constraintOptions);
                 $attr['required'] = true;
             }
@@ -495,7 +495,7 @@ class AddressFormBuilder
             $attr = $this->addressLine2Options['attr'];
             $constraints = $attr['constraints'] ?? [];
 
-            if (! $this->allFieldsOptional && $usageTemplate->getAddressLine2() === 'required') {
+            if (! $this->allFieldsOptional && ($usageTemplate->getAddressLine2() === 'required' || $this->addressLine2Options['attr']['required'])) {
                 $constraints[] = new NotBlank($this->constraintOptions);
                 $attr['required'] = true;
             }
@@ -526,7 +526,7 @@ class AddressFormBuilder
             $attr = $this->addressLine3Options['attr'];
             $constraints = $attr['constraints'] ?? [];
 
-            if (! $this->allFieldsOptional && $usageTemplate->getAddressLine3() === 'required') {
+            if (! $this->allFieldsOptional && ($usageTemplate->getAddressLine3() === 'required' || $this->addressLine3Options['attr']['required'])) {
                 $constraints[] = new NotBlank($this->constraintOptions);
                 $attr['required'] = true;
             }
@@ -557,7 +557,7 @@ class AddressFormBuilder
             $attr = $this->postalCodeOptions['attr'];
             $constraints = $attr['constraints'] ?? [];
 
-            if (! $this->allFieldsOptional && $usageTemplate->getPostalCode() === 'required') {
+            if (! $this->allFieldsOptional && ($usageTemplate->getPostalCode() === 'required' || $this->postalCodeOptions['attr']['required'])) {
                 $constraints[] = new NotBlank($this->constraintOptions);
                 $attr['required'] = true;
             }
@@ -590,7 +590,7 @@ class AddressFormBuilder
             $attr = $this->stateOptions['attr'];
             $constraints = $attr['constraints'] ?? [];
 
-            if (! $this->allFieldsOptional && $usageTemplate->getState() === 'required') {
+            if (! $this->allFieldsOptional && ($usageTemplate->getState() === 'required' || $this->stateOptions['attr']['required'])) {
                 $constraints[] = new NotBlank($this->constraintOptions);
                 $attr['required'] = true;
             }
@@ -629,7 +629,7 @@ class AddressFormBuilder
             $attr = $this->localityOptions['attr'];
             $constraints = $attr['constraints'] ?? [];
 
-            if (! $this->allFieldsOptional && $usageTemplate->getLocality() === 'required') {
+            if (! $this->allFieldsOptional && ($usageTemplate->getLocality() === 'required' || $this->localityOptions['attr']['required'])) {
                 $constraints[] = new NotBlank($this->constraintOptions);
                 $attr['required'] = true;
             }
@@ -660,7 +660,7 @@ class AddressFormBuilder
             $attr = $this->subLocalityOptions['attr'];
             $constraints = $attr['constraints'] ?? [];
 
-            if (! $this->allFieldsOptional && $usageTemplate->getSubLocality() === 'required') {
+            if (! $this->allFieldsOptional && ($usageTemplate->getSubLocality() === 'required' || $this->subLocalityOptions['attr']['required'])) {
                 $constraints[] = new NotBlank($this->constraintOptions);
                 $attr['required'] = true;
             }
@@ -691,7 +691,7 @@ class AddressFormBuilder
             $attr = $this->sortingCodeOptions['attr'];
             $constraints = $attr['constraints'] ?? [];
 
-            if (! $this->allFieldsOptional && $usageTemplate->getSortingCode() === 'required') {
+            if (! $this->allFieldsOptional && ($usageTemplate->getSortingCode() === 'required' || $this->sortingCodeOptions['attr']['required'])) {
                 $constraints[] = new NotBlank($this->constraintOptions);
                 $attr['required'] = true;
             }
