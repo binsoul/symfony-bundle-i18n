@@ -39,6 +39,11 @@ class AddressFormBuilder
 
     private ?array $constraintOptions = null;
 
+    /**
+     * @var callable|null
+     */
+    private $dataProvider = null;
+
     private array $countryOptions = [
         'enabled' => true,
         'field' => 'countryCode',
@@ -216,6 +221,16 @@ class AddressFormBuilder
     public function withConstraintOptions(array $constraintOptions): self
     {
         $this->constraintOptions = $constraintOptions;
+
+        return $this;
+    }
+
+    /**
+     * @param callable $dataProvider
+     */
+    public function withDataProvider($dataProvider): self
+    {
+        $this->dataProvider = $dataProvider;
 
         return $this;
     }
@@ -403,6 +418,10 @@ class AddressFormBuilder
                 $object = $event->getData();
                 $data = [];
 
+                if ($this->dataProvider !== null) {
+                    $object = ($this->dataProvider)($object);
+                }
+
                 $this->modifyForm($event->getForm(), $object instanceof MutableAddress ? $object : null, $data);
             }
         );
@@ -412,6 +431,10 @@ class AddressFormBuilder
             function (FormEvent $event) {
                 $object = $event->getForm()->getData();
                 $data = $event->getData();
+
+                if ($this->dataProvider !== null) {
+                    $object = ($this->dataProvider)($object);
+                }
 
                 $modifiedData = $this->modifyForm($event->getForm(), $object instanceof MutableAddress ? $object : null, $data);
                 $event->setData($modifiedData);
