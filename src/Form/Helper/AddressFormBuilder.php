@@ -612,7 +612,12 @@ class AddressFormBuilder
             $names = $this->stateOptions['enableChoice'] ? StateData::names($countryCode) : [];
 
             if (count($names) > 0) {
-                $attr['choices'] = array_combine($names, $names);
+                if (! StateData::useCode($countryCode)) {
+                    $attr['choices'] = array_combine($names, $names);
+                } else {
+                    $attr['choices'] = array_combine($names, StateData::codes($countryCode));
+                }
+
                 $builder->add($this->stateOptions['field'], ChoiceType::class, $attr);
             } else {
                 $builder->add($this->stateOptions['field'], $this->stateOptions['type'], $attr);
