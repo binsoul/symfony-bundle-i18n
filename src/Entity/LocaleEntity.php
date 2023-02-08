@@ -105,10 +105,20 @@ class LocaleEntity implements Locale
     /**
      * Returns the name of the locale.
      */
-    public function getName(Locale $displayLocale): string
+    public function getName(?Locale $displayLocale = null): string
     {
+        $localeCode = $this->getCode('_');
+
+        if ($displayLocale !== null) {
+            try {
+                return Locales::getName($localeCode, $displayLocale->getCode('_'));
+            } catch (MissingResourceException $e) {
+                // ignore
+            }
+        }
+
         try {
-            return Locales::getName($this->getCode('_'), $displayLocale->getCode('_'));
+            return Locales::getName($localeCode, $localeCode);
         } catch (MissingResourceException $e) {
             return $this->code;
         }

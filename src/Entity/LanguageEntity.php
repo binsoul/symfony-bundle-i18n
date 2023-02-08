@@ -9,6 +9,7 @@ use BinSoul\Common\I18n\Locale;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Intl\Exception\MissingResourceException;
 use Symfony\Component\Intl\Languages;
+use Symfony\Component\Intl\Locales;
 
 /**
  * Represents a language.
@@ -100,10 +101,18 @@ class LanguageEntity implements Language
     /**
      * Returns the name of the language.
      */
-    public function getName(Locale $displayLocale): string
+    public function getName(?Locale $displayLocale = null): string
     {
+        if ($displayLocale !== null) {
+            try {
+                return Locales::getName($this->getIso2(), $displayLocale->getCode('_'));
+            } catch (MissingResourceException $e) {
+                // ignore
+            }
+        }
+
         try {
-            return Languages::getName($this->getIso2(), $displayLocale->getCode('_'));
+            return Languages::getName($this->getIso2(), $this->getIso2());
         } catch (MissingResourceException $e) {
             return $this->getIso3();
         }
