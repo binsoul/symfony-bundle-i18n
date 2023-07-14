@@ -18,10 +18,7 @@ use Twig\TwigFilter;
  */
 class DateTimeFormatterExtension extends AbstractExtension
 {
-    /**
-     * @var I18nManager
-     */
-    private $i18nManager;
+    private I18nManager $i18nManager;
 
     /**
      * Constructs an instance of this class.
@@ -37,12 +34,42 @@ class DateTimeFormatterExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('formatPattern', [$this, 'formatPattern']),
-            new TwigFilter('formatTime', [$this, 'formatTime']),
-            new TwigFilter('formatTimeWithSeconds', [$this, 'formatTimeWithSeconds']),
-            new TwigFilter('formatDate', [$this, 'formatDate']),
-            new TwigFilter('formatDateTime', [$this, 'formatDateTime']),
-            new TwigFilter('formatDateTimeWithSeconds', [$this, 'formatDateTimeWithSeconds']),
+            new TwigFilter(
+                'formatPattern',
+                function (DateTimeInterface $datetime, string $pattern, Locale|string|null $locale = null): string {
+                    return $this->formatPattern($datetime, $pattern, $locale);
+                }
+            ),
+            new TwigFilter(
+                'formatTime',
+                function (DateTimeInterface $time, Locale|string|null $locale = null): string {
+                    return $this->formatTime($time, $locale);
+                }
+            ),
+            new TwigFilter(
+                'formatTimeWithSeconds',
+                function (DateTimeInterface $time, Locale|string|null $locale = null): string {
+                    return $this->formatTimeWithSeconds($time, $locale);
+                }
+            ),
+            new TwigFilter(
+                'formatDate',
+                function (DateTimeInterface $date, Locale|string|null $locale = null): string {
+                    return $this->formatDate($date, $locale);
+                }
+            ),
+            new TwigFilter(
+                'formatDateTime',
+                function (DateTimeInterface $datetime, Locale|string|null $locale = null): string {
+                    return $this->formatDateTime($datetime, $locale);
+                }
+            ),
+            new TwigFilter(
+                'formatDateTimeWithSeconds',
+                function (DateTimeInterface $datetime, Locale|string|null $locale = null): string {
+                    return $this->formatDateTimeWithSeconds($datetime, $locale);
+                }
+            ),
         ];
     }
 
@@ -53,7 +80,7 @@ class DateTimeFormatterExtension extends AbstractExtension
      * @param string             $pattern  The pattern for the datetime
      * @param Locale|string|null $locale   The locale or null to use the default
      */
-    public function formatPattern(DateTimeInterface $datetime, string $pattern, $locale = null): string
+    public function formatPattern(DateTimeInterface $datetime, string $pattern, Locale|string|null $locale = null): string
     {
         return $this->getFormatter($locale)->formatPattern($datetime, $pattern);
     }
@@ -64,7 +91,7 @@ class DateTimeFormatterExtension extends AbstractExtension
      * @param DateTimeInterface  $time   The time
      * @param Locale|string|null $locale The locale or null to use the default
      */
-    public function formatTime(DateTimeInterface $time, $locale = null): string
+    public function formatTime(DateTimeInterface $time, Locale|string|null $locale = null): string
     {
         return $this->getFormatter($locale)->formatTime($time);
     }
@@ -75,7 +102,7 @@ class DateTimeFormatterExtension extends AbstractExtension
      * @param DateTimeInterface  $time   The time
      * @param Locale|string|null $locale The locale or null to use the default
      */
-    public function formatTimeWithSeconds(DateTimeInterface $time, $locale = null): string
+    public function formatTimeWithSeconds(DateTimeInterface $time, Locale|string|null $locale = null): string
     {
         return $this->getFormatter($locale)->formatTimeWithSeconds($time);
     }
@@ -86,7 +113,7 @@ class DateTimeFormatterExtension extends AbstractExtension
      * @param DateTimeInterface  $date   The date
      * @param Locale|string|null $locale The locale or null to use the default
      */
-    public function formatDate(DateTimeInterface $date, $locale = null): string
+    public function formatDate(DateTimeInterface $date, Locale|string|null $locale = null): string
     {
         return $this->getFormatter($locale)->formatDate($date);
     }
@@ -97,7 +124,7 @@ class DateTimeFormatterExtension extends AbstractExtension
      * @param DateTimeInterface  $datetime The datetime
      * @param Locale|string|null $locale   The locale or null to use the default
      */
-    public function formatDateTime(DateTimeInterface $datetime, $locale = null): string
+    public function formatDateTime(DateTimeInterface $datetime, Locale|string|null $locale = null): string
     {
         return $this->getFormatter($locale)->formatDateTime($datetime);
     }
@@ -108,17 +135,15 @@ class DateTimeFormatterExtension extends AbstractExtension
      * @param DateTimeInterface  $datetime The datetime
      * @param Locale|string|null $locale   The locale or null to use the default
      */
-    public function formatDateTimeWithSeconds(DateTimeInterface $datetime, $locale = null): string
+    public function formatDateTimeWithSeconds(DateTimeInterface $datetime, Locale|string|null $locale = null): string
     {
         return $this->getFormatter($locale)->formatDateTimeWithSeconds($datetime);
     }
 
     /**
      * Returns a formatter for the given locale.
-     *
-     * @param Locale|string|null $locale
      */
-    private function getFormatter($locale): CommonDateTimeFormatter
+    private function getFormatter(Locale|string|null $locale): CommonDateTimeFormatter
     {
         $formatter = $this->i18nManager->getEnvironment()->getDateTimeFormatter();
 
@@ -127,7 +152,7 @@ class DateTimeFormatterExtension extends AbstractExtension
         }
 
         if (! ($locale instanceof Locale)) {
-            $locale = DefaultLocale::fromString((string) $locale);
+            $locale = DefaultLocale::fromString($locale);
         }
 
         return $formatter->withLocale($locale);

@@ -14,9 +14,9 @@ use Doctrine\Persistence\ObjectManager;
 class LoadLanguages extends Fixture implements FixtureGroupInterface
 {
     /**
-     * @var mixed[][]
+     * @var array[]
      */
-    private static $rows = [
+    private const ROWS = [
         [1, 'Abkhaz', 'ab', 'abk', 'ltr'],
         [2, 'Afar', 'aa', 'aar', 'ltr'],
         [3, 'Afrikaans', 'af', 'afr', 'ltr'],
@@ -209,7 +209,7 @@ class LoadLanguages extends Fixture implements FixtureGroupInterface
         $metadata->setIdGeneratorType(ClassMetadataInfo::GENERATOR_TYPE_NONE);
         $metadata->setIdGenerator(new AssignedGenerator());
 
-        foreach (self::$rows as $row) {
+        foreach (self::ROWS as $row) {
             $entity = new LanguageEntity($row[0]);
             $entity->setIso2($row[2]);
             $entity->setIso3($row[3]);

@@ -6,45 +6,35 @@ namespace BinSoul\Symfony\Bundle\I18n\Entity;
 
 use BinSoul\Common\I18n\Currency;
 use BinSoul\Common\I18n\Locale;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Intl\Currencies;
 use Symfony\Component\Intl\Exception\MissingResourceException;
 
 /**
  * Represents a currency.
- *
- * @ORM\Entity()
- * @ORM\Table(
- *     name="currency",
- *     uniqueConstraints={
- *         @ORM\UniqueConstraint(columns={"iso3"}),
- *     },
- * )
  */
+#[ORM\Entity]
+#[ORM\Table(name: 'currency')]
+#[ORM\UniqueConstraint(columns: ['iso3'])]
 class CurrencyEntity implements Currency
 {
     /**
      * @var int|null ID of the currency
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
      */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $id;
 
     /**
      * @var string ISO3 code of the currency
-     *
-     * @ORM\Column(type="string", length=3, nullable=false)
      */
-    private $iso3;
+    #[ORM\Column(type: Types::STRING, length: 3)]
+    private string $iso3;
 
-    /**
-     * @var string Numeric ISO code of the currency
-     *
-     * @ORM\Column(type="string", length=3, nullable=false)
-     */
-    private $isoNumeric;
+    #[ORM\Column(type: Types::STRING, length: 3)]
+    private ?string $isoNumeric = null;
 
     /**
      * Constructs an instance of this class.
@@ -86,7 +76,7 @@ class CurrencyEntity implements Currency
     {
         try {
             return Currencies::getName($this->getIso3(), $displayLocale->getCode('_'));
-        } catch (MissingResourceException $e) {
+        } catch (MissingResourceException) {
             return $this->getIso3();
         }
     }

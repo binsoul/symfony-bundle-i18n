@@ -37,7 +37,12 @@ class AddressFormatterExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('formatAddress', [$this, 'formatAddress']),
+            new TwigFilter(
+                'formatAddress',
+                function (Address $address, Locale|string|null $locale = null): string {
+                    return $this->formatAddress($address, $locale);
+                }
+            ),
         ];
     }
 
@@ -47,8 +52,20 @@ class AddressFormatterExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('addressContainerClasses', [$this, 'addressContainerClasses'], ['is_safe' => ['html']]),
-            new TwigFunction('addressFieldClasses', [$this, 'addressFieldClasses'], ['is_safe' => ['html']]),
+            new TwigFunction(
+                'addressContainerClasses',
+                function (Country|string $country, array $options = []): string {
+                    return $this->addressContainerClasses($country, $options);
+                },
+                ['is_safe' => ['html']]
+            ),
+            new TwigFunction(
+                'addressFieldClasses',
+                function (string $fieldName, Country|string $country, array $options = []): string {
+                    return $this->addressFieldClasses($fieldName, $country, $options);
+                },
+                ['is_safe' => ['html']]
+            ),
         ];
     }
 
@@ -58,7 +75,7 @@ class AddressFormatterExtension extends AbstractExtension
      * @param Address            $address The address
      * @param Locale|string|null $locale  The locale or null to use the default
      */
-    public function formatAddress(Address $address, $locale = null): string
+    public function formatAddress(Address $address, Locale|string|null $locale = null): string
     {
         return $this->getFormatter($locale)->format($address);
     }
@@ -67,7 +84,7 @@ class AddressFormatterExtension extends AbstractExtension
      * @param Country|string                                                                  $country Country or ISO2 code of the country
      * @param array{'includeFields': array<int, string>, 'excludeFields': array<int, string>} $options
      */
-    public function addressContainerClasses($country, array $options = []): string
+    public function addressContainerClasses(Country|string $country, array $options = []): string
     {
         $layout = $this->getLayout($country instanceof Country ? $country->getIso2() : $country, $options);
         [$numberOfRows, $numberOfColumns] = $this->getDimensions($layout);
@@ -80,7 +97,7 @@ class AddressFormatterExtension extends AbstractExtension
      * @param Country|string                                                                  $country   Country or ISO2 code of the country
      * @param array{'includeFields': array<int, string>, 'excludeFields': array<int, string>} $options
      */
-    public function addressFieldClasses(string $fieldName, $country, array $options = []): string
+    public function addressFieldClasses(string $fieldName, Country|string $country, array $options = []): string
     {
         $layout = $this->getLayout($country instanceof Country ? $country->getIso2() : $country, $options);
         [, $numberOfColumns] = $this->getDimensions($layout);
@@ -102,7 +119,7 @@ class AddressFormatterExtension extends AbstractExtension
             [$row, $column] = $position;
 
             if ($row === $targetRow) {
-                $rowLayout[((int) $column - 1)] = $field;
+                $rowLayout[($column - 1)] = $field;
             }
         }
 
@@ -131,8 +148,8 @@ class AddressFormatterExtension extends AbstractExtension
             }
 
             [$row, $column] = $position;
-            $numberOfRows = max($numberOfRows, (int) $row);
-            $numberOfColumns = max($numberOfColumns, (int) $column);
+            $numberOfRows = max($numberOfRows, $row);
+            $numberOfColumns = max($numberOfColumns, $column);
         }
 
         return [$numberOfRows, $numberOfColumns];
@@ -215,10 +232,8 @@ class AddressFormatterExtension extends AbstractExtension
 
     /**
      * Returns a address formatter for the given locale.
-     *
-     * @param Locale|string|null $locale
      */
-    private function getFormatter($locale): CommonAddressFormatter
+    private function getFormatter(Locale|string|null $locale): CommonAddressFormatter
     {
         $formatter = $this->i18nManager->getEnvironment()->getAddressFormatter();
 
@@ -227,7 +242,7 @@ class AddressFormatterExtension extends AbstractExtension
         }
 
         if (! ($locale instanceof Locale)) {
-            $locale = DefaultLocale::fromString((string) $locale);
+            $locale = DefaultLocale::fromString($locale);
         }
 
         return $formatter->withLocale($locale);

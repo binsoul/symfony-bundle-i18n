@@ -6,54 +6,46 @@ namespace BinSoul\Symfony\Bundle\I18n\Entity;
 
 use BinSoul\Common\I18n\DefaultLocale;
 use BinSoul\Common\I18n\Locale;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Intl\Exception\MissingResourceException;
 use Symfony\Component\Intl\Locales;
 
 /**
  * Represents a locale.
- *
- * @ORM\Entity()
- * @ORM\Table(
- *     name="locale",
- *     uniqueConstraints={
- *         @ORM\UniqueConstraint(columns={"code"})
- *     },
- * )
  */
+#[ORM\Table(name: 'locale')]
+#[ORM\UniqueConstraint(columns: ['code'])]
+#[ORM\Entity]
 class LocaleEntity implements Locale
 {
     /**
      * @var int|null ID of the locale
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
      */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $id;
 
     /**
      * @var string Code of the locale
-     *
-     * @ORM\Column(type="string", length=32, nullable=false)
      */
-    private $code;
+    #[ORM\Column(type: Types::STRING, length: 32)]
+    private string $code;
 
     /**
      * @var LanguageEntity Language of the locale
-     *
-     * @ORM\ManyToOne(targetEntity="\BinSoul\Symfony\Bundle\I18n\Entity\LanguageEntity")
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
-    private $language;
+    #[ORM\ManyToOne(targetEntity: LanguageEntity::class)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    private LanguageEntity $language;
 
     /**
      * @var CountryEntity|null Country of the locale
-     *
-     * @ORM\ManyToOne(targetEntity="\BinSoul\Symfony\Bundle\I18n\Entity\CountryEntity")
-     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
-    private $country;
+    #[ORM\ManyToOne(targetEntity: CountryEntity::class)]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
+    private ?CountryEntity $country = null;
 
     /**
      * Constructs an instance of this class.
@@ -112,14 +104,14 @@ class LocaleEntity implements Locale
         if ($displayLocale !== null) {
             try {
                 return Locales::getName($localeCode, $displayLocale->getCode('_'));
-            } catch (MissingResourceException $e) {
+            } catch (MissingResourceException) {
                 // ignore
             }
         }
 
         try {
             return Locales::getName($localeCode, $localeCode);
-        } catch (MissingResourceException $e) {
+        } catch (MissingResourceException) {
             return $this->code;
         }
     }

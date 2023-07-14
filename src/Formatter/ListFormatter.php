@@ -14,15 +14,9 @@ use BinSoul\Common\I18n\Locale;
  */
 class ListFormatter implements CommonListFormatter
 {
-    /**
-     * @var Locale
-     */
-    private $locale;
+    private Locale $locale;
 
-    /**
-     * @var DefaultListFormatter
-     */
-    private $formatter;
+    private DefaultListFormatter $formatter;
 
     /**
      * Constructs an instance of this class.

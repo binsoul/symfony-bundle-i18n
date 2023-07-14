@@ -6,6 +6,7 @@ namespace BinSoul\Symfony\Bundle\I18n\Entity;
 
 use BinSoul\Common\I18n\Language;
 use BinSoul\Common\I18n\Locale;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Intl\Exception\MissingResourceException;
 use Symfony\Component\Intl\Languages;
@@ -13,47 +14,38 @@ use Symfony\Component\Intl\Locales;
 
 /**
  * Represents a language.
- *
- * @ORM\Entity()
- * @ORM\Table(
- *     name="language",
- *     uniqueConstraints={
- *         @ORM\UniqueConstraint(columns={"iso2"}),
- *         @ORM\UniqueConstraint(columns={"iso3"}),
- *     },
- * )
  */
+#[ORM\Entity]
+#[ORM\Table(name: 'language')]
+#[ORM\UniqueConstraint(columns: ['iso2'])]
+#[ORM\UniqueConstraint(columns: ['iso3'])]
 class LanguageEntity implements Language
 {
     /**
      * @var int|null ID of the language
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
      */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $id;
 
     /**
      * @var string ISO2 code of the language
-     *
-     * @ORM\Column(type="string", length=2, nullable=false)
      */
-    private $iso2;
+    #[ORM\Column(type: Types::STRING, length: 2)]
+    private string $iso2;
 
     /**
      * @var string ISO3 code of the language
-     *
-     * @ORM\Column(type="string", length=3, nullable=false)
      */
-    private $iso3;
+    #[ORM\Column(type: Types::STRING, length: 3)]
+    private string $iso3;
 
     /**
      * @var string Directionality of the language
-     *
-     * @ORM\Column(type="string", length=3, nullable=false)
      */
-    private $directionality;
+    #[ORM\Column(type: Types::STRING, length: 3)]
+    private string $directionality;
 
     /**
      * Constructs an instance of this class.
@@ -106,14 +98,14 @@ class LanguageEntity implements Language
         if ($displayLocale !== null) {
             try {
                 return Locales::getName($this->getIso2(), $displayLocale->getCode('_'));
-            } catch (MissingResourceException $e) {
+            } catch (MissingResourceException) {
                 // ignore
             }
         }
 
         try {
             return Languages::getName($this->getIso2(), $this->getIso2());
-        } catch (MissingResourceException $e) {
+        } catch (MissingResourceException) {
             return $this->getIso3();
         }
     }

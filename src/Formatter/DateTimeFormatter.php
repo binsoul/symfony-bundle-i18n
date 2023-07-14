@@ -15,15 +15,9 @@ use DateTimeInterface;
  */
 class DateTimeFormatter implements CommonDateTimeFormatter
 {
-    /**
-     * @var Locale
-     */
-    private $locale;
+    private Locale $locale;
 
-    /**
-     * @var IntlDateTimeFormatter
-     */
-    private $formatter;
+    private IntlDateTimeFormatter $formatter;
 
     /**
      * Constructs an instance of this class.

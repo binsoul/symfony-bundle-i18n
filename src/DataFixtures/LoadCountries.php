@@ -16,9 +16,9 @@ use Doctrine\Persistence\ObjectManager;
 class LoadCountries extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
     /**
-     * @var mixed[][]
+     * @var array[]
      */
-    private static $rows = [
+    private const ROWS = [
         [1, 3, 'Afghanistan', 'AF', 'AFG', '004', 'AFG', 0.000000, 0.000000],
         [2, 4, 'Albania', 'AL', 'ALB', '008', 'AL', 0.000000, 0.000000],
         [3, 1, 'Algeria', 'DZ', 'DZA', '012', 'DZ', 0.000000, 0.000000],
@@ -70,7 +70,7 @@ class LoadCountries extends Fixture implements DependentFixtureInterface, Fixtur
         [49, 1, 'Congo', 'CG', 'COG', '178', 'RCB', 0.000000, 0.000000],
         [50, 6, 'Cook Islands', 'CK', 'COK', '184', null, 0.000000, 0.000000],
         [51, 5, 'Costa Rica', 'CR', 'CRI', '188', 'CR', 0.000000, 0.000000],
-        [52, 1, 'Cote D\'Ivoire', 'CI', 'CIV', '384', 'CI', 0.000000, 0.000000],
+        [52, 1, "Cote D'Ivoire", 'CI', 'CIV', '384', 'CI', 0.000000, 0.000000],
         [53, 4, 'Kroatien', 'HR', 'HRV', '191', 'HR', 0.000000, 0.000000],
         [54, 5, 'Cuba', 'CU', 'CUB', '192', 'C', 0.000000, 0.000000],
         [55, 3, 'Zypern', 'CY', 'CYP', '196', 'CY', 0.000000, 0.000000],
@@ -129,11 +129,11 @@ class LoadCountries extends Fixture implements DependentFixtureInterface, Fixtur
         [109, 3, 'Kazakhstan', 'KZ', 'KAZ', '398', 'KZ', 0.000000, 0.000000],
         [110, 1, 'Kenya', 'KE', 'KEN', '404', 'EAK', 0.000000, 0.000000],
         [111, 6, 'Kiribati', 'KI', 'KIR', '296', 'KIR', 0.000000, 0.000000],
-        [112, 3, 'Korea, Democratic People\'s Republic of', 'KP', 'PRK', '408', 'KP', 0.000000, 0.000000],
+        [112, 3, "Korea, Democratic People's Republic of", 'KP', 'PRK', '408', 'KP', 0.000000, 0.000000],
         [113, 3, 'Korea, Republic of', 'KR', 'KOR', '410', 'ROK', 0.000000, 0.000000],
         [114, 3, 'Kuwait', 'KW', 'KWT', '414', 'KWT', 0.000000, 0.000000],
         [115, 3, 'Kyrgyzstan', 'KG', 'KGZ', '417', 'KS', 0.000000, 0.000000],
-        [116, 3, 'Lao People\'s Democratic Republic', 'LA', 'LAO', '418', 'LAO', 0.000000, 0.000000],
+        [116, 3, "Lao People's Democratic Republic", 'LA', 'LAO', '418', 'LAO', 0.000000, 0.000000],
         [117, 4, 'Lettland', 'LV', 'LVA', '428', 'LV', 0.000000, 0.000000],
         [118, 3, 'Lebanon', 'LB', 'LBN', '422', 'RL', 0.000000, 0.000000],
         [119, 1, 'Lesotho', 'LS', 'LSO', '426', 'LS', 0.000000, 0.000000],
@@ -278,10 +278,7 @@ class LoadCountries extends Fixture implements DependentFixtureInterface, Fixtur
         [259, 1, 'Tristan da Cunha', 'TA', 'TAA', null, null, 0.000000, 0.000000],
     ];
 
-    /**
-     * @var ContinentRepository
-     */
-    private $continentRepository;
+    private ContinentRepository $continentRepository;
 
     /**
      * Constructs an instance of this class.
@@ -298,10 +295,10 @@ class LoadCountries extends Fixture implements DependentFixtureInterface, Fixtur
         $metadata->setIdGeneratorType(ClassMetadataInfo::GENERATOR_TYPE_NONE);
         $metadata->setIdGenerator(new AssignedGenerator());
 
-        foreach (self::$rows as $row) {
+        foreach (self::ROWS as $row) {
             $continent = $this->continentRepository->load($row[1]);
 
-            if (! $continent) {
+            if ($continent === null) {
                 continue;
             }
 

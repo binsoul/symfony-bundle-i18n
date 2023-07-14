@@ -6,84 +6,67 @@ namespace BinSoul\Symfony\Bundle\I18n\Entity;
 
 use BinSoul\Common\I18n\Country;
 use BinSoul\Common\I18n\Locale;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Intl\Exception\MissingResourceException;
 
 /**
  * Represents a country.
- *
- * @ORM\Entity()
- * @ORM\Table(
- *     name="country",
- *     uniqueConstraints={
- *         @ORM\UniqueConstraint(columns={"iso2"}),
- *     },
- *     indexes={
- *         @ORM\Index(columns={"iso3"}),
- *     },
- * )
  */
+#[ORM\Entity]
+#[ORM\Table(name: 'country')]
+#[ORM\UniqueConstraint(columns: ['iso2'])]
+#[ORM\Index(columns: ['iso3'])]
 class CountryEntity implements Country
 {
     /**
      * @var int|null ID of the country
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
      */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $id;
 
     /**
      * @var string ISO2 code of the country
-     *
-     * @ORM\Column(type="string", length=2, nullable=false)
      */
-    private $iso2;
+    #[ORM\Column(type: Types::STRING, length: 2)]
+    private string $iso2;
 
     /**
      * @var string|null ISO3 code of the country
-     *
-     * @ORM\Column(type="string", length=3, nullable=true)
      */
-    private $iso3;
+    #[ORM\Column(type: Types::STRING, length: 3, nullable: true)]
+    private ?string $iso3 = null;
 
     /**
      * @var string|null Numeric ISO code of the country
-     *
-     * @ORM\Column(type="string", length=3, nullable=true)
      */
-    private $isoNumeric;
+    #[ORM\Column(type: Types::STRING, length: 3, nullable: true)]
+    private ?string $isoNumeric = null;
 
     /**
      * @var string|null DSIT code of the country
-     *
-     * @ORM\Column(type="string", length=3, nullable=true)
      */
-    private $dsit;
+    #[ORM\Column(type: Types::STRING, length: 3, nullable: true)]
+    private ?string $dsit = null;
 
     /**
      * @var float|string|null Latitude of the center of the country
-     *
-     * @ORM\Column(type="decimal", precision=10, scale=6, nullable=true)
      */
-    private $centerLatitude;
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 6, nullable: true)]
+    private float|string|null $centerLatitude = null;
 
     /**
      * @var float|string|null Longitude of the center of the country
-     *
-     * @ORM\Column(type="decimal", precision=10, scale=6, nullable=true)
      */
-    private $centerLongitude;
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 6, nullable: true)]
+    private float|string|null $centerLongitude = null;
 
-    /**
-     * @var ContinentEntity
-     *
-     * @ORM\ManyToOne(targetEntity="\BinSoul\Symfony\Bundle\I18n\Entity\ContinentEntity")
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     */
-    private $continent;
+    #[ORM\ManyToOne(targetEntity: ContinentEntity::class)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    private ContinentEntity $continent;
 
     /**
      * Constructs an instance of this class.
@@ -175,7 +158,7 @@ class CountryEntity implements Country
     {
         try {
             return Countries::getName($this->getIso2(), $displayLocale->getCode('_'));
-        } catch (MissingResourceException $e) {
+        } catch (MissingResourceException) {
             return $this->getIso2();
         }
     }

@@ -12,15 +12,9 @@ use Twig\Environment;
 
 class TwigGlobalsListener implements EventSubscriberInterface
 {
-    /**
-     * @var Environment
-     */
-    private $twig;
+    private Environment $twig;
 
-    /**
-     * @var I18nManager
-     */
-    private $i18nManager;
+    private I18nManager $i18nManager;
 
     /**
      * Constructs an instance of this class.
@@ -32,7 +26,7 @@ class TwigGlobalsListener implements EventSubscriberInterface
     }
 
     /**
-     * @return mixed[][]
+     * @return array[]
      */
     public static function getSubscribedEvents(): array
     {
@@ -43,7 +37,7 @@ class TwigGlobalsListener implements EventSubscriberInterface
         ];
     }
 
-    public function onController(ControllerEvent $event): void
+    public function onController(): void
     {
         $this->twig->addGlobal('i18nManager', $this->i18nManager);
     }

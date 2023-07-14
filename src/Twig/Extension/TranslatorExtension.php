@@ -21,10 +21,7 @@ use Twig\TwigFilter;
  */
 class TranslatorExtension extends AbstractExtension
 {
-    /**
-     * @var I18nManager
-     */
-    private $i18nManager;
+    private I18nManager $i18nManager;
 
     /**
      * Constructs an instance of this class.
@@ -40,9 +37,24 @@ class TranslatorExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('translate', [$this, 'translate']),
-            new TwigFilter('pluralize', [$this, 'pluralize']),
-            new TwigFilter('inDomain', [$this, 'inDomain']),
+            new TwigFilter(
+                'translate',
+                function (string|Message $key, array $parameters = [], ?string $domain = null, Locale|string|null $locale = null): TranslatedMessage {
+                    return $this->translate($key, $parameters, $domain, $locale);
+                }
+            ),
+            new TwigFilter(
+                'pluralize',
+                function (string|Message $key, float|int $quantity, ?string $domain = null, Locale|string|null $locale = null): PluralizedMessage {
+                    return $this->pluralize($key, $quantity, $domain, $locale);
+                }
+            ),
+            new TwigFilter(
+                'inDomain',
+                function (string|Message $key, ?string $domain = null): Message {
+                    return $this->inDomain($key, $domain);
+                }
+            ),
         ];
     }
 
@@ -50,11 +62,11 @@ class TranslatorExtension extends AbstractExtension
      * Translates the key.
      *
      * @param string|Message|PluralizedMessage $key        The message key
-     * @param mixed[]                          $parameters An array of parameters for the message
+     * @param array                            $parameters An array of parameters for the message
      * @param string|null                      $domain     The domain for the message or null to use the default
      * @param Locale|string|null               $locale     The locale for the message or null to use the default
      */
-    public function translate($key, array $parameters = [], ?string $domain = null, $locale = null): TranslatedMessage
+    public function translate(string|Message|PluralizedMessage $key, array $parameters = [], ?string $domain = null, Locale|string|null $locale = null): TranslatedMessage
     {
         return $this->getTranslator($locale)->translate($key, $parameters, $domain);
     }
@@ -67,7 +79,7 @@ class TranslatorExtension extends AbstractExtension
      * @param string|null        $domain   The domain for the message or null to use the default
      * @param Locale|string|null $locale   The locale for the message or null to use the default
      */
-    public function pluralize($key, $quantity, ?string $domain = null, $locale = null): PluralizedMessage
+    public function pluralize(string|Message $key, float|int $quantity, ?string $domain = null, Locale|string|null $locale = null): PluralizedMessage
     {
         return $this->getTranslator($locale)->pluralize($key, $quantity, $domain);
     }
@@ -78,7 +90,7 @@ class TranslatorExtension extends AbstractExtension
      * @param string|Message $key    The message key
      * @param string|null    $domain The domain for the message or null to use the default
      */
-    public function inDomain($key, ?string $domain = null): Message
+    public function inDomain(string|Message $key, ?string $domain = null): Message
     {
         if ($key instanceof Message) {
             return $key->withDomain($domain);
@@ -89,10 +101,8 @@ class TranslatorExtension extends AbstractExtension
 
     /**
      * Returns a translator for the given locale.
-     *
-     * @param Locale|string|null $locale
      */
-    private function getTranslator($locale): CommonTranslator
+    private function getTranslator(Locale|string|null $locale): CommonTranslator
     {
         $translator = $this->i18nManager->getEnvironment()->getTranslator();
 
@@ -101,7 +111,7 @@ class TranslatorExtension extends AbstractExtension
         }
 
         if (! ($locale instanceof Locale)) {
-            $locale = DefaultLocale::fromString((string) $locale);
+            $locale = DefaultLocale::fromString($locale);
         }
 
         return $translator->withLocale($locale);

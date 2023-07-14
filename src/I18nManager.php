@@ -33,8 +33,6 @@ interface I18nManager
 
     /**
      * Executes the operation in an environment for the given locale and returns the output.
-     *
-     * @return mixed|null
      */
-    public function execute(Locale $locale, callable $operation);
+    public function execute(Locale $locale, callable $operation): mixed;
 }

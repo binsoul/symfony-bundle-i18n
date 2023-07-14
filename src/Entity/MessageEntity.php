@@ -6,61 +6,50 @@ namespace BinSoul\Symfony\Bundle\I18n\Entity;
 
 use BinSoul\Common\I18n\Message;
 use BinSoul\Common\I18n\StoredMessage;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Represents a translatable message.
- *
- * @ORM\Entity()
- * @ORM\Table(
- *     name="message",
- *     uniqueConstraints={
- *         @ORM\UniqueConstraint(columns={"locale_id", "key", "domain"})
- *     },
- *     indexes={
- *         @ORM\Index(columns={"locale_id", "domain"})
- *     },
- * )
  */
+#[ORM\Entity]
+#[ORM\Table(name: 'message')]
+#[ORM\UniqueConstraint(columns: ['locale_id', 'key', 'domain'])]
+#[ORM\Index(columns: ['locale_id', 'domain'])]
 class MessageEntity implements StoredMessage
 {
     /**
      * @var int|null ID of the message
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
      */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $id;
 
     /**
      * @var string Key of the message
-     *
-     * @ORM\Column(type="string", length=256, nullable=false)
      */
-    private $key;
+    #[ORM\Column(type: Types::STRING, length: 256)]
+    private string $key;
 
     /**
      * @var string Format of the message
-     *
-     * @ORM\Column(type="string", length=8192, nullable=false)
      */
-    private $format;
+    #[ORM\Column(type: Types::STRING, length: 8192)]
+    private string $format;
 
     /**
      * @var string Domain of the message
-     *
-     * @ORM\Column(type="string", length=256, nullable=false)
      */
-    private $domain = 'messages';
+    #[ORM\Column(type: Types::STRING, length: 256)]
+    private string $domain = 'messages';
 
     /**
      * @var LocaleEntity Locale of the message
-     *
-     * @ORM\ManyToOne(targetEntity="\BinSoul\Symfony\Bundle\I18n\Entity\LocaleEntity")
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
-    private $locale;
+    #[ORM\ManyToOne(targetEntity: LocaleEntity::class)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    private LocaleEntity $locale;
 
     /**
      * Constructs an instance of this class.
@@ -122,5 +111,7 @@ class MessageEntity implements StoredMessage
         $result->format = $this->format;
         $result->domain = $domain;
         $result->locale = $this->locale;
+
+        return $result;
     }
 }

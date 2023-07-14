@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 class BinsoulI18nExtension extends Extension
 {
     /**
-     * @param mixed[] $configs
+     * @param array<array<mixed>> $configs
      */
     public function load(array $configs, ContainerBuilder $container): void
     {

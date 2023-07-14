@@ -22,35 +22,23 @@ use Throwable;
  */
 class DatabaseTranslator extends BaseTranslator
 {
-    /**
-     * @var MessageRepository
-     */
-    private $messageRepository;
+    private MessageRepository $messageRepository;
 
-    /**
-     * @var LocaleRepository
-     */
-    private $localeRepository;
+    private LocaleRepository $localeRepository;
 
-    /**
-     * @var bool|null
-     */
-    private $tablesExist;
+    private ?bool $tablesExist = null;
 
-    /**
-     * @var MessageFormatterInterface
-     */
-    private $messageFormatter;
+    private MessageFormatterInterface $messageFormatter;
 
     /**
      * @var bool[][]
      */
-    private $loadedCatalogues = [];
+    private array $loadedCatalogues = [];
 
     /**
      * @var MessageCatalogueInterface[]
      */
-    private $databaseCatalogues = [];
+    private array $databaseCatalogues = [];
 
     public function __construct(
         ContainerInterface $container,
@@ -69,6 +57,7 @@ class DatabaseTranslator extends BaseTranslator
         if ($messageRepository === null) {
             throw new InvalidArgumentException('A message repository is required.');
         }
+
         $this->messageRepository = $messageRepository;
 
         if ($localeRepository === null) {
@@ -78,7 +67,7 @@ class DatabaseTranslator extends BaseTranslator
         $this->localeRepository = $localeRepository;
     }
 
-    public function trans($id, array $parameters = [], $domain = null, $locale = null): string
+    public function trans(?string $id, array $parameters = [], string $domain = null, string $locale = null): string
     {
         if ((string) $id === '') {
             return '';
@@ -142,7 +131,7 @@ class DatabaseTranslator extends BaseTranslator
 
         try {
             $entities = $this->messageRepository->findAllByLocaleAndDomain($localeEntity, $domain);
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return new MessageCatalogue($locale);
         }
 

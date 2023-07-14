@@ -22,17 +22,11 @@ class Manager implements I18nManager, LocaleAwareInterface
     /**
      * @var Environment[]
      */
-    private $stack = [];
+    private array $stack = [];
 
-    /**
-     * @var Locale
-     */
-    private $defaultLocale;
+    private Locale $defaultLocale;
 
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * Constructs an instance of this class.
@@ -89,7 +83,7 @@ class Manager implements I18nManager, LocaleAwareInterface
         \Locale::setDefault($environment->getLocale()->getCode());
     }
 
-    public function execute(Locale $locale, callable $operation)
+    public function execute(Locale $locale, callable $operation): mixed
     {
         $environment = $this->enterEnvironment($locale);
 

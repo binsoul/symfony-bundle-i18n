@@ -42,7 +42,7 @@ class AddressFormBuilder
     /**
      * @var callable|null
      */
-    private $dataProvider = null;
+    private $dataProvider;
 
     private array $countryOptions = [
         'enabled' => true,
@@ -225,10 +225,7 @@ class AddressFormBuilder
         return $this;
     }
 
-    /**
-     * @param callable $dataProvider
-     */
-    public function withDataProvider($dataProvider): self
+    public function withDataProvider(callable $dataProvider): self
     {
         $this->dataProvider = $dataProvider;
 
@@ -414,7 +411,7 @@ class AddressFormBuilder
 
         $builder->addEventListener(
             FormEvents::PRE_SET_DATA,
-            function (FormEvent $event) {
+            function (FormEvent $event): void {
                 $object = $event->getData();
                 $data = [];
 
@@ -428,7 +425,7 @@ class AddressFormBuilder
 
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
-            function (FormEvent $event) {
+            function (FormEvent $event): void {
                 $object = $event->getForm()->getData();
                 $data = $event->getData();
 
@@ -611,7 +608,7 @@ class AddressFormBuilder
 
             $names = $this->stateOptions['enableChoice'] ? StateData::names($countryCode) : [];
 
-            if (count($names) > 0) {
+            if ($names !== []) {
                 if (! StateData::useCode($countryCode)) {
                     $attr['choices'] = array_combine($names, $names);
                 } else {

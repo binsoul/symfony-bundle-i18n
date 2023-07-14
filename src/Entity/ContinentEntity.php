@@ -5,59 +5,50 @@ declare(strict_types=1);
 namespace BinSoul\Symfony\Bundle\I18n\Entity;
 
 use BinSoul\Common\I18n\Locale;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Intl\Exception\MissingResourceException;
 
 /**
  * Represents a continent.
- *
- * @ORM\Entity()
- * @ORM\Table(
- *     name="continent",
- *     uniqueConstraints={
- *         @ORM\UniqueConstraint(columns={"code"})
- *     },
- * )
  */
+#[ORM\Entity]
+#[ORM\Table(name: 'continent')]
+#[ORM\UniqueConstraint(columns: ['code'])]
 class ContinentEntity
 {
     /**
      * @var int|null ID of the continent
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
      */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $id;
 
     /**
      * @var string Code of the continent
-     *
-     * @ORM\Column(type="string", length=2, nullable=false)
      */
-    private $code;
+    #[ORM\Column(type: Types::STRING, length: 2)]
+    private string $code;
 
     /**
      * @var string Country code of the continent
-     *
-     * @ORM\Column(type="string", length=3, nullable=false)
      */
-    private $countryCode;
+    #[ORM\Column(type: Types::STRING, length: 3)]
+    private string $countryCode;
 
     /**
      * @var float|string|null Latitude of the center of the continent
-     *
-     * @ORM\Column(type="decimal", precision=10, scale=6, nullable=true)
      */
-    private $centerLatitude;
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 6, nullable: true)]
+    private float|string|null $centerLatitude = null;
 
     /**
      * @var float|string|null Longitude of the center of the continent
-     *
-     * @ORM\Column(type="decimal", precision=10, scale=6, nullable=true)
      */
-    private $centerLongitude;
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 6, nullable: true)]
+    private float|string|null $centerLongitude = null;
 
     /**
      * Constructs an instance of this class.
@@ -119,7 +110,7 @@ class ContinentEntity
     {
         try {
             return Countries::getName($this->getCountryCode(), $displayLocale->getCode('_'));
-        } catch (MissingResourceException $e) {
+        } catch (MissingResourceException) {
             return $this->getCode();
         }
     }

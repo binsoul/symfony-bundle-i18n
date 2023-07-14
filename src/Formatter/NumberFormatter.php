@@ -14,15 +14,9 @@ use BinSoul\Common\I18n\NumberFormatter as CommonNumberFormatter;
  */
 class NumberFormatter implements CommonNumberFormatter
 {
-    /**
-     * @var Locale
-     */
-    private $locale;
+    private Locale $locale;
 
-    /**
-     * @var IntlNumberFormatter
-     */
-    private $formatter;
+    private IntlNumberFormatter $formatter;
 
     /**
      * Constructs an instance of this class.

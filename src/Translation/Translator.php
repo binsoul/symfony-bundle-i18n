@@ -20,10 +20,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class Translator extends DefaultTranslator
 {
-    /**
-     * @var TranslatorInterface|TranslatorBagInterface|LocaleAwareInterface
-     */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * Constructs an instance of this class.
@@ -35,7 +32,7 @@ class Translator extends DefaultTranslator
         parent::__construct($locale ?? DefaultLocale::fromString(IntlLocale::getDefault()));
 
         if (! $translator instanceof TranslatorInterface || ! $translator instanceof TranslatorBagInterface || ! $translator instanceof LocaleAwareInterface) {
-            throw new InvalidArgumentException(sprintf('The Translator "%s" must implement TranslatorInterface, TranslatorBagInterface and LocaleAwareInterface.', \get_class($translator)));
+            throw new InvalidArgumentException(sprintf('The Translator "%s" must implement TranslatorInterface, TranslatorBagInterface and LocaleAwareInterface.', $translator::class));
         }
 
         $this->translator = $translator;
@@ -54,9 +51,7 @@ class Translator extends DefaultTranslator
             $parameters['%count%'] = $quantity;
         }
 
-        /** @var TranslatorInterface $translator */
-        $translator = $this->translator;
-        $translation = $translator->trans($message->getKey(), $parameters, $message->getDomain(), $this->locale->getCode('_'));
+        $translation = $this->translator->trans($message->getKey(), $parameters, $message->getDomain(), $this->locale->getCode('_'));
 
         return new DefaultTranslatedMessage($message->getDecoratedMessage(), $translation, $this->locale);
     }
