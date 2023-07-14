@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BinSoul\Symfony\Bundle\I18n\Translation;
 
 use BinSoul\Common\I18n\DefaultLocale;
+use BinSoul\Symfony\Bundle\I18n\Entity\LocaleEntity;
 use BinSoul\Symfony\Bundle\I18n\Repository\LocaleRepository;
 use BinSoul\Symfony\Bundle\I18n\Repository\MessageRepository;
 use InvalidArgumentException;
@@ -39,6 +40,11 @@ class DatabaseTranslator extends BaseTranslator
      * @var MessageCatalogueInterface[]
      */
     private array $databaseCatalogues = [];
+
+    /**
+     * @var array<string, LocaleEntity|null>
+     */
+    private array $cachedLocale = [];
 
     public function __construct(
         ContainerInterface $container,
@@ -116,7 +122,13 @@ class DatabaseTranslator extends BaseTranslator
         $parsedLocale = DefaultLocale::fromString($locale, '_');
 
         while (! $parsedLocale->isRoot()) {
-            $localeEntity = $this->localeRepository->findByCode($parsedLocale->getCode('-'));
+            $parsedLocaleCode = $parsedLocale->getCode('-');
+
+            if (! array_key_exists($parsedLocaleCode, $this->cachedLocale)) {
+                $this->cachedLocale[$parsedLocaleCode] = $this->localeRepository->findByCode($parsedLocaleCode);
+            }
+
+            $localeEntity = $this->cachedLocale[$parsedLocaleCode];
 
             if ($localeEntity !== null) {
                 break;
