@@ -36,7 +36,7 @@ class LocaleEntity implements Locale
     /**
      * @var LanguageEntity Language of the locale
      */
-    #[ORM\ManyToOne(targetEntity: LanguageEntity::class)]
+    #[ORM\ManyToOne(targetEntity: LanguageEntity::class, fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private LanguageEntity $language;
 
