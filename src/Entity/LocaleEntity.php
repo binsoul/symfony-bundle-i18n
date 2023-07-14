@@ -17,6 +17,7 @@ use Symfony\Component\Intl\Locales;
 #[ORM\Table(name: 'locale')]
 #[ORM\UniqueConstraint(columns: ['code'])]
 #[ORM\Entity]
+#[ORM\Cache(usage: 'READ_ONLY')]
 class LocaleEntity implements Locale
 {
     /**

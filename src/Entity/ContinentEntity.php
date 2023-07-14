@@ -16,6 +16,7 @@ use Symfony\Component\Intl\Exception\MissingResourceException;
 #[ORM\Entity]
 #[ORM\Table(name: 'continent')]
 #[ORM\UniqueConstraint(columns: ['code'])]
+#[ORM\Cache(usage: 'READ_ONLY')]
 class ContinentEntity
 {
     /**

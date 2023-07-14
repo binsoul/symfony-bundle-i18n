@@ -17,6 +17,7 @@ use Symfony\Component\Intl\Exception\MissingResourceException;
 #[ORM\Entity]
 #[ORM\Table(name: 'currency')]
 #[ORM\UniqueConstraint(columns: ['iso3'])]
+#[ORM\Cache(usage: 'READ_ONLY')]
 class CurrencyEntity implements Currency
 {
     /**

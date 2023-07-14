@@ -19,6 +19,7 @@ use Symfony\Component\Intl\Locales;
 #[ORM\Table(name: 'language')]
 #[ORM\UniqueConstraint(columns: ['iso2'])]
 #[ORM\UniqueConstraint(columns: ['iso3'])]
+#[ORM\Cache(usage: 'READ_ONLY')]
 class LanguageEntity implements Language
 {
     /**
