@@ -22,11 +22,15 @@ class OverrideTranslatorPass implements CompilerPassInterface
             return;
         }
 
-        $defaultTranslator = $container->getDefinition('translator.default');
-        $defaultTranslator->setClass(DatabaseTranslator::class);
-        $defaultTranslator->addArgument(new Reference(MessageRepository::class));
-        $defaultTranslator->addArgument(new Reference(LocaleRepository::class));
+        $enableTranslator = $container->getParameter('binsoul_i18n.enableTranslator');
 
-        $container->removeDefinition(DatabaseTranslator::class);
+        if ($enableTranslator) {
+            $defaultTranslator = $container->getDefinition('translator.default');
+            $defaultTranslator->setClass(DatabaseTranslator::class);
+            $defaultTranslator->addArgument(new Reference(MessageRepository::class));
+            $defaultTranslator->addArgument(new Reference(LocaleRepository::class));
+
+            $container->removeDefinition(DatabaseTranslator::class);
+        }
     }
 }

@@ -22,6 +22,10 @@ class Configuration implements ConfigurationInterface
             ->defaultValue('')
             ->info('will be prepended to table, index and sequence names')
             ->end()
+            ->booleanNode('enableTranslator')
+            ->defaultValue(false)
+            ->info('enables the database translator')
+            ->end()
             ->end();
 
         return $treeBuilder;

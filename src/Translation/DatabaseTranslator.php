@@ -27,8 +27,6 @@ class DatabaseTranslator extends BaseTranslator
 
     private LocaleRepository $localeRepository;
 
-    private ?bool $tablesExist = null;
-
     private MessageFormatterInterface $messageFormatter;
 
     /**
@@ -110,10 +108,6 @@ class DatabaseTranslator extends BaseTranslator
 
     public function load(string $locale, string $domain): MessageCatalogueInterface
     {
-        if (! $this->isEnabled()) {
-            return new MessageCatalogue($locale);
-        }
-
         if (isset($this->loadedCatalogues[$locale][$domain])) {
             return $this->databaseCatalogues[$locale];
         }
@@ -174,17 +168,5 @@ class DatabaseTranslator extends BaseTranslator
         }
 
         return $this->databaseCatalogues[$locale];
-    }
-
-    /**
-     * Indicates if translations can be loaded from the database.
-     */
-    private function isEnabled(): bool
-    {
-        if ($this->tablesExist === null) {
-            $this->tablesExist = $this->localeRepository->tableExists() && $this->messageRepository->tableExists();
-        }
-
-        return $this->tablesExist;
     }
 }

@@ -30,5 +30,7 @@ class BinsoulI18nExtension extends Extension
         if ($prefix === '') {
             $definition->clearTags();
         }
+
+        $container->setParameter('binsoul_i18n.enableTranslator', $config['enableTranslator'] ?? false);
     }
 }
