@@ -62,8 +62,8 @@ class AddressFormatterExtension extends AbstractExtension
             ),
             new TwigFunction(
                 'addressFieldClasses',
-                function (string $fieldName, Country|string $country, array $options = []): string {
-                    return $this->addressFieldClasses($fieldName, $country, $options);
+                function (string $fieldName, Country|string $country, array $options = [], ?FormView $formField = null): string {
+                    return $this->addressFieldClasses($fieldName, $country, $options, $formField);
                 },
                 ['is_safe' => ['html']]
             ),
