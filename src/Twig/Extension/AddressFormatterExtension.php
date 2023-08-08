@@ -12,6 +12,7 @@ use BinSoul\Common\I18n\DefaultLocale;
 use BinSoul\Common\I18n\Locale;
 use BinSoul\Symfony\Bundle\I18n\Formatter\AddressFormatter;
 use BinSoul\Symfony\Bundle\I18n\I18nManager;
+use Symfony\Component\Form\FormView;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -97,13 +98,19 @@ class AddressFormatterExtension extends AbstractExtension
      * @param Country|string                                                                  $country   Country or ISO2 code of the country
      * @param array{'includeFields': array<int, string>, 'excludeFields': array<int, string>} $options
      */
-    public function addressFieldClasses(string $fieldName, Country|string $country, array $options = []): string
+    public function addressFieldClasses(string $fieldName, Country|string $country, array $options = [], ?FormView $formField = null): string
     {
         $layout = $this->getLayout($country instanceof Country ? $country->getIso2() : $country, $options);
         [, $numberOfColumns] = $this->getDimensions($layout);
 
+        $isRequired = false;
+
+        if ($formField !== null) {
+            $isRequired = $formField->vars['required'] ?? false;
+        }
+
         if (! isset($layout[$fieldName])) {
-            return 'invisible';
+            return 'invisible' . ($isRequired ? ' required' : '');
         }
 
         [$targetRow, $targetColumn] = $layout[$fieldName];
@@ -129,7 +136,7 @@ class AddressFormatterExtension extends AbstractExtension
             $span = $numberOfColumns - count($rowLayout) + 1;
         }
 
-        return 'visible row-' . $targetRow . ' column-' . $targetColumn . ' span-' . $span;
+        return 'visible row-' . $targetRow . ' column-' . $targetColumn . ' span-' . $span . ($isRequired ? ' required' : '');
     }
 
     /**
