@@ -269,7 +269,7 @@ class AddressFormBuilder
         $this->addressLine2Options['enabled'] = true;
         $this->addressLine2Options['field'] = $fieldName;
         $this->addressLine2Options['type'] = $fieldType;
-        $this->addressLine2Options['attr'] = $this->merge($this->addressLine1Options['attr'], $fieldOptions);
+        $this->addressLine2Options['attr'] = $this->merge($this->addressLine2Options['attr'], $fieldOptions);
 
         return $this;
     }
