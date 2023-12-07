@@ -15,9 +15,9 @@ use DateTimeInterface;
  */
 class DateTimeFormatter implements CommonDateTimeFormatter
 {
-    private Locale $locale;
+    private readonly Locale $locale;
 
-    private IntlDateTimeFormatter $formatter;
+    private readonly IntlDateTimeFormatter $formatter;
 
     /**
      * Constructs an instance of this class.

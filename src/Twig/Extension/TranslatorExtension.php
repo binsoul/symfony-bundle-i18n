@@ -21,7 +21,7 @@ use Twig\TwigFilter;
  */
 class TranslatorExtension extends AbstractExtension
 {
-    private I18nManager $i18nManager;
+    private readonly I18nManager $i18nManager;
 
     /**
      * Constructs an instance of this class.

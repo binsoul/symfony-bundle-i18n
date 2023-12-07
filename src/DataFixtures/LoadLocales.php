@@ -495,9 +495,9 @@ class LoadLocales extends Fixture implements DependentFixtureInterface, FixtureG
         [472, 'zu-ZA', 'zul', 'ZA'],
     ];
 
-    private LanguageRepository $languageRepository;
+    private readonly LanguageRepository $languageRepository;
 
-    private CountryRepository $countryRepository;
+    private readonly CountryRepository $countryRepository;
 
     /**
      * Constructs an instance of this class.

@@ -13,7 +13,7 @@ use Symfony\Contracts\Cache\ItemInterface;
 
 class MessageRepository extends AbstractRepository
 {
-    private ?CacheItemPoolInterface $messageCache;
+    private readonly ?CacheItemPoolInterface $messageCache;
 
     /**
      * Constructs an instance of this class.

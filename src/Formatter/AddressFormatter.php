@@ -15,9 +15,9 @@ use BinSoul\Common\I18n\Locale;
  */
 class AddressFormatter implements CommonAddressFormatter
 {
-    private Locale $locale;
+    private readonly Locale $locale;
 
-    private IntlAddressFormatter $formatter;
+    private readonly IntlAddressFormatter $formatter;
 
     /**
      * Constructs an instance of this class.

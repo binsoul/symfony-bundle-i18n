@@ -26,7 +26,7 @@ class Manager implements I18nManager, LocaleAwareInterface
 
     private Locale $defaultLocale;
 
-    private TranslatorInterface $translator;
+    private readonly TranslatorInterface $translator;
 
     /**
      * Constructs an instance of this class.

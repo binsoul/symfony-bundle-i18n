@@ -20,7 +20,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class Translator extends DefaultTranslator
 {
-    private TranslatorInterface $translator;
+    private readonly TranslatorInterface $translator;
 
     /**
      * Constructs an instance of this class.

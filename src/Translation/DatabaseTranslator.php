@@ -23,11 +23,11 @@ use Throwable;
  */
 class DatabaseTranslator extends BaseTranslator
 {
-    private MessageRepository $messageRepository;
+    private readonly MessageRepository $messageRepository;
 
-    private LocaleRepository $localeRepository;
+    private readonly LocaleRepository $localeRepository;
 
-    private MessageFormatterInterface $messageFormatter;
+    private readonly MessageFormatterInterface $messageFormatter;
 
     /**
      * @var bool[][]

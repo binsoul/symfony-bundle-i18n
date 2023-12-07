@@ -14,9 +14,9 @@ use BinSoul\Common\I18n\QuoteFormatter as CommonQuoteFormatter;
  */
 class QuoteFormatter implements CommonQuoteFormatter
 {
-    private Locale $locale;
+    private readonly Locale $locale;
 
-    private DefaultQuoteFormatter $formatter;
+    private readonly DefaultQuoteFormatter $formatter;
 
     /**
      * Constructs an instance of this class.

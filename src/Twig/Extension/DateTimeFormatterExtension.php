@@ -18,7 +18,7 @@ use Twig\TwigFilter;
  */
 class DateTimeFormatterExtension extends AbstractExtension
 {
-    private I18nManager $i18nManager;
+    private readonly I18nManager $i18nManager;
 
     /**
      * Constructs an instance of this class.

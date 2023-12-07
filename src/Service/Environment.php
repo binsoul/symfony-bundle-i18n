@@ -21,21 +21,21 @@ use BinSoul\Symfony\Bundle\I18n\Transliterator\SlugGenerator;
 
 class Environment implements I18nEnvironment
 {
-    private Locale $locale;
+    private readonly Locale $locale;
 
-    private NumberFormatter $numberFormatter;
+    private readonly NumberFormatter $numberFormatter;
 
-    private DateTimeFormatter $dateTimeFormatter;
+    private readonly DateTimeFormatter $dateTimeFormatter;
 
-    private AddressFormatter $addressFormatter;
+    private readonly AddressFormatter $addressFormatter;
 
-    private Translator $translator;
+    private readonly Translator $translator;
 
     private ?SlugGenerator $slugGenerator = null;
 
-    private ListFormatter $listFormatter;
+    private readonly ListFormatter $listFormatter;
 
-    private QuoteFormatter $quoteFormatter;
+    private readonly QuoteFormatter $quoteFormatter;
 
     /**
      * Constructs an instance of this class.

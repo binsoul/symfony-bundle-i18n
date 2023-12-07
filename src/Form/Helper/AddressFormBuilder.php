@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints\Regex;
  */
 class AddressFormBuilder
 {
-    private AddressFormatter $addressFormatter;
+    private readonly AddressFormatter $addressFormatter;
 
     private ?string $defaultCountry = null;
 

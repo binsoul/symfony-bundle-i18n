@@ -67,7 +67,7 @@ class ManagerTest extends TestCase
 
         $called = false;
         $calledLocale = null;
-        $operation = static function (I18nEnvironment $environment) use (&$called, &$calledLocale) {
+        $operation = static function (I18nEnvironment $environment) use (&$called, &$calledLocale): string {
             $called = true;
             $calledLocale = $environment->getLocale()->getCode();
 

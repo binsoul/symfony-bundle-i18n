@@ -278,7 +278,7 @@ class LoadCountries extends Fixture implements DependentFixtureInterface, Fixtur
         [259, 1, 'Tristan da Cunha', 'TA', 'TAA', null, null, 0.000000, 0.000000],
     ];
 
-    private ContinentRepository $continentRepository;
+    private readonly ContinentRepository $continentRepository;
 
     /**
      * Constructs an instance of this class.

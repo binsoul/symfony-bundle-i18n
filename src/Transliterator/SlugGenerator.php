@@ -14,9 +14,9 @@ use BinSoul\Common\I18n\SlugGenerator as CommonSlugGenerator;
  */
 class SlugGenerator implements CommonSlugGenerator
 {
-    private Locale $locale;
+    private readonly Locale $locale;
 
-    private IntlSlugGenerator $generator;
+    private readonly IntlSlugGenerator $generator;
 
     /**
      * Constructs an instance of this class.

@@ -6,15 +6,14 @@ namespace BinSoul\Symfony\Bundle\I18n\EventListener;
 
 use BinSoul\Symfony\Bundle\I18n\I18nManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Twig\Environment;
 
 class TwigGlobalsListener implements EventSubscriberInterface
 {
-    private Environment $twig;
+    private readonly Environment $twig;
 
-    private I18nManager $i18nManager;
+    private readonly I18nManager $i18nManager;
 
     /**
      * Constructs an instance of this class.
