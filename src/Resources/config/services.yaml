@@ -23,5 +23,8 @@ services:
     BinSoul\Symfony\Bundle\I18n\Service\Manager: ~
     BinSoul\Symfony\Bundle\I18n\I18nManager: '@BinSoul\Symfony\Bundle\I18n\Service\Manager'
 
+    BinSoul\Symfony\Bundle\I18n\EventListener\TablePrefixListener:
+        public: true
+
     BinSoul\Symfony\Bundle\I18n\EventListener\TwigGlobalsListener:
         tags: ['kernel.event_subscriber']
