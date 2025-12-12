@@ -10,7 +10,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\ORM\Id\AssignedGenerator;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\ObjectManager;
 
 class LoadCountries extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
@@ -290,9 +290,8 @@ class LoadCountries extends Fixture implements DependentFixtureInterface, Fixtur
 
     public function load(ObjectManager $manager): void
     {
-        /** @var ClassMetadataInfo $metadata */
         $metadata = $manager->getClassMetadata(CountryEntity::class);
-        $metadata->setIdGeneratorType(ClassMetadataInfo::GENERATOR_TYPE_NONE);
+        $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
         $metadata->setIdGenerator(new AssignedGenerator());
 
         foreach (self::ROWS as $row) {

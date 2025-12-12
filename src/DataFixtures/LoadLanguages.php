@@ -8,7 +8,7 @@ use BinSoul\Symfony\Bundle\I18n\Entity\LanguageEntity;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\ORM\Id\AssignedGenerator;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\ObjectManager;
 
 class LoadLanguages extends Fixture implements FixtureGroupInterface
@@ -204,9 +204,8 @@ class LoadLanguages extends Fixture implements FixtureGroupInterface
 
     public function load(ObjectManager $manager): void
     {
-        /** @var ClassMetadataInfo $metadata */
         $metadata = $manager->getClassMetadata(LanguageEntity::class);
-        $metadata->setIdGeneratorType(ClassMetadataInfo::GENERATOR_TYPE_NONE);
+        $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
         $metadata->setIdGenerator(new AssignedGenerator());
 
         foreach (self::ROWS as $row) {
