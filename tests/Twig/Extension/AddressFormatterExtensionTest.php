@@ -86,7 +86,7 @@ class AddressFormatterExtensionTest extends TestCase
     private function buildManager(): Manager
     {
         /** @var Translator $translator */
-        $translator = $this->createMock(Translator::class);
+        $translator = $this->createStub(Translator::class);
 
         return new Manager($translator);
     }
