@@ -9,24 +9,22 @@ use BinSoul\Symfony\Bundle\I18n\Entity\LocaleEntity;
 use BinSoul\Symfony\Bundle\I18n\Repository\LocaleRepository;
 use BinSoul\Symfony\Bundle\I18n\Repository\MessageRepository;
 use InvalidArgumentException;
-use Psr\Container\ContainerInterface;
-use Symfony\Bundle\FrameworkBundle\Translation\Translator as BaseTranslator;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 use Symfony\Component\Translation\Formatter\IntlFormatterInterface;
+use Symfony\Component\Translation\Formatter\MessageFormatter;
 use Symfony\Component\Translation\Formatter\MessageFormatterInterface;
 use Symfony\Component\Translation\MessageCatalogue;
 use Symfony\Component\Translation\MessageCatalogueInterface;
+use Symfony\Component\Translation\TranslatorBagInterface;
+use Symfony\Contracts\Translation\LocaleAwareInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
 /**
  * Replaces the original Symfony FrameworkBundle translator.
  */
-class DatabaseTranslator extends BaseTranslator
+class DatabaseTranslator implements TranslatorInterface, TranslatorBagInterface, LocaleAwareInterface
 {
-    private readonly MessageRepository $messageRepository;
-
-    private readonly LocaleRepository $localeRepository;
-
     private readonly MessageFormatterInterface $messageFormatter;
 
     /**
@@ -45,30 +43,20 @@ class DatabaseTranslator extends BaseTranslator
     private array $cachedLocale = [];
 
     public function __construct(
-        ContainerInterface $container,
-        MessageFormatterInterface $formatter,
-        string $defaultLocale,
-        array $loaderIds = [],
-        array $options = [],
-        array $enabledLocales = [],
-        ?MessageRepository $messageRepository = null,
-        ?LocaleRepository $localeRepository = null
+        private readonly TranslatorInterface $defaultTranslator,
+        private readonly MessageRepository $messageRepository,
+        private readonly LocaleRepository $localeRepository,
+        ?MessageFormatterInterface $formatter = null,
     ) {
-        parent::__construct($container, $formatter, $defaultLocale, $loaderIds, $options, $enabledLocales);
+        $this->messageFormatter = $formatter ?? new MessageFormatter();
+    }
 
-        $this->messageFormatter = $formatter;
-
-        if ($messageRepository === null) {
-            throw new InvalidArgumentException('A message repository is required.');
-        }
-
-        $this->messageRepository = $messageRepository;
-
-        if ($localeRepository === null) {
-            throw new InvalidArgumentException('A locale repository is required.');
-        }
-
-        $this->localeRepository = $localeRepository;
+    /**
+     * Passes through all unknown calls onto the default translator object.
+     */
+    public function __call(string $method, array $args)
+    {
+        return call_user_func_array([$this->defaultTranslator, $method], $args);
     }
 
     public function trans(?string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
@@ -96,7 +84,7 @@ class DatabaseTranslator extends BaseTranslator
         }
 
         if (! $catalogue->defines($id, $domain)) {
-            return parent::trans($id, $parameters, $domain, $locale);
+            return $this->defaultTranslator->trans($id, $parameters, $domain, $locale);
         }
 
         if ($this->messageFormatter instanceof IntlFormatterInterface) {
@@ -168,5 +156,37 @@ class DatabaseTranslator extends BaseTranslator
         }
 
         return $this->databaseCatalogues[$locale];
+    }
+
+    public function getLocale(): string
+    {
+        return $this->defaultTranslator->getLocale();
+    }
+
+    public function setLocale(string $locale): void
+    {
+        if (! $this->defaultTranslator instanceof LocaleAwareInterface) {
+            throw new InvalidArgumentException('The default translator must implements LocaleAwareInterface.');
+        }
+
+        $this->defaultTranslator->setLocale($locale);
+    }
+
+    public function getCatalogue(?string $locale = null): MessageCatalogueInterface
+    {
+        if (! $this->defaultTranslator instanceof TranslatorBagInterface) {
+            throw new InvalidArgumentException('The default translator must implements TranslatorBagInterface.');
+        }
+
+        return $this->defaultTranslator->getCatalogue($locale);
+    }
+
+    public function getCatalogues(): array
+    {
+        if (! $this->defaultTranslator instanceof TranslatorBagInterface) {
+            throw new InvalidArgumentException('The default translator must implements TranslatorBagInterface.');
+        }
+
+        return $this->defaultTranslator->getCatalogues();
     }
 }
