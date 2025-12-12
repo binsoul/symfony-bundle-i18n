@@ -12,11 +12,11 @@ use BinSoul\Common\I18n\QuoteFormatter as CommonQuoteFormatter;
 /**
  * Formats quotes using the {@see DefaultQuoteFormatter} class.
  */
-class QuoteFormatter implements CommonQuoteFormatter
+readonly class QuoteFormatter implements CommonQuoteFormatter
 {
-    private readonly Locale $locale;
+    private Locale $locale;
 
-    private readonly DefaultQuoteFormatter $formatter;
+    private DefaultQuoteFormatter $formatter;
 
     /**
      * Constructs an instance of this class.

@@ -18,7 +18,7 @@ class LoadCountries extends Fixture implements DependentFixtureInterface, Fixtur
     /**
      * @var array[]
      */
-    private const ROWS = [
+    private const array ROWS = [
         [1, 3, 'Afghanistan', 'AF', 'AFG', '004', 'AFG', 0.000000, 0.000000],
         [2, 4, 'Albania', 'AL', 'ALB', '008', 'AL', 0.000000, 0.000000],
         [3, 1, 'Algeria', 'DZ', 'DZA', '012', 'DZ', 0.000000, 0.000000],

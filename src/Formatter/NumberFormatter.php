@@ -12,11 +12,11 @@ use BinSoul\Common\I18n\NumberFormatter as CommonNumberFormatter;
 /**
  * Formats numbers using the {@see IntlNumberFormatter} class.
  */
-class NumberFormatter implements CommonNumberFormatter
+readonly class NumberFormatter implements CommonNumberFormatter
 {
-    private readonly Locale $locale;
+    private Locale $locale;
 
-    private readonly IntlNumberFormatter $formatter;
+    private IntlNumberFormatter $formatter;
 
     /**
      * Constructs an instance of this class.

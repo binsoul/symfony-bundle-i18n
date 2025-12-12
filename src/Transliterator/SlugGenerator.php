@@ -12,11 +12,11 @@ use BinSoul\Common\I18n\SlugGenerator as CommonSlugGenerator;
 /**
  * Generates slugs using the {@see IntlSlugGenerator} class.
  */
-class SlugGenerator implements CommonSlugGenerator
+readonly class SlugGenerator implements CommonSlugGenerator
 {
-    private readonly Locale $locale;
+    private Locale $locale;
 
-    private readonly IntlSlugGenerator $generator;
+    private IntlSlugGenerator $generator;
 
     /**
      * Constructs an instance of this class.

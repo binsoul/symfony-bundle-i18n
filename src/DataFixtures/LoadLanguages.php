@@ -16,7 +16,7 @@ class LoadLanguages extends Fixture implements FixtureGroupInterface
     /**
      * @var array[]
      */
-    private const ROWS = [
+    private const array ROWS = [
         [1, 'Abkhaz', 'ab', 'abk', 'ltr'],
         [2, 'Afar', 'aa', 'aar', 'ltr'],
         [3, 'Afrikaans', 'af', 'afr', 'ltr'],

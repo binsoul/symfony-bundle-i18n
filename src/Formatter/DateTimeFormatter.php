@@ -13,11 +13,11 @@ use DateTimeInterface;
 /**
  * Formats dates and times using the {@see IntlDateTimeFormatter} class.
  */
-class DateTimeFormatter implements CommonDateTimeFormatter
+readonly class DateTimeFormatter implements CommonDateTimeFormatter
 {
-    private readonly Locale $locale;
+    private Locale $locale;
 
-    private readonly IntlDateTimeFormatter $formatter;
+    private IntlDateTimeFormatter $formatter;
 
     /**
      * Constructs an instance of this class.

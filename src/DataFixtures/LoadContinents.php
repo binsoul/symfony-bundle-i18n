@@ -16,7 +16,7 @@ class LoadContinents extends Fixture implements FixtureGroupInterface
     /**
      * @var array[]
      */
-    private const ROWS = [
+    private const array ROWS = [
         [1, 'AF', '002', 0.000000, 0.000000],
         [2, 'AN', 'AQ', 0.000000, 0.000000],
         [3, 'AS', '142', 0.000000, 0.000000],

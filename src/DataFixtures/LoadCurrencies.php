@@ -16,7 +16,7 @@ class LoadCurrencies extends Fixture implements FixtureGroupInterface
     /**
      * @var array[]
      */
-    private const ROWS = [
+    private const array ROWS = [
         [1, 'EUR', 978],
         [2, 'PLN', 985],
         [3, 'NOK', 578],

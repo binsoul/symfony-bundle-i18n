@@ -13,11 +13,11 @@ use BinSoul\Common\I18n\Locale;
 /**
  * Formats addresses using the {@see IntlAddressFormatter} class.
  */
-class AddressFormatter implements CommonAddressFormatter
+readonly class AddressFormatter implements CommonAddressFormatter
 {
-    private readonly Locale $locale;
+    private Locale $locale;
 
-    private readonly IntlAddressFormatter $formatter;
+    private IntlAddressFormatter $formatter;
 
     /**
      * Constructs an instance of this class.

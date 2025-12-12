@@ -12,11 +12,11 @@ use BinSoul\Common\I18n\Locale;
 /**
  * Formats lists using the {@see DefaultListFormatter} class.
  */
-class ListFormatter implements CommonListFormatter
+readonly class ListFormatter implements CommonListFormatter
 {
-    private readonly Locale $locale;
+    private Locale $locale;
 
-    private readonly DefaultListFormatter $formatter;
+    private DefaultListFormatter $formatter;
 
     /**
      * Constructs an instance of this class.

@@ -9,19 +9,13 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Twig\Environment;
 
-class TwigGlobalsListener implements EventSubscriberInterface
+readonly class TwigGlobalsListener implements EventSubscriberInterface
 {
-    private readonly Environment $twig;
-
-    private readonly I18nManager $i18nManager;
-
     /**
      * Constructs an instance of this class.
      */
-    public function __construct(Environment $twig, I18nManager $i18nManager)
+    public function __construct(private Environment $twig, private I18nManager $i18nManager)
     {
-        $this->twig = $twig;
-        $this->i18nManager = $i18nManager;
     }
 
     /**

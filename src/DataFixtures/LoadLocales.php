@@ -19,7 +19,7 @@ class LoadLocales extends Fixture implements DependentFixtureInterface, FixtureG
     /**
      * @var array[]
      */
-    private const ROWS = [
+    private const array ROWS = [
         //id, locale_code, lang_iso3, country_iso2
         [1, 'af', 'afr', null],
         [2, 'af-NA', 'afr', 'NA'],
