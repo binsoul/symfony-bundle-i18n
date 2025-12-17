@@ -25,20 +25,14 @@ class OverrideTranslatorPass implements CompilerPassInterface
         $enableTranslator = $container->getParameter('binsoul_i18n.enableTranslator');
 
         if ($enableTranslator) {
-            $defaultTranslator = $container->getDefinition('translator.default');
-            $container->setDefinition('translator.default_override', clone $defaultTranslator);
-
-            $defaultTranslator->setClass(DatabaseTranslator::class);
-            $defaultTranslator->setArguments(
-                [
-                    new Reference('translator.default_override'),
+            $container->register('translator.database', DatabaseTranslator::class)
+                ->setDecoratedService('translator.default')
+                ->setArguments([
+                    new Reference('translator.database.inner'),
                     new Reference(MessageRepository::class),
                     new Reference(LocaleRepository::class),
                     new Reference('translator.formatter'),
-                ]
-            );
-
-            $container->removeDefinition(DatabaseTranslator::class);
+                ]);
         }
     }
 }
