@@ -433,17 +433,18 @@ class AddressFormBuilder
                     $object = ($this->dataProvider)($object);
                 }
 
-                $modifiedData = $this->modifyForm($event->getForm(), $object instanceof MutableAddress ? $object : null, $data);
-                $event->setData($modifiedData);
+                if ($data !== null) {
+                    $modifiedData = $this->modifyForm($event->getForm(), $object instanceof MutableAddress ? $object : null, $data);
+                    $event->setData($modifiedData);
+                }
             }
         );
     }
 
-    private function modifyForm(FormInterface $builder, ?MutableAddress $object, ?array $data): array
+    private function modifyForm(FormInterface $builder, ?MutableAddress $object, array $data): array
     {
         $countryCode = $this->defaultCountry;
 
-        $data = $data ?? [];
         $object = $object ?? new DefaultAddress();
 
         if (trim((string) ($data[$this->countryOptions['field']] ?? '')) !== '') {
