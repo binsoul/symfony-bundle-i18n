@@ -102,6 +102,29 @@ class AddressValidationHelperTest extends TestCase
         $this->assertSame(['IT', 'IT'], $this->helper->resolveCountryCode($constraint, $context));
     }
 
+    public function test_resolve_country_code_with_stringable_object(): void
+    {
+        $context = $this->createStub(ExecutionContextInterface::class);
+        $constraint = new PostalCode(countryField: 'country');
+
+        $stringable = new class() {
+            public function __toString()
+            {
+                return 'it';
+            }
+        };
+        $object = new class($stringable) {
+            public function __construct(
+                public $country
+            ) {
+            }
+        };
+        $context->method('getObject')->willReturn($object);
+
+        $this->assertSame(['IT', 'IT'], $this->helper->resolveCountryCode($constraint, $context));
+    }
+
+
     public function test_resolve_country_code_property_accessor_exception_is_caught(): void
     {
         $context = $this->createStub(ExecutionContextInterface::class);

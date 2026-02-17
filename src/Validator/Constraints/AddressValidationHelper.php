@@ -167,7 +167,11 @@ class AddressValidationHelper
             $stringValue = $normalizer($stringValue);
         }
 
-        return $stringValue;
+        if ($stringValue === null) {
+            return null;
+        }
+
+        return trim($stringValue) !== '' ? $stringValue : null;
     }
 
     /**

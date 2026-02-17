@@ -66,7 +66,7 @@ class AddressFieldValidatorTest extends TestCase
         $this->validator->initialize($context);
         $constraint = new PostalCode();
 
-        $this->helper->method('normalizeValue')->willReturn('');
+        $this->helper->method('normalizeValue')->willReturn(null);
         $this->helper->method('resolveCountryCode')->willReturn(['DE', 'DE']);
         $this->helper->method('getTemplates')->willReturn(['required', null]);
         $this->helper->method('isRequired')->willReturn(true);
@@ -90,7 +90,7 @@ class AddressFieldValidatorTest extends TestCase
 
         $constraint = new PostalCode();
 
-        $this->helper->method('normalizeValue')->willReturn('');
+        $this->helper->method('normalizeValue')->willReturn(null);
         $this->helper->method('resolveCountryCode')->willReturn(['DE', 'DE']);
         $this->helper->method('getTemplates')->willReturn(['optional', '\\d{5}']);
         $this->helper->method('isRequired')->willReturn(false);

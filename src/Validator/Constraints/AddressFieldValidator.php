@@ -52,16 +52,11 @@ final class AddressFieldValidator extends ConstraintValidator
             return;
         }
 
-        $isEmpty = $stringValue === null || trim($stringValue) === '';
+        if ($stringValue === null) {
+            if ($this->helper->isRequired($constraint, $usageValue)) {
+                $this->context->buildViolation($constraint->messageNotBlank)->addViolation();
+            }
 
-        if ($this->helper->isRequired($constraint, $usageValue) && $isEmpty) {
-            $this->context->buildViolation($constraint->messageNotBlank)->addViolation();
-
-            return;
-        }
-
-        // If empty and not required → skip regex
-        if ($isEmpty) {
             return;
         }
 

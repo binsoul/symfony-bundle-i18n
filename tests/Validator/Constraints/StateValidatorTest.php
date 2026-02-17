@@ -46,7 +46,7 @@ class StateValidatorTest extends TestCase
         $this->validator->initialize($context);
         $constraint = new State();
 
-        $this->helper->method('normalizeValue')->willReturn('');
+        $this->helper->method('normalizeValue')->willReturn(null);
         $this->helper->method('resolveCountryCode')->willReturn(['US', 'US']);
         $this->helper->method('getTemplates')->willReturn(['required', null]);
         $this->helper->method('isRequired')->willReturn(true);
@@ -191,7 +191,7 @@ class StateValidatorTest extends TestCase
 
         $constraint = new State();
 
-        $this->helper->method('normalizeValue')->willReturn('');
+        $this->helper->method('normalizeValue')->willReturn(null);
         $this->helper->method('resolveCountryCode')->willReturn(['US', 'US']);
         $this->helper->method('getTemplates')->willReturn(['optional', null]);
         $this->helper->method('isRequired')->willReturn(false);
