@@ -15,16 +15,11 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  * - Required fields (Usage-Template = "required") trigger a NotBlank validation,
  *   unless overridden by `forceOptional` or enforced by `forceRequired`.
  * - Format validation is performed using a Regex-Template (positive matching).
- *
- * The associated address field is defined in the child class via the static property
- * `static::$addressField` (e.g., "postalCode").
- *
- * This constraint is only usable as a PHP 8 attribute and supports property and method targets.
  */
 abstract class AbstractAddressFieldConstraint extends Constraint
 {
     /**
-     * @var string Name of the associated address field.
+     * @var string name of the associated address field
      */
     public static string $addressField = '';
 
