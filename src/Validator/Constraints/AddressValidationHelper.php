@@ -57,10 +57,10 @@ class AddressValidationHelper
 
         // 2. Country resolver
         if ($attempted === null && $constraint->countryResolver !== null && is_callable($constraint->countryResolver)) {
-            $resolverCode = ($constraint->countryResolver)($object, $context);
+            $resolverValue = ($constraint->countryResolver)($object, $context);
 
-            if (is_string($resolverCode) && trim($resolverCode) !== '') {
-                $attempted = strtoupper(trim($resolverCode));
+            if (is_string($resolverValue) && trim($resolverValue) !== '') {
+                $attempted = strtoupper(trim($resolverValue));
             }
         }
 
@@ -78,8 +78,8 @@ class AddressValidationHelper
                 $fieldValue = $fieldValue->getIso2();
             }
 
-            if (is_string($fieldValue) && trim($fieldValue) !== '') {
-                $attempted = strtoupper(trim($fieldValue));
+            if ((is_string($fieldValue) || (is_object($fieldValue) && method_exists($fieldValue, '__toString'))) && trim((string) $fieldValue) !== '') {
+                $attempted = strtoupper(trim((string) $fieldValue));
             }
         }
 
