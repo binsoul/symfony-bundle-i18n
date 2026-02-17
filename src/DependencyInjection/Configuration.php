@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BinSoul\Symfony\Bundle\I18n\DependencyInjection;
 
+use BinSoul\Symfony\Bundle\I18n\Formatter\AddressFormatter;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -25,6 +26,14 @@ class Configuration implements ConfigurationInterface
             ->booleanNode('enableTranslator')
             ->defaultValue(false)
             ->info('enables the database translator')
+            ->end()
+            ->scalarNode('defaultCountry')
+            ->defaultNull()
+            ->info('default country code to use')
+            ->end()
+            ->scalarNode('addressFormatter')
+            ->defaultValue(AddressFormatter::class)
+            ->info('service id of the address formatter to use')
             ->end()
             ->end();
 

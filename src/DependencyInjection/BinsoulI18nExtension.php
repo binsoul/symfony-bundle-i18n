@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace BinSoul\Symfony\Bundle\I18n\DependencyInjection;
 
 use BinSoul\Symfony\Bundle\I18n\EventListener\TablePrefixListener;
+use BinSoul\Symfony\Bundle\I18n\Validator\Constraints\AddressValidationConfig;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\DependencyInjection\Reference;
 
 class BinsoulI18nExtension extends Extension
 {
@@ -29,5 +32,13 @@ class BinsoulI18nExtension extends Extension
         }
 
         $container->setParameter('binsoul_i18n.enableTranslator', $config['enableTranslator'] ?? false);
+
+        $configDefinition = new Definition(AddressValidationConfig::class);
+        $configDefinition->setArguments([
+            new Reference($config['addressFormatter']),
+            $config['defaultCountry'],
+        ]);
+
+        $container->setDefinition(AddressValidationConfig::class, $configDefinition);
     }
 }
