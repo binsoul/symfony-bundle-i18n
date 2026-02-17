@@ -34,4 +34,4 @@ services:
 
     BinSoul\Symfony\Bundle\I18n\Validator\Constraints\:
         resource: '../../Validator/Constraints/*'
-        exclude: '../../Validator/Constraints/{Abstract*,AddressValidationConfig.php,AddressValidationHelper.php}'
+        exclude: '../../Validator/Constraints/Abstract*'
