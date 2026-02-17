@@ -57,7 +57,7 @@ abstract class AbstractAddressFieldConstraint extends Constraint
         public $normalizer = null,
         public mixed $payload = null,
     ) {
-        parent::__construct([], $groups, $payload);
+        parent::__construct(null, $groups, $payload);
     }
 
     public function validatedBy(): string
