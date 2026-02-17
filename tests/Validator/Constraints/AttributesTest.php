@@ -8,6 +8,8 @@ use BinSoul\Symfony\Bundle\I18n\Validator\Constraints\AddressFieldValidator;
 use BinSoul\Symfony\Bundle\I18n\Validator\Constraints\AddressLine1;
 use BinSoul\Symfony\Bundle\I18n\Validator\Constraints\AddressLine2;
 use BinSoul\Symfony\Bundle\I18n\Validator\Constraints\AddressLine3;
+use BinSoul\Symfony\Bundle\I18n\Validator\Constraints\Country;
+use BinSoul\Symfony\Bundle\I18n\Validator\Constraints\CountryValidator;
 use BinSoul\Symfony\Bundle\I18n\Validator\Constraints\Locality;
 use BinSoul\Symfony\Bundle\I18n\Validator\Constraints\PostalCode;
 use BinSoul\Symfony\Bundle\I18n\Validator\Constraints\SortingCode;
@@ -34,6 +36,7 @@ class AttributesTest extends TestCase
         $this->assertSame(AddressFieldValidator::class, (new PostalCode())->validatedBy());
         $this->assertSame(AddressFieldValidator::class, (new SortingCode())->validatedBy());
         $this->assertSame(StateValidator::class, (new State())->validatedBy());
+        $this->assertSame(CountryValidator::class, (new Country())->validatedBy());
     }
 
     public function test_constructor_defaults_and_overrides_on_abstract_constraint_children(): void
@@ -60,5 +63,14 @@ class AttributesTest extends TestCase
     {
         $state = new State();
         $this->assertSame('This value is not a valid state.', $state->messageInvalidState);
+    }
+
+    public function test_country_defaults_and_overrides(): void
+    {
+        $constraint = new Country(groups: ['Custom'], message: 'Invalid country', payload: ['a' => 'b']);
+
+        $this->assertSame(['Custom'], $constraint->groups);
+        $this->assertSame('Invalid country', $constraint->message);
+        $this->assertSame(['a' => 'b'], $constraint->payload);
     }
 }
