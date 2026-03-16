@@ -36,27 +36,19 @@ class NumberFormatterExtension extends AbstractExtension
         return [
             new TwigFilter(
                 'formatDecimal',
-                function (float|int|string $value, ?int $decimals = null, Locale|string|null $locale = null): string {
-                    return $this->formatDecimal($value, $decimals, $locale);
-                }
+                fn (float|int|string $value, ?int $decimals = null, Locale|string|null $locale = null): string => $this->formatDecimal($value, $decimals, $locale)
             ),
             new TwigFilter(
                 'formatPercent',
-                function (float|int|string $value, ?int $decimals = null, Locale|string|null $locale = null): string {
-                    return $this->formatPercent($value, $decimals, $locale);
-                }
+                fn (float|int|string $value, ?int $decimals = null, Locale|string|null $locale = null): string => $this->formatPercent($value, $decimals, $locale)
             ),
             new TwigFilter(
                 'formatCurrency',
-                function (float|int|string $value, Currency|string $currency, Locale|string|null $locale = null): string {
-                    return $this->formatCurrency($value, $currency, $locale);
-                }
+                fn (float|int|string $value, Currency|string $currency, Locale|string|null $locale = null): string => $this->formatCurrency($value, $currency, $locale)
             ),
             new TwigFilter(
                 'formatCurrencyNumber',
-                function (float|int|string $value, Locale|string|null $locale = null): string {
-                    return $this->formatCurrencyNumber($value, $locale);
-                }
+                fn (float|int|string $value, Locale|string|null $locale = null): string => $this->formatCurrencyNumber($value, $locale)
             ),
         ];
     }

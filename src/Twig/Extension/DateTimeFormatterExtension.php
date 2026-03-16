@@ -36,39 +36,27 @@ class DateTimeFormatterExtension extends AbstractExtension
         return [
             new TwigFilter(
                 'formatPattern',
-                function (DateTimeInterface $datetime, string $pattern, Locale|string|null $locale = null): string {
-                    return $this->formatPattern($datetime, $pattern, $locale);
-                }
+                fn (DateTimeInterface $datetime, string $pattern, Locale|string|null $locale = null): string => $this->formatPattern($datetime, $pattern, $locale)
             ),
             new TwigFilter(
                 'formatTime',
-                function (DateTimeInterface $time, Locale|string|null $locale = null): string {
-                    return $this->formatTime($time, $locale);
-                }
+                fn (DateTimeInterface $time, Locale|string|null $locale = null): string => $this->formatTime($time, $locale)
             ),
             new TwigFilter(
                 'formatTimeWithSeconds',
-                function (DateTimeInterface $time, Locale|string|null $locale = null): string {
-                    return $this->formatTimeWithSeconds($time, $locale);
-                }
+                fn (DateTimeInterface $time, Locale|string|null $locale = null): string => $this->formatTimeWithSeconds($time, $locale)
             ),
             new TwigFilter(
                 'formatDate',
-                function (DateTimeInterface $date, Locale|string|null $locale = null): string {
-                    return $this->formatDate($date, $locale);
-                }
+                fn (DateTimeInterface $date, Locale|string|null $locale = null): string => $this->formatDate($date, $locale)
             ),
             new TwigFilter(
                 'formatDateTime',
-                function (DateTimeInterface $datetime, Locale|string|null $locale = null): string {
-                    return $this->formatDateTime($datetime, $locale);
-                }
+                fn (DateTimeInterface $datetime, Locale|string|null $locale = null): string => $this->formatDateTime($datetime, $locale)
             ),
             new TwigFilter(
                 'formatDateTimeWithSeconds',
-                function (DateTimeInterface $datetime, Locale|string|null $locale = null): string {
-                    return $this->formatDateTimeWithSeconds($datetime, $locale);
-                }
+                fn (DateTimeInterface $datetime, Locale|string|null $locale = null): string => $this->formatDateTimeWithSeconds($datetime, $locale)
             ),
         ];
     }

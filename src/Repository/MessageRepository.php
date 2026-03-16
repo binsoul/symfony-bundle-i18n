@@ -65,7 +65,7 @@ class MessageRepository extends AbstractRepository
     public function findAllByLocaleAndDomain(LocaleEntity $locale, string $domain): array
     {
         if ($this->messageCache !== null) {
-            $key = str_replace(str_split(ItemInterface::RESERVED_CHARACTERS), '-', __CLASS__ . '_locale_' . $locale->getCode() . '_domain_' . $domain);
+            $key = str_replace(str_split(ItemInterface::RESERVED_CHARACTERS), '-', self::class . '_locale_' . $locale->getCode() . '_domain_' . $domain);
             $item = $this->messageCache->getItem($key);
 
             if ($item->isHit()) {

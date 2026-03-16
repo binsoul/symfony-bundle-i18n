@@ -40,9 +40,7 @@ class AddressFormatterExtension extends AbstractExtension
         return [
             new TwigFilter(
                 'formatAddress',
-                function (Address $address, Locale|string|null $locale = null): string {
-                    return $this->formatAddress($address, $locale);
-                }
+                fn (Address $address, Locale|string|null $locale = null): string => $this->formatAddress($address, $locale)
             ),
         ];
     }
@@ -55,16 +53,12 @@ class AddressFormatterExtension extends AbstractExtension
         return [
             new TwigFunction(
                 'addressContainerClasses',
-                function (Country|string $country, array $options = []): string {
-                    return $this->addressContainerClasses($country, $options);
-                },
+                fn (Country|string $country, array $options = []): string => $this->addressContainerClasses($country, $options),
                 ['is_safe' => ['html']]
             ),
             new TwigFunction(
                 'addressFieldClasses',
-                function (string $fieldName, Country|string $country, array $options = [], ?FormView $formField = null): string {
-                    return $this->addressFieldClasses($fieldName, $country, $options, $formField);
-                },
+                fn (string $fieldName, Country|string $country, array $options = [], ?FormView $formField = null): string => $this->addressFieldClasses($fieldName, $country, $options, $formField),
                 ['is_safe' => ['html']]
             ),
         ];

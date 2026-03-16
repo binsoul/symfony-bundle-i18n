@@ -6,6 +6,7 @@ namespace BinSoul\Test\Symfony\Bundle\I18n\Form\Helper;
 
 use BinSoul\Common\I18n\Address;
 use BinSoul\Common\I18n\AddressFormatter;
+use BinSoul\Common\I18n\MutableAddress;
 use BinSoul\Symfony\Bundle\I18n\Form\Helper\AddressFormBuilder;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
@@ -20,9 +21,9 @@ use Symfony\Component\Validator\Constraints\Regex;
 
 class AddressFormBuilderTest extends TestCase
 {
-    private $addressFormatter;
+    private AddressFormatter&Stub $addressFormatter;
 
-    private $builder;
+    private AddressFormBuilder $builder;
 
     protected function setUp(): void
     {
@@ -58,7 +59,7 @@ class AddressFormBuilderTest extends TestCase
         $addedFields = [];
         $formMock = $this->createStub(FormInterface::class);
         $formMock->method('add')->willReturnCallback(
-            function ($field) use (&$addedFields, $formMock) {
+            function ($field) use (&$addedFields, $formMock): Stub {
                 $addedFields[] = $field;
 
                 return $formMock;
@@ -74,7 +75,7 @@ class AddressFormBuilderTest extends TestCase
         $this->trigger($listeners, FormEvents::PRE_SUBMIT, new FormEvent($formMock, $data));
 
         foreach (array_keys($fields) as $fieldName) {
-            $this->assertContains($fieldName, $addedFields, "Field {$fieldName} was not added based on usage template.");
+            $this->assertContains($fieldName, $addedFields, sprintf('Field %s was not added based on usage template.', $fieldName));
         }
     }
 
@@ -104,14 +105,14 @@ class AddressFormBuilderTest extends TestCase
         $formMock = $this->createStub(FormInterface::class);
         $formMock->method('add')->willReturn($formMock);
         $formMock->method('remove')->willReturnCallback(
-            function ($field) use (&$removedFields, $formMock) {
+            function ($field) use (&$removedFields, $formMock): Stub {
                 $removedFields[] = $field;
 
                 return $formMock;
             }
         );
 
-        $addressMock = $this->createMock(\BinSoul\Common\I18n\MutableAddress::class);
+        $addressMock = $this->createMock(MutableAddress::class);
         $addressMock->expects($this->once())->method('setAddressLine1')->with(null);
         $addressMock->expects($this->once())->method('setAddressLine2')->with(null);
         $addressMock->expects($this->once())->method('setAddressLine3')->with(null);
@@ -143,13 +144,13 @@ class AddressFormBuilderTest extends TestCase
         ];
 
         foreach ($expectedFields as $fieldName) {
-            $this->assertContains($fieldName, $removedFields, "Field {$fieldName} was not removed.");
+            $this->assertContains($fieldName, $removedFields, sprintf('Field %s was not removed.', $fieldName));
         }
 
         $modifiedData = $event->getData();
 
         foreach ($expectedFields as $fieldName) {
-            $this->assertArrayNotHasKey($fieldName, $modifiedData, "Field {$fieldName} should be removed from data.");
+            $this->assertArrayNotHasKey($fieldName, $modifiedData, sprintf('Field %s should be removed from data.', $fieldName));
         }
 
         $this->assertEquals($countryCode, $modifiedData['countryCode']);
@@ -185,7 +186,7 @@ class AddressFormBuilderTest extends TestCase
         $addedFields = [];
         $formMock = $this->createStub(FormInterface::class);
         $formMock->method('add')->willReturnCallback(
-            function ($field, $type, $options) use (&$addedFields, $formMock) {
+            function ($field, $type, $options) use (&$addedFields, $formMock): Stub {
                 $addedFields[$field] = $options;
 
                 return $formMock;
@@ -201,7 +202,7 @@ class AddressFormBuilderTest extends TestCase
         $this->trigger($listeners, FormEvents::PRE_SUBMIT, new FormEvent($formMock, $data));
 
         foreach ($fields as $fieldName) {
-            $this->assertArrayHasKey($fieldName, $addedFields, "Field {$fieldName} was not added even though makeAllFieldsVisible() was called.");
+            $this->assertArrayHasKey($fieldName, $addedFields, sprintf('Field %s was not added even though makeAllFieldsVisible() was called.', $fieldName));
         }
     }
 
@@ -234,7 +235,7 @@ class AddressFormBuilderTest extends TestCase
         $addedFields = [];
         $formMock = $this->createStub(FormInterface::class);
         $formMock->method('add')->willReturnCallback(
-            function ($field, $type, $options) use (&$addedFields, $formMock) {
+            function ($field, $type, $options) use (&$addedFields, $formMock): Stub {
                 $addedFields[$field] = $options;
 
                 return $formMock;
@@ -261,7 +262,7 @@ class AddressFormBuilderTest extends TestCase
         ];
 
         foreach ($expectedFields as $field => $pattern) {
-            $this->assertArrayHasKey($field, $addedFields, "Field {$field} was not added.");
+            $this->assertArrayHasKey($field, $addedFields, sprintf('Field %s was not added.', $field));
             $found = false;
 
             foreach ($addedFields[$field]['constraints'] as $constraint) {
@@ -271,7 +272,8 @@ class AddressFormBuilderTest extends TestCase
                     break;
                 }
             }
-            $this->assertTrue($found, "Regex constraint with pattern {$pattern} not found for field {$field}.");
+
+            $this->assertTrue($found, sprintf('Regex constraint with pattern %s not found for field %s.', $pattern, $field));
         }
     }
 
@@ -303,7 +305,7 @@ class AddressFormBuilderTest extends TestCase
         $addedFields = [];
         $formMock = $this->createStub(FormInterface::class);
         $formMock->method('add')->willReturnCallback(
-            function ($field, $type, $options) use (&$addedFields, $formMock) {
+            function ($field, $type, $options) use (&$addedFields, $formMock): Stub {
                 $addedFields[$field] = $options;
 
                 return $formMock;
@@ -319,8 +321,8 @@ class AddressFormBuilderTest extends TestCase
         $this->trigger($listeners, FormEvents::PRE_SUBMIT, new FormEvent($formMock, $data));
 
         foreach ($fields as $fieldName) {
-            $this->assertArrayHasKey($fieldName, $addedFields, "Field {$fieldName} was not added.");
-            $this->assertTrue($addedFields[$fieldName]['required'] ?? false, "Field {$fieldName} should be required.");
+            $this->assertArrayHasKey($fieldName, $addedFields, sprintf('Field %s was not added.', $fieldName));
+            $this->assertTrue($addedFields[$fieldName]['required'] ?? false, sprintf('Field %s should be required.', $fieldName));
             $foundNotBlank = false;
 
             foreach ($addedFields[$fieldName]['constraints'] as $constraint) {
@@ -330,7 +332,8 @@ class AddressFormBuilderTest extends TestCase
                     break;
                 }
             }
-            $this->assertTrue($foundNotBlank, "NotBlank constraint not found for field {$fieldName}.");
+
+            $this->assertTrue($foundNotBlank, sprintf('NotBlank constraint not found for field %s.', $fieldName));
         }
     }
 
@@ -364,7 +367,7 @@ class AddressFormBuilderTest extends TestCase
         $addedFields = [];
         $formMock = $this->createStub(FormInterface::class);
         $formMock->method('add')->willReturnCallback(
-            function ($field, $type, $options) use (&$addedFields, $formMock) {
+            function ($field, $type, $options) use (&$addedFields, $formMock): Stub {
                 $addedFields[$field] = $options;
 
                 return $formMock;
@@ -380,17 +383,15 @@ class AddressFormBuilderTest extends TestCase
         $this->trigger($listeners, FormEvents::PRE_SUBMIT, new FormEvent($formMock, $data));
 
         foreach (array_keys($fields) as $fieldName) {
-            $this->assertArrayHasKey($fieldName, $addedFields, "Field {$fieldName} was not added.");
-            $this->assertTrue($addedFields[$fieldName]['disabled'] ?? false, "Field {$fieldName} should be disabled.");
+            $this->assertArrayHasKey($fieldName, $addedFields, sprintf('Field %s was not added.', $fieldName));
+            $this->assertTrue($addedFields[$fieldName]['disabled'] ?? false, sprintf('Field %s should be disabled.', $fieldName));
         }
     }
 
     public function test_modify_form_translates_labels_for_all_fields(): void
     {
         $this->builder->withLabelTranslator(
-            function ($field, $label) {
-                return 'Translated ' . $label;
-            }
+            fn ($field, $label): string => 'Translated ' . $label
         );
 
         $countryCode = 'DE';
@@ -422,7 +423,7 @@ class AddressFormBuilderTest extends TestCase
         $addedFields = [];
         $formMock = $this->createStub(FormInterface::class);
         $formMock->method('add')->willReturnCallback(
-            function ($field, $type, $options) use (&$addedFields, $formMock) {
+            function ($field, $type, $options) use (&$addedFields, $formMock): Stub {
                 $addedFields[$field] = $options;
 
                 return $formMock;
@@ -437,9 +438,9 @@ class AddressFormBuilderTest extends TestCase
 
         $this->trigger($listeners, FormEvents::PRE_SUBMIT, new FormEvent($formMock, $data));
 
-        foreach ($fields as $fieldName => $method) {
-            $this->assertArrayHasKey($fieldName, $addedFields, "Field {$fieldName} was not added.");
-            $this->assertEquals('Translated LBL_' . strtoupper($fieldName), $addedFields[$fieldName]['label'], "Label for field {$fieldName} was not translated correctly.");
+        foreach (array_keys($fields) as $fieldName) {
+            $this->assertArrayHasKey($fieldName, $addedFields, sprintf('Field %s was not added.', $fieldName));
+            $this->assertEquals('Translated LBL_' . strtoupper($fieldName), $addedFields[$fieldName]['label'], sprintf('Label for field %s was not translated correctly.', $fieldName));
         }
     }
 
@@ -448,7 +449,7 @@ class AddressFormBuilderTest extends TestCase
         $countryCode = 'FR';
         $data = []; // No countryCode here
 
-        $object = $this->createStub(\BinSoul\Common\I18n\MutableAddress::class);
+        $object = $this->createStub(MutableAddress::class);
         $object->method('getCountryCode')->willReturn($countryCode);
 
         $formMock = $this->createStub(FormInterface::class);
@@ -458,7 +459,7 @@ class AddressFormBuilderTest extends TestCase
 
         $calledCountryCode = null;
         $this->addressFormatter->method('generateUsageTemplate')->willReturnCallback(
-            function ($code) use (&$calledCountryCode) {
+            function ($code) use (&$calledCountryCode): Stub {
                 $calledCountryCode = $code;
 
                 return $this->createStub(Address::class);
@@ -493,7 +494,7 @@ class AddressFormBuilderTest extends TestCase
         $stateType = null;
         $formMock = $this->createStub(FormInterface::class);
         $formMock->method('add')->willReturnCallback(
-            function ($field, $type, $options) use (&$stateOptions, &$stateType, $formMock) {
+            function ($field, $type, $options) use (&$stateOptions, &$stateType, $formMock): Stub {
                 if ($field === 'state') {
                     $stateType = $type;
                     $stateOptions = $options;
@@ -532,7 +533,7 @@ class AddressFormBuilderTest extends TestCase
         $stateType = null;
         $formMock = $this->createStub(FormInterface::class);
         $formMock->method('add')->willReturnCallback(
-            function ($field, $type, $options) use (&$stateType, $formMock) {
+            function ($field, $type) use (&$stateType, $formMock): Stub {
                 if ($field === 'state') {
                     $stateType = $type;
                 }
@@ -555,13 +556,13 @@ class AddressFormBuilderTest extends TestCase
 
     public function test_modify_form_uses_provided_object_from_data_provider(): void
     {
-        $originalObject = $this->createStub(\BinSoul\Common\I18n\MutableAddress::class);
-        $providedObject = $this->createStub(\BinSoul\Common\I18n\MutableAddress::class);
+        $originalObject = $this->createStub(MutableAddress::class);
+        $providedObject = $this->createStub(MutableAddress::class);
         $providedObject->method('getCountryCode')->willReturn('IT');
 
         $dataProviderCalled = 0;
         $this->builder->withDataProvider(
-            function ($object) use (&$dataProviderCalled, $originalObject, $providedObject) {
+            function ($object) use (&$dataProviderCalled, $originalObject, $providedObject): Stub {
                 $dataProviderCalled++;
                 $this->assertSame($originalObject, $object);
 
@@ -573,7 +574,7 @@ class AddressFormBuilderTest extends TestCase
         // We verify indirectly via method().willReturn(), but check the country code in a callback
         $this->addressFormatter->method('generateUsageTemplate')
             ->willReturnCallback(
-                function ($countryCode) use ($usageTemplate) {
+                function ($countryCode) use ($usageTemplate): Stub {
                     $this->assertEquals('IT', $countryCode, 'AddressFormatter should receive country code from provided object');
 
                     return $usageTemplate;
@@ -631,7 +632,7 @@ class AddressFormBuilderTest extends TestCase
         $addedFields = [];
         $formMock = $this->createStub(FormInterface::class);
         $formMock->method('add')->willReturnCallback(
-            function ($field, $type, $options) use (&$addedFields, $formMock) {
+            function ($field, $type, $options) use (&$addedFields, $formMock): Stub {
                 $addedFields[$field] = $options;
 
                 return $formMock;
@@ -651,8 +652,8 @@ class AddressFormBuilderTest extends TestCase
         $this->assertFalse($addedFields['countryCode']['required'] ?? false, 'countryCode field should be optional.');
 
         foreach ($fields as $fieldName) {
-            $this->assertArrayHasKey($fieldName, $addedFields, "Field {$fieldName} was not added.");
-            $this->assertFalse($addedFields[$fieldName]['required'] ?? false, "Field {$fieldName} should be optional even if required in template.");
+            $this->assertArrayHasKey($fieldName, $addedFields, sprintf('Field %s was not added.', $fieldName));
+            $this->assertFalse($addedFields[$fieldName]['required'] ?? false, sprintf('Field %s should be optional even if required in template.', $fieldName));
 
             $hasNotBlank = false;
 
@@ -663,7 +664,8 @@ class AddressFormBuilderTest extends TestCase
                     break;
                 }
             }
-            $this->assertFalse($hasNotBlank, "Field {$fieldName} should not have a NotBlank constraint.");
+
+            $this->assertFalse($hasNotBlank, sprintf('Field %s should not have a NotBlank constraint.', $fieldName));
         }
     }
 
@@ -709,7 +711,7 @@ class AddressFormBuilderTest extends TestCase
         $addedFields = [];
         $formMock = $this->createStub(FormInterface::class);
         $formMock->method('add')->willReturnCallback(
-            function ($field, $type, $options) use (&$addedFields, $formMock) {
+            function ($field, $type, $options) use (&$addedFields, $formMock): Stub {
                 $addedFields[$field] = ['type' => $type, 'options' => $options];
 
                 return $formMock;
@@ -723,7 +725,7 @@ class AddressFormBuilderTest extends TestCase
         // Manual capture for the initial 'add' call in build()
         $capturedDuringBuild = [];
         $formBuilder->method('add')->willReturnCallback(
-            function ($field, $type, $options) use (&$capturedDuringBuild, $formBuilder) {
+            function ($field, $type, $options) use (&$capturedDuringBuild, $formBuilder): Stub&FormBuilderInterface {
                 $capturedDuringBuild[$field] = ['type' => $type, 'options' => $options];
 
                 return $formBuilder;
@@ -782,7 +784,7 @@ class AddressFormBuilderTest extends TestCase
         $addedFields = [];
         $formMock = $this->createStub(FormInterface::class);
         $formMock->method('add')->willReturnCallback(
-            function ($field) use (&$addedFields, $formMock) {
+            function ($field) use (&$addedFields, $formMock): Stub {
                 $addedFields[] = $field;
 
                 return $formMock;
@@ -802,7 +804,7 @@ class AddressFormBuilderTest extends TestCase
         ];
 
         foreach ($allFields as $fieldName) {
-            $this->assertNotContains($fieldName, $addedFields, "Field {$fieldName} should have been disabled.");
+            $this->assertNotContains($fieldName, $addedFields, sprintf('Field %s should have been disabled.', $fieldName));
         }
     }
 
@@ -811,7 +813,7 @@ class AddressFormBuilderTest extends TestCase
         $this->builder->withDefaultCountry('US');
 
         $data = []; // No countryCode
-        $object = $this->createStub(\BinSoul\Common\I18n\MutableAddress::class);
+        $object = $this->createStub(MutableAddress::class);
         $object->method('getCountryCode')->willReturn(''); // No countryCode in object either
 
         $formMock = $this->createStub(FormInterface::class);
@@ -821,7 +823,7 @@ class AddressFormBuilderTest extends TestCase
 
         $calledCountryCode = null;
         $this->addressFormatter->method('generateUsageTemplate')->willReturnCallback(
-            function ($code) use (&$calledCountryCode) {
+            function ($code) use (&$calledCountryCode): Stub {
                 $calledCountryCode = $code;
 
                 return $this->createStub(Address::class);
@@ -857,7 +859,7 @@ class AddressFormBuilderTest extends TestCase
         $stateType = null;
         $formMock = $this->createStub(FormInterface::class);
         $formMock->method('add')->willReturnCallback(
-            function ($field, $type, $options) use (&$stateType, $formMock) {
+            function ($field, $type, $options) use (&$stateType, $formMock): Stub {
                 if ($field === 'state') {
                     $stateType = $type;
                 }
@@ -894,7 +896,7 @@ class AddressFormBuilderTest extends TestCase
         $stateAdded = false;
         $formMock = $this->createStub(FormInterface::class);
         $formMock->method('add')->willReturnCallback(
-            function ($field) use (&$stateAdded, $formMock) {
+            function ($field) use (&$stateAdded, $formMock): Stub {
                 if ($field === 'state') {
                     $stateAdded = true;
                 }
@@ -942,7 +944,7 @@ class AddressFormBuilderTest extends TestCase
         $addedOptions = [];
         $formMock = $this->createStub(FormInterface::class);
         $formMock->method('add')->willReturnCallback(
-            function ($field, $type, $options) use (&$addedOptions, $formMock) {
+            function ($field, $type, $options) use (&$addedOptions, $formMock): Stub {
                 if ($field === 'addressLine1') {
                     $addedOptions = $options;
                 }
@@ -981,12 +983,12 @@ class AddressFormBuilderTest extends TestCase
         $this->assertTrue($regexFound, 'Regex constraint not found.');
     }
 
-    private function setupFormBuilder(&$listeners, &$addedFields = []): FormBuilderInterface&Stub
+    private function setupFormBuilder(array &$listeners, array &$addedFields = []): FormBuilderInterface&Stub
     {
         $formBuilder = $this->createStub(FormBuilderInterface::class);
 
         $formBuilder->method('add')->willReturnCallback(
-            function ($field, $type, $options) use (&$addedFields, $formBuilder) {
+            function ($field, $type, $options) use (&$addedFields, $formBuilder): Stub {
                 $addedFields[$field] = $options;
 
                 return $formBuilder;
@@ -994,7 +996,7 @@ class AddressFormBuilderTest extends TestCase
         );
 
         $formBuilder->method('addEventListener')->willReturnCallback(
-            function ($eventName, $listener) use (&$listeners, $formBuilder) {
+            function ($eventName, $listener) use (&$listeners, $formBuilder): Stub {
                 $listeners[$eventName][] = $listener;
 
                 return $formBuilder;

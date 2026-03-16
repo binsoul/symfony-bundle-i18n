@@ -39,21 +39,15 @@ class TranslatorExtension extends AbstractExtension
         return [
             new TwigFilter(
                 'translate',
-                function (string|Message $key, array $parameters = [], ?string $domain = null, Locale|string|null $locale = null): TranslatedMessage {
-                    return $this->translate($key, $parameters, $domain, $locale);
-                }
+                fn (string|Message $key, array $parameters = [], ?string $domain = null, Locale|string|null $locale = null): TranslatedMessage => $this->translate($key, $parameters, $domain, $locale)
             ),
             new TwigFilter(
                 'pluralize',
-                function (string|Message $key, float|int $quantity, ?string $domain = null, Locale|string|null $locale = null): PluralizedMessage {
-                    return $this->pluralize($key, $quantity, $domain, $locale);
-                }
+                fn (string|Message $key, float|int $quantity, ?string $domain = null, Locale|string|null $locale = null): PluralizedMessage => $this->pluralize($key, $quantity, $domain, $locale)
             ),
             new TwigFilter(
                 'inDomain',
-                function (string|Message $key, ?string $domain = null): Message {
-                    return $this->inDomain($key, $domain);
-                }
+                fn (string|Message $key, ?string $domain = null): Message => $this->inDomain($key, $domain)
             ),
         ];
     }

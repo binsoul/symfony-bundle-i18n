@@ -454,7 +454,7 @@ class AddressFormBuilder
     {
         $countryCode = $this->defaultCountry;
 
-        $object = $object ?? new DefaultAddress();
+        $object ??= new DefaultAddress();
 
         if (trim((string) ($data[$this->countryOptions['field']] ?? '')) !== '') {
             $countryCode = trim((string) $data[$this->countryOptions['field']]);
@@ -507,7 +507,7 @@ class AddressFormBuilder
             }
 
             $builder->add($this->addressLine1Options['field'], $this->addressLine1Options['type'], $attr);
-            $data[$this->addressLine1Options['field']] = $data[$this->addressLine1Options['field']] ?? null;
+            $data[$this->addressLine1Options['field']] ??= null;
         } else {
             $builder->remove($this->addressLine1Options['field']);
             $object->setAddressLine1(null);
@@ -553,7 +553,7 @@ class AddressFormBuilder
             }
 
             $builder->add($this->addressLine2Options['field'], $this->addressLine2Options['type'], $attr);
-            $data[$this->addressLine2Options['field']] = $data[$this->addressLine2Options['field']] ?? null;
+            $data[$this->addressLine2Options['field']] ??= null;
         } else {
             $builder->remove($this->addressLine2Options['field']);
             $object->setAddressLine2(null);
@@ -599,7 +599,7 @@ class AddressFormBuilder
             }
 
             $builder->add($this->addressLine3Options['field'], $this->addressLine3Options['type'], $attr);
-            $data[$this->addressLine3Options['field']] = $data[$this->addressLine3Options['field']] ?? null;
+            $data[$this->addressLine3Options['field']] ??= null;
         } else {
             $builder->remove($this->addressLine3Options['field']);
             $object->setAddressLine3(null);
@@ -645,7 +645,7 @@ class AddressFormBuilder
             }
 
             $builder->add($this->postalCodeOptions['field'], $this->postalCodeOptions['type'], $attr);
-            $data[$this->postalCodeOptions['field']] = $data[$this->postalCodeOptions['field']] ?? null;
+            $data[$this->postalCodeOptions['field']] ??= null;
         } else {
             $builder->remove($this->postalCodeOptions['field']);
             $object->setPostalCode(null);
@@ -706,7 +706,7 @@ class AddressFormBuilder
                 $builder->add($this->stateOptions['field'], $this->stateOptions['type'], $attr);
             }
 
-            $data[$this->stateOptions['field']] = $data[$this->stateOptions['field']] ?? null;
+            $data[$this->stateOptions['field']] ??= null;
         } else {
             $builder->remove($this->stateOptions['field']);
             $object->setState(null);
@@ -752,7 +752,7 @@ class AddressFormBuilder
             }
 
             $builder->add($this->localityOptions['field'], $this->localityOptions['type'], $attr);
-            $data[$this->localityOptions['field']] = $data[$this->localityOptions['field']] ?? null;
+            $data[$this->localityOptions['field']] ??= null;
         } else {
             $builder->remove($this->localityOptions['field']);
             $object->setLocality(null);
@@ -798,7 +798,7 @@ class AddressFormBuilder
             }
 
             $builder->add($this->subLocalityOptions['field'], $this->subLocalityOptions['type'], $attr);
-            $data[$this->subLocalityOptions['field']] = $data[$this->subLocalityOptions['field']] ?? null;
+            $data[$this->subLocalityOptions['field']] ??= null;
         } else {
             $builder->remove($this->subLocalityOptions['field']);
             $object->setSubLocality(null);
@@ -844,7 +844,7 @@ class AddressFormBuilder
             }
 
             $builder->add($this->sortingCodeOptions['field'], $this->sortingCodeOptions['type'], $attr);
-            $data[$this->sortingCodeOptions['field']] = $data[$this->sortingCodeOptions['field']] ?? null;
+            $data[$this->sortingCodeOptions['field']] ??= null;
         } else {
             $builder->remove($this->sortingCodeOptions['field']);
             $object->setSortingCode(null);

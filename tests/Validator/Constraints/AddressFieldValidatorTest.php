@@ -16,6 +16,8 @@ use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
 class AddressFieldValidatorTest extends TestCase
 {
+    private AddressFieldValidator $validator;
+
     private AddressValidationHelper&Stub $helper;
 
     protected function setUp(): void

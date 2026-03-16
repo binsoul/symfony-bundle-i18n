@@ -14,8 +14,10 @@ readonly class TwigGlobalsListener implements EventSubscriberInterface
     /**
      * Constructs an instance of this class.
      */
-    public function __construct(private Environment $twig, private I18nManager $i18nManager)
-    {
+    public function __construct(
+        private Environment $twig,
+        private I18nManager $i18nManager,
+    ) {
     }
 
     /**

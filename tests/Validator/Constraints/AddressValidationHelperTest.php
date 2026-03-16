@@ -63,7 +63,7 @@ class AddressValidationHelperTest extends TestCase
         $this->assertSame(['DE', 'DE'], $this->helper->resolveCountryCode($constraint, $context));
 
         // 2. Country resolver
-        $constraint->countryResolver = fn () => 'FR';
+        $constraint->countryResolver = static fn (): string => 'FR';
         $this->assertSame(['FR', 'FR'], $this->helper->resolveCountryCode($constraint, $context));
 
         // 1. Country code literal
@@ -86,7 +86,7 @@ class AddressValidationHelperTest extends TestCase
         $this->formatter->method('generateUsageTemplate')->willReturn($usageTemplateIT);
 
         $countryEntity = new class() {
-            public function getIso2()
+            public function getIso2(): string
             {
                 return 'IT';
             }
@@ -108,7 +108,7 @@ class AddressValidationHelperTest extends TestCase
         $constraint = new PostalCode(countryField: 'country');
 
         $stringable = new class() {
-            public function __toString()
+            public function __toString(): string
             {
                 return 'it';
             }
@@ -186,14 +186,14 @@ class AddressValidationHelperTest extends TestCase
         $this->assertSame('foo', $this->helper->normalizeValue('foo', null));
 
         $obj = new class() {
-            public function __toString()
+            public function __toString(): string
             {
                 return 'bar';
             }
         };
         $this->assertSame('bar', $this->helper->normalizeValue($obj, null));
 
-        $normalizer = fn ($v) => strtoupper($v);
+        $normalizer = fn ($v) => strtoupper((string) $v);
         $this->assertSame('FOO', $this->helper->normalizeValue('foo', $normalizer));
     }
 
