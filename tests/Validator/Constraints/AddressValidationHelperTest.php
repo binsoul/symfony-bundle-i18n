@@ -124,7 +124,6 @@ class AddressValidationHelperTest extends TestCase
         $this->assertSame(['IT', 'IT'], $this->helper->resolveCountryCode($constraint, $context));
     }
 
-
     public function test_resolve_country_code_property_accessor_exception_is_caught(): void
     {
         $context = $this->createStub(ExecutionContextInterface::class);
@@ -207,7 +206,9 @@ class AddressValidationHelperTest extends TestCase
     public function test_apply_regex(): void
     {
         $this->assertTrue($this->helper->applyRegex('12345', '\d{5}'));
-        $this->assertFalse($this->helper->applyRegex('123A5', '^\d{5}$'));
+        $this->assertFalse($this->helper->applyRegex('1234', '\d{5}'));
+        $this->assertFalse($this->helper->applyRegex('123456', '\d{5}'));
+        $this->assertFalse($this->helper->applyRegex('123A5', '\d{5}'));
         $this->assertTrue($this->helper->applyRegex('foo', null));
         $this->assertTrue($this->helper->applyRegex('foo', ''));
     }

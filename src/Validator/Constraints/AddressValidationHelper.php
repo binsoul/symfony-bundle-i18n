@@ -188,7 +188,7 @@ class AddressValidationHelper
             return true;
         }
 
-        $pattern = '/' . $regex . '/';
+        $pattern = '/^' . $regex . '$/';
 
         return @preg_match($pattern, (string) $value) === 1;
     }
