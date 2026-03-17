@@ -16,7 +16,7 @@ use Doctrine\Persistence\ObjectManager;
 class LoadCountries extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
     /**
-     * @var array[]
+     * @var array<int, array{0: int, 1: int, 2: string, 3: string, 4: string|null, 5: string, 6: string|null, 7: float, 8: float}>
      */
     private const array ROWS = [
         [1, 3, 'Afghanistan', 'AF', 'AFG', '004', 'AFG', 0.000000, 0.000000],
@@ -291,8 +291,11 @@ class LoadCountries extends Fixture implements DependentFixtureInterface, Fixtur
     public function load(ObjectManager $manager): void
     {
         $metadata = $manager->getClassMetadata(CountryEntity::class);
-        $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
-        $metadata->setIdGenerator(new AssignedGenerator());
+
+        if ($metadata instanceof ClassMetadata) {
+            $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
+            $metadata->setIdGenerator(new AssignedGenerator());
+        }
 
         foreach (self::ROWS as $row) {
             $continent = $this->continentRepository->load($row[1]);

@@ -17,7 +17,7 @@ use Doctrine\Persistence\ObjectManager;
 class LoadLocales extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
     /**
-     * @var array[]
+     * @var array<int, array{0: int, 1: string, 2: string, 3: string|null}>
      */
     private const array ROWS = [
         //id, locale_code, lang_iso3, country_iso2
@@ -511,8 +511,11 @@ class LoadLocales extends Fixture implements DependentFixtureInterface, FixtureG
     public function load(ObjectManager $manager): void
     {
         $metadata = $manager->getClassMetadata(LocaleEntity::class);
-        $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
-        $metadata->setIdGenerator(new AssignedGenerator());
+
+        if ($metadata instanceof ClassMetadata) {
+            $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
+            $metadata->setIdGenerator(new AssignedGenerator());
+        }
 
         foreach (self::ROWS as $row) {
             $language = $this->languageRepository->findByIso3($row[2]);

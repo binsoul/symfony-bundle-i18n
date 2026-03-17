@@ -14,7 +14,7 @@ use Doctrine\Persistence\ObjectManager;
 class LoadCurrencies extends Fixture implements FixtureGroupInterface
 {
     /**
-     * @var array[]
+     * @var array<int, array{0: int, 1: string, 2: int}>
      */
     private const array ROWS = [
         [1, 'EUR', 978],
@@ -184,8 +184,11 @@ class LoadCurrencies extends Fixture implements FixtureGroupInterface
     public function load(ObjectManager $manager): void
     {
         $metadata = $manager->getClassMetadata(CurrencyEntity::class);
-        $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
-        $metadata->setIdGenerator(new AssignedGenerator());
+
+        if ($metadata instanceof ClassMetadata) {
+            $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
+            $metadata->setIdGenerator(new AssignedGenerator());
+        }
 
         foreach (self::ROWS as $row) {
             $entity = new CurrencyEntity($row[0]);

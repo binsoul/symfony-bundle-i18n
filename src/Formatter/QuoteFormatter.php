@@ -8,6 +8,7 @@ use BinSoul\Common\I18n\DefaultLocale;
 use BinSoul\Common\I18n\DefaultQuoteFormatter;
 use BinSoul\Common\I18n\Locale;
 use BinSoul\Common\I18n\QuoteFormatter as CommonQuoteFormatter;
+use Stringable;
 
 /**
  * Formats quotes using the {@see DefaultQuoteFormatter} class.
@@ -27,12 +28,12 @@ readonly class QuoteFormatter implements CommonQuoteFormatter
         $this->formatter = new DefaultQuoteFormatter($this->locale);
     }
 
-    public function primary($value)
+    public function primary(string|int|float|bool|null|Stringable|array $value): string|array
     {
         return $this->formatter->primary($value);
     }
 
-    public function secondary($value)
+    public function secondary(string|int|float|bool|null|Stringable|array $value): string|array
     {
         return $this->formatter->secondary($value);
     }

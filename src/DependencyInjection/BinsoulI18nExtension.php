@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace BinSoul\Symfony\Bundle\I18n\DependencyInjection;
 
+use BinSoul\Common\I18n\Intl\IntlAddressFormatter;
+use BinSoul\Symfony\Bundle\Doctrine\Repository\AbstractRepository;
 use BinSoul\Symfony\Bundle\I18n\EventListener\TablePrefixListener;
 use BinSoul\Symfony\Bundle\I18n\Validator\Constraints\AddressValidationConfig;
 use Symfony\Component\Config\FileLocator;
@@ -21,6 +23,7 @@ class BinsoulI18nExtension extends Extension
         $loader->load('services.yaml');
 
         $configuration = new Configuration();
+        /** @var array{prefix?: string, enableTranslator?: bool, addressFormatter?: string, defaultCountry?: string|null} $config */
         $config = $this->processConfiguration($configuration, $configs);
         $prefix = trim($config['prefix'] ?? '');
 
@@ -31,12 +34,18 @@ class BinsoulI18nExtension extends Extension
             $definition->clearTags();
         }
 
-        $container->setParameter('binsoul_i18n.enableTranslator', $config['enableTranslator'] ?? false);
+        $enableTranslator = $config['enableTranslator'] ?? false;
+
+        if ($enableTranslator && ! class_exists(AbstractRepository::class)) {
+            $enableTranslator = false;
+        }
+
+        $container->setParameter('binsoul_i18n.enableTranslator', $enableTranslator);
 
         $configDefinition = new Definition(AddressValidationConfig::class);
         $configDefinition->setArguments([
-            new Reference($config['addressFormatter']),
-            $config['defaultCountry'],
+            new Reference($config['addressFormatter'] ?? IntlAddressFormatter::class),
+            $config['defaultCountry'] ?? null,
         ]);
 
         $container->setDefinition(AddressValidationConfig::class, $configDefinition);

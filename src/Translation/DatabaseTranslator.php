@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BinSoul\Symfony\Bundle\I18n\Translation;
 
+use BadMethodCallException;
 use BinSoul\Common\I18n\DefaultLocale;
 use BinSoul\Symfony\Bundle\I18n\Entity\LocaleEntity;
 use BinSoul\Symfony\Bundle\I18n\Repository\LocaleRepository;
@@ -28,12 +29,12 @@ class DatabaseTranslator implements TranslatorInterface, TranslatorBagInterface,
     private readonly MessageFormatterInterface $messageFormatter;
 
     /**
-     * @var bool[][]
+     * @var array<string, array<string, bool>>
      */
     private array $loadedCatalogues = [];
 
     /**
-     * @var MessageCatalogueInterface[]
+     * @var array<string, MessageCatalogueInterface>
      */
     private array $databaseCatalogues = [];
 
@@ -53,15 +54,28 @@ class DatabaseTranslator implements TranslatorInterface, TranslatorBagInterface,
 
     /**
      * Passes through all unknown calls onto the default translator object.
+     *
+     * @param mixed[] $args
      */
-    public function __call(string $method, array $args)
+    public function __call(string $method, array $args): mixed
     {
-        return call_user_func_array([$this->defaultTranslator, $method], $args);
+        $callable = [$this->defaultTranslator, $method];
+
+        if (is_callable($callable)) {
+            return call_user_func_array($callable, $args);
+        }
+
+        throw new BadMethodCallException(sprintf('Method "%s" does not exist on "%s".', $method, $this->defaultTranslator::class));
     }
 
+    /**
+     * @param array<string, mixed> $parameters
+     */
     public function trans(?string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
     {
-        if ((string) $id === '') {
+        $idString = (string) $id;
+
+        if ($idString === '') {
             return '';
         }
 
@@ -72,7 +86,7 @@ class DatabaseTranslator implements TranslatorInterface, TranslatorBagInterface,
         $catalogue = $this->load($locale ?? $this->getLocale(), $domain);
         $locale = $catalogue->getLocale();
 
-        while (! $catalogue->defines($id, $domain)) {
+        while (! $catalogue->defines($idString, $domain)) {
             $fallbackCatalogue = $catalogue->getFallbackCatalogue();
 
             if ($fallbackCatalogue === null) {
@@ -83,15 +97,15 @@ class DatabaseTranslator implements TranslatorInterface, TranslatorBagInterface,
             $locale = $catalogue->getLocale();
         }
 
-        if (! $catalogue->defines($id, $domain)) {
-            return $this->defaultTranslator->trans($id, $parameters, $domain, $locale);
+        if (! $catalogue->defines($idString, $domain)) {
+            return $this->defaultTranslator->trans($idString, $parameters, $domain, $locale);
         }
 
         if ($this->messageFormatter instanceof IntlFormatterInterface) {
-            return $this->messageFormatter->formatIntl($catalogue->get($id, $domain), $locale, $parameters);
+            return $this->messageFormatter->formatIntl($catalogue->get($idString, $domain), $locale, $parameters);
         }
 
-        return $this->messageFormatter->format($catalogue->get($id, $domain), $locale, $parameters);
+        return $this->messageFormatter->format($catalogue->get($idString, $domain), $locale, $parameters);
     }
 
     public function load(string $locale, string $domain): MessageCatalogueInterface

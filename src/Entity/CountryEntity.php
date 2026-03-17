@@ -8,6 +8,7 @@ use BinSoul\Common\I18n\Country;
 use BinSoul\Common\I18n\Locale;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use InvalidArgumentException;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Intl\Exception\MissingResourceException;
 
@@ -54,16 +55,16 @@ class CountryEntity implements Country
     private ?string $dsit = null;
 
     /**
-     * @var float|string|null Latitude of the center of the country
+     * @var string|null Latitude of the center of the country
      */
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 6, nullable: true)]
-    private float|string|null $centerLatitude = null;
+    private ?string $centerLatitude = null;
 
     /**
-     * @var float|string|null Longitude of the center of the country
+     * @var string|null Longitude of the center of the country
      */
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 6, nullable: true)]
-    private float|string|null $centerLongitude = null;
+    private ?string $centerLongitude = null;
 
     #[ORM\ManyToOne(targetEntity: ContinentEntity::class)]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
@@ -124,22 +125,22 @@ class CountryEntity implements Country
 
     public function setCenterLongitude(?float $centerLongitude): void
     {
-        $this->centerLongitude = $centerLongitude;
+        $this->centerLongitude = $this->floatToDecimal($centerLongitude);
     }
 
     public function getCenterLongitude(): ?float
     {
-        return $this->centerLongitude !== null ? (float) $this->centerLongitude : null;
+        return $this->decimalToFloat($this->centerLongitude);
     }
 
     public function setCenterLatitude(?float $centerLatitude): void
     {
-        $this->centerLatitude = $centerLatitude;
+        $this->centerLatitude = $this->floatToDecimal($centerLatitude);
     }
 
     public function getCenterLatitude(): ?float
     {
-        return $this->centerLatitude !== null ? (float) $this->centerLatitude : null;
+        return $this->decimalToFloat($this->centerLatitude);
     }
 
     public function setContinent(ContinentEntity $continent): void
@@ -162,5 +163,31 @@ class CountryEntity implements Country
         } catch (MissingResourceException) {
             return $this->getIso2();
         }
+    }
+
+    private function decimalToFloat(?string $value): ?float
+    {
+        return $value !== null ? (float) $value : null;
+    }
+
+    private function floatToDecimal(?float $value, int $precision = 10, int $scale = 6): ?string
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        $rounded = round($value, $scale);
+        $maxValue = (10 ** ($precision - $scale)) - (10 ** (-$scale));
+
+        if (abs($rounded) > $maxValue) {
+            throw new InvalidArgumentException(sprintf(
+                'The value %s does not fit into DECIMAL(%d,%d).',
+                number_format($rounded, $scale, '.', ''),
+                $precision,
+                $scale
+            ));
+        }
+
+        return number_format($rounded, $scale, '.', '');
     }
 }

@@ -22,8 +22,6 @@
         "ext-intl": "*",
         "binsoul/common-i18n": "*@dev",
         "binsoul/common-i18n-intl": "*@dev",
-        "binsoul/symfony-bundle-doctrine": "*@dev",
-        "doctrine/orm": "^3|^4",
         "symfony/config": "^7|^8",
         "symfony/dependency-injection": "^7|^8",
         "symfony/form": "^7|^8",
@@ -31,20 +29,27 @@
         "symfony/intl": "^7|^8",
         "symfony/translation": "^7|^8",
         "symfony/validator": "^7|^8",
-        "doctrine/doctrine-fixtures-bundle": "^3|^4",
         "twig/twig": "^3"
     },
     "require-dev": {
-        "binsoul/coding-standard": "^1",
+        "binsoul/coding-standard": "^2",
         "phpstan/phpstan": "^2",
         "phpstan/phpstan-symfony": "^2",
         "phpunit/phpunit": "^12",
+        "rector/rector": "^2",
         "roave/security-advisories": "dev-latest"
+    },
+    "suggest": {
+        "binsoul/symfony-bundle-doctrine": "For Doctrine integration",
+        "doctrine/doctrine-fixtures-bundle": "For loading fixtures"
     },
     "autoload": {
         "psr-4": {
             "BinSoul\\Symfony\\Bundle\\I18n\\": "src"
-        }
+        },
+        "exclude-from-classmap": [
+            "/tests/"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
@@ -54,7 +59,7 @@
     "scripts": {
         "test": "phpunit",
         "fix-style": "ecs check src tests --config vendor/binsoul/coding-standard/easy-coding-standard.php --fix",
-        "analyze": "phpstan analyse -l max src"
+        "analyze": "phpstan analyse -l max src tests"
     },
     "extra": {
         "branch-alias": {

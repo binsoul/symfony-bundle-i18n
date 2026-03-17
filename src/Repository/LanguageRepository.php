@@ -8,6 +8,9 @@ use BinSoul\Symfony\Bundle\Doctrine\Repository\AbstractRepository;
 use BinSoul\Symfony\Bundle\I18n\Entity\LanguageEntity;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends AbstractRepository<LanguageEntity>
+ */
 class LanguageRepository extends AbstractRepository
 {
     /**

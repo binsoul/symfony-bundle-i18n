@@ -21,7 +21,7 @@ readonly class TwigGlobalsListener implements EventSubscriberInterface
     }
 
     /**
-     * @return array[]
+     * @return array<string, array{0: array{0: string, 1: int}}>
      */
     public static function getSubscribedEvents(): array
     {

@@ -14,25 +14,36 @@ use BinSoul\Symfony\Bundle\I18n\Formatter\QuoteFormatter;
 use BinSoul\Symfony\Bundle\I18n\I18nEnvironment;
 use BinSoul\Symfony\Bundle\I18n\I18nManager;
 use BinSoul\Symfony\Bundle\I18n\Translation\Translator;
+use InvalidArgumentException;
+use Symfony\Component\Translation\TranslatorBagInterface;
 use Symfony\Contracts\Translation\LocaleAwareInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class Manager implements I18nManager, LocaleAwareInterface
 {
     /**
-     * @var Environment[]
+     * @var array<int, Environment>
      */
     private array $stack = [];
 
     private Locale $defaultLocale;
 
+    /**
+     * @var TranslatorInterface&TranslatorBagInterface&LocaleAwareInterface
+     */
     private readonly TranslatorInterface $translator;
 
     /**
      * Constructs an instance of this class.
+     *
+     * @param TranslatorInterface&TranslatorBagInterface&LocaleAwareInterface $translator
      */
     public function __construct(TranslatorInterface $translator)
     {
+        if (! $translator instanceof TranslatorBagInterface || ! $translator instanceof LocaleAwareInterface) {
+            throw new InvalidArgumentException(sprintf('The Translator "%s" must implement TranslatorBagInterface and LocaleAwareInterface.', get_class($translator)));
+        }
+
         $this->translator = $translator;
         $this->defaultLocale = DefaultLocale::fromString(\Locale::getDefault());
         $this->stack[0] = $this->createEnvironment($this->defaultLocale);

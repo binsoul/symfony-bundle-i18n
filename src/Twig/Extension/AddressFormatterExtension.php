@@ -46,7 +46,7 @@ class AddressFormatterExtension extends AbstractExtension
     }
 
     /**
-     * @return TwigFilter[]
+     * @return TwigFunction[]
      */
     public function getFunctions(): array
     {
@@ -76,11 +76,12 @@ class AddressFormatterExtension extends AbstractExtension
     }
 
     /**
-     * @param Country|string                                                                  $country Country or ISO2 code of the country
-     * @param array{'includeFields': array<int, string>, 'excludeFields': array<int, string>} $options
+     * @param Country|string          $country Country or ISO2 code of the country
+     * @param array<array-key, mixed> $options
      */
     public function addressContainerClasses(Country|string $country, array $options = []): string
     {
+        /** @var array{'includeFields'?: array<int, string>, 'excludeFields'?: array<int, string>} $options */
         $layout = $this->getLayout($country instanceof Country ? $country->getIso2() : $country, $options);
         [$numberOfRows, $numberOfColumns] = $this->getDimensions($layout);
 
@@ -88,12 +89,13 @@ class AddressFormatterExtension extends AbstractExtension
     }
 
     /**
-     * @param string                                                                          $fieldName Name of the field
-     * @param Country|string                                                                  $country   Country or ISO2 code of the country
-     * @param array{'includeFields': array<int, string>, 'excludeFields': array<int, string>} $options
+     * @param string                  $fieldName Name of the field
+     * @param Country|string          $country   Country or ISO2 code of the country
+     * @param array<array-key, mixed> $options
      */
     public function addressFieldClasses(string $fieldName, Country|string $country, array $options = [], ?FormView $formField = null): string
     {
+        /** @var array{'includeFields'?: array<int, string>, 'excludeFields'?: array<int, string>} $options */
         $layout = $this->getLayout($country instanceof Country ? $country->getIso2() : $country, $options);
         [, $numberOfColumns] = $this->getDimensions($layout);
 
@@ -157,7 +159,7 @@ class AddressFormatterExtension extends AbstractExtension
     }
 
     /**
-     * @param array{'includeFields': array<int, string>, 'excludeFields': array<int, string>} $options
+     * @param array{'includeFields'?: array<int, string>, 'excludeFields'?: array<int, string>} $options
      *
      * @return array<string, array{0: int, 1: int}>
      */

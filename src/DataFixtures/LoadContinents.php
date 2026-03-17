@@ -14,7 +14,7 @@ use Doctrine\Persistence\ObjectManager;
 class LoadContinents extends Fixture implements FixtureGroupInterface
 {
     /**
-     * @var array[]
+     * @var array<int, array{0: int, 1: string, 2: string, 3: float, 4: float}>
      */
     private const array ROWS = [
         [1, 'AF', '002', 0.000000, 0.000000],
@@ -29,8 +29,11 @@ class LoadContinents extends Fixture implements FixtureGroupInterface
     public function load(ObjectManager $manager): void
     {
         $metadata = $manager->getClassMetaData(ContinentEntity::class);
-        $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
-        $metadata->setIdGenerator(new AssignedGenerator());
+
+        if ($metadata instanceof ClassMetadata) {
+            $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
+            $metadata->setIdGenerator(new AssignedGenerator());
+        }
 
         foreach (self::ROWS as $row) {
             $entity = new ContinentEntity($row[0]);

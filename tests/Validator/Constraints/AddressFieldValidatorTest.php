@@ -128,7 +128,10 @@ class AddressFieldValidatorTest extends TestCase
         $validator = new AddressFieldValidator($this->helper);
         $validator->initialize($context);
         $this->expectException(UnexpectedTypeException::class);
-        $validator->validate('value', $this->createStub(Constraint::class));
+
+        $constraint = $this->createStub(Constraint::class);
+        /** @var PostalCode&Stub $constraint */
+        $validator->validate('value', $constraint);
     }
 
     public function test_builds_violation_when_country_cannot_be_resolved_with_na(): void

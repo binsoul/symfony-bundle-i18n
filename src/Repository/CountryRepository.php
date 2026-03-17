@@ -8,6 +8,9 @@ use BinSoul\Symfony\Bundle\Doctrine\Repository\AbstractRepository;
 use BinSoul\Symfony\Bundle\I18n\Entity\CountryEntity;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends AbstractRepository<CountryEntity>
+ */
 class CountryRepository extends AbstractRepository
 {
     /**

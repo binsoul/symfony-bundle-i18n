@@ -11,6 +11,9 @@ use Doctrine\Persistence\ManagerRegistry;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 
+/**
+ * @extends AbstractRepository<MessageEntity>
+ */
 class MessageRepository extends AbstractRepository
 {
     private readonly ?CacheItemPoolInterface $messageCache;
@@ -69,7 +72,10 @@ class MessageRepository extends AbstractRepository
             $item = $this->messageCache->getItem($key);
 
             if ($item->isHit()) {
-                return $item->get();
+                /** @var MessageEntity[] $result */
+                $result = $item->get();
+
+                return $result;
             }
         }
 

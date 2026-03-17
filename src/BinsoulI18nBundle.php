@@ -20,18 +20,25 @@ class BinsoulI18nBundle extends Bundle
 
         $container->addCompilerPass(new OverrideTranslatorPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 16);
 
+        $entityPath = realpath(__DIR__ . '/Entity');
+        $directories = $entityPath !== false ? [$entityPath] : [];
+
         $container->addCompilerPass(
             $this->buildDoctrineOrmMappingsPass(
                 ['BinSoul\Symfony\Bundle\I18n'],
-                [realpath(__DIR__ . '/Entity')],
+                $directories,
             )
         );
     }
 
+    /**
+     * @param array<string> $namespaces
+     * @param array<string> $directories
+     */
     private function buildDoctrineOrmMappingsPass(array $namespaces, array $directories): DoctrineOrmMappingsPass
     {
         $driver = new Definition(AttributeDriver::class, [$directories]);
 
-        return new DoctrineOrmMappingsPass($driver, $namespaces, [], false, []);
+        return new DoctrineOrmMappingsPass($driver, $namespaces, $directories, false);
     }
 }

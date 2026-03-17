@@ -32,7 +32,9 @@ class CountryValidatorTest extends TestCase
         $this->validator->initialize($context);
 
         $this->expectException(UnexpectedTypeException::class);
-        $this->validator->validate('DE', $this->createStub(Constraint::class));
+        $constraint = $this->createStub(Constraint::class);
+        /** @var Country&Stub $constraint */
+        $this->validator->validate('DE', $constraint);
     }
 
     public function test_null_or_empty_value_skips_validation(): void

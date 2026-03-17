@@ -148,6 +148,7 @@ class AddressFormBuilderTest extends TestCase
         }
 
         $modifiedData = $event->getData();
+        $this->assertIsArray($modifiedData);
 
         foreach ($expectedFields as $fieldName) {
             $this->assertArrayNotHasKey($fieldName, $modifiedData, sprintf('Field %s should be removed from data.', $fieldName));
@@ -186,8 +187,8 @@ class AddressFormBuilderTest extends TestCase
         $addedFields = [];
         $formMock = $this->createStub(FormInterface::class);
         $formMock->method('add')->willReturnCallback(
-            function ($field, $type, $options) use (&$addedFields, $formMock): Stub {
-                $addedFields[$field] = $options;
+            function (string $child, ?string $type = null, array $options = []) use (&$addedFields, $formMock): Stub {
+                $addedFields[$child] = $options;
 
                 return $formMock;
             }
@@ -235,8 +236,8 @@ class AddressFormBuilderTest extends TestCase
         $addedFields = [];
         $formMock = $this->createStub(FormInterface::class);
         $formMock->method('add')->willReturnCallback(
-            function ($field, $type, $options) use (&$addedFields, $formMock): Stub {
-                $addedFields[$field] = $options;
+            function (string $child, ?string $type = null, array $options = []) use (&$addedFields, $formMock): Stub {
+                $addedFields[$child] = $options;
 
                 return $formMock;
             }
@@ -265,7 +266,7 @@ class AddressFormBuilderTest extends TestCase
             $this->assertArrayHasKey($field, $addedFields, sprintf('Field %s was not added.', $field));
             $found = false;
 
-            foreach ($addedFields[$field]['constraints'] as $constraint) {
+            foreach ((array) ($addedFields[$field]['constraints'] ?? []) as $constraint) {
                 if ($constraint instanceof Regex && $constraint->pattern === $pattern) {
                     $found = true;
 
@@ -305,8 +306,8 @@ class AddressFormBuilderTest extends TestCase
         $addedFields = [];
         $formMock = $this->createStub(FormInterface::class);
         $formMock->method('add')->willReturnCallback(
-            function ($field, $type, $options) use (&$addedFields, $formMock): Stub {
-                $addedFields[$field] = $options;
+            function (string $child, ?string $type = null, array $options = []) use (&$addedFields, $formMock): Stub {
+                $addedFields[$child] = $options;
 
                 return $formMock;
             }
@@ -325,7 +326,7 @@ class AddressFormBuilderTest extends TestCase
             $this->assertTrue($addedFields[$fieldName]['required'] ?? false, sprintf('Field %s should be required.', $fieldName));
             $foundNotBlank = false;
 
-            foreach ($addedFields[$fieldName]['constraints'] as $constraint) {
+            foreach ((array) ($addedFields[$fieldName]['constraints'] ?? []) as $constraint) {
                 if ($constraint instanceof NotBlank) {
                     $foundNotBlank = true;
 
@@ -367,8 +368,8 @@ class AddressFormBuilderTest extends TestCase
         $addedFields = [];
         $formMock = $this->createStub(FormInterface::class);
         $formMock->method('add')->willReturnCallback(
-            function ($field, $type, $options) use (&$addedFields, $formMock): Stub {
-                $addedFields[$field] = $options;
+            function (string $child, ?string $type = null, array $options = []) use (&$addedFields, $formMock): Stub {
+                $addedFields[$child] = $options;
 
                 return $formMock;
             }
@@ -391,7 +392,7 @@ class AddressFormBuilderTest extends TestCase
     public function test_modify_form_translates_labels_for_all_fields(): void
     {
         $this->builder->withLabelTranslator(
-            fn ($field, $label): string => 'Translated ' . $label
+            fn (string $field, string $label): string => 'Translated ' . $label
         );
 
         $countryCode = 'DE';
@@ -423,8 +424,8 @@ class AddressFormBuilderTest extends TestCase
         $addedFields = [];
         $formMock = $this->createStub(FormInterface::class);
         $formMock->method('add')->willReturnCallback(
-            function ($field, $type, $options) use (&$addedFields, $formMock): Stub {
-                $addedFields[$field] = $options;
+            function (string $child, ?string $type = null, array $options = []) use (&$addedFields, $formMock): Stub {
+                $addedFields[$child] = $options;
 
                 return $formMock;
             }
@@ -494,8 +495,8 @@ class AddressFormBuilderTest extends TestCase
         $stateType = null;
         $formMock = $this->createStub(FormInterface::class);
         $formMock->method('add')->willReturnCallback(
-            function ($field, $type, $options) use (&$stateOptions, &$stateType, $formMock): Stub {
-                if ($field === 'state') {
+            function (string $child, ?string $type = null, array $options = []) use (&$stateOptions, &$stateType, $formMock): Stub {
+                if ($child === 'state') {
                     $stateType = $type;
                     $stateOptions = $options;
                 }
@@ -513,7 +514,8 @@ class AddressFormBuilderTest extends TestCase
         $this->trigger($listeners, FormEvents::PRE_SUBMIT, new FormEvent($formMock, $data));
 
         $this->assertEquals(ChoiceType::class, $stateType);
-        $this->assertArrayHasKey('choices', $stateOptions);
+        $this->assertIsArray($stateOptions);
+        $this->assertIsArray($stateOptions['choices']);
         // Alberta code is 'AB'
         $this->assertEquals('AB', $stateOptions['choices']['Alberta']);
     }
@@ -632,8 +634,8 @@ class AddressFormBuilderTest extends TestCase
         $addedFields = [];
         $formMock = $this->createStub(FormInterface::class);
         $formMock->method('add')->willReturnCallback(
-            function ($field, $type, $options) use (&$addedFields, $formMock): Stub {
-                $addedFields[$field] = $options;
+            function (string $child, ?string $type = null, array $options = []) use (&$addedFields, $formMock): Stub {
+                $addedFields[$child] = $options;
 
                 return $formMock;
             }
@@ -649,15 +651,17 @@ class AddressFormBuilderTest extends TestCase
         $this->trigger($listeners, FormEvents::PRE_SUBMIT, new FormEvent($formMock, $data));
 
         $this->assertArrayHasKey('countryCode', $addedFields, 'countryCode field was not added.');
+        $this->assertIsArray($addedFields['countryCode']);
         $this->assertFalse($addedFields['countryCode']['required'] ?? false, 'countryCode field should be optional.');
 
         foreach ($fields as $fieldName) {
             $this->assertArrayHasKey($fieldName, $addedFields, sprintf('Field %s was not added.', $fieldName));
+            $this->assertIsArray($addedFields[$fieldName]);
             $this->assertFalse($addedFields[$fieldName]['required'] ?? false, sprintf('Field %s should be optional even if required in template.', $fieldName));
 
             $hasNotBlank = false;
 
-            foreach ($addedFields[$fieldName]['constraints'] ?? [] as $constraint) {
+            foreach ((array) ($addedFields[$fieldName]['constraints'] ?? []) as $constraint) {
                 if ($constraint instanceof NotBlank) {
                     $hasNotBlank = true;
 
@@ -711,8 +715,8 @@ class AddressFormBuilderTest extends TestCase
         $addedFields = [];
         $formMock = $this->createStub(FormInterface::class);
         $formMock->method('add')->willReturnCallback(
-            function ($field, $type, $options) use (&$addedFields, $formMock): Stub {
-                $addedFields[$field] = ['type' => $type, 'options' => $options];
+            function (string $child, ?string $type = null, array $options = []) use (&$addedFields, $formMock): Stub {
+                $addedFields[$child] = ['type' => $type, 'options' => $options];
 
                 return $formMock;
             }
@@ -725,8 +729,8 @@ class AddressFormBuilderTest extends TestCase
         // Manual capture for the initial 'add' call in build()
         $capturedDuringBuild = [];
         $formBuilder->method('add')->willReturnCallback(
-            function ($field, $type, $options) use (&$capturedDuringBuild, $formBuilder): Stub&FormBuilderInterface {
-                $capturedDuringBuild[$field] = ['type' => $type, 'options' => $options];
+            function (string $child, ?string $type = null, array $options = []) use (&$capturedDuringBuild, $formBuilder): Stub&FormBuilderInterface {
+                $capturedDuringBuild[$child] = ['type' => $type, 'options' => $options];
 
                 return $formBuilder;
             }
@@ -739,12 +743,14 @@ class AddressFormBuilderTest extends TestCase
         // Check Country field (added during build)
         $this->assertArrayHasKey('custom_country', $capturedDuringBuild);
         $this->assertEquals($customType, $capturedDuringBuild['custom_country']['type']);
+        $this->assertIsArray($capturedDuringBuild['custom_country']['options']['attr'] ?? null);
         $this->assertEquals('custom-class', $capturedDuringBuild['custom_country']['options']['attr']['class']);
 
         // Check other fields (added during modifyForm)
         foreach ($fields as $fieldName) {
             $this->assertArrayHasKey($fieldName, $addedFields);
             $this->assertEquals($customType, $addedFields[$fieldName]['type']);
+            $this->assertIsArray($addedFields[$fieldName]['options']['attr'] ?? null);
             $this->assertEquals('custom-class', $addedFields[$fieldName]['options']['attr']['class']);
         }
     }
@@ -792,6 +798,8 @@ class AddressFormBuilderTest extends TestCase
         );
 
         $listeners = [];
+        /** @var array<string, mixed> $addedFields */
+        $addedFields = [];
         $formBuilder = $this->setupFormBuilder($listeners, $addedFields);
         $this->builder->build($formBuilder);
 
@@ -859,8 +867,8 @@ class AddressFormBuilderTest extends TestCase
         $stateType = null;
         $formMock = $this->createStub(FormInterface::class);
         $formMock->method('add')->willReturnCallback(
-            function ($field, $type, $options) use (&$stateType, $formMock): Stub {
-                if ($field === 'state') {
+            function (string $child, ?string $type = null, array $options = []) use (&$stateType, $formMock): Stub {
+                if ($child === 'state') {
                     $stateType = $type;
                 }
 
@@ -944,8 +952,8 @@ class AddressFormBuilderTest extends TestCase
         $addedOptions = [];
         $formMock = $this->createStub(FormInterface::class);
         $formMock->method('add')->willReturnCallback(
-            function ($field, $type, $options) use (&$addedOptions, $formMock): Stub {
-                if ($field === 'addressLine1') {
+            function (string $child, ?string $type = null, array $options = []) use (&$addedOptions, $formMock): Stub {
+                if ($child === 'addressLine1') {
                     $addedOptions = $options;
                 }
 
@@ -963,7 +971,7 @@ class AddressFormBuilderTest extends TestCase
         $notBlankFound = false;
         $regexFound = false;
 
-        foreach ($addedOptions['constraints'] as $constraint) {
+        foreach ((array) ($addedOptions['constraints'] ?? []) as $constraint) {
             if ($constraint instanceof NotBlank) {
                 $notBlankFound = true;
                 $this->assertEquals('Custom Message', $constraint->message);
@@ -983,20 +991,24 @@ class AddressFormBuilderTest extends TestCase
         $this->assertTrue($regexFound, 'Regex constraint not found.');
     }
 
+    /**
+     * @param array<string, callable[]> $listeners
+     * @param array<string, mixed>      $addedFields
+     */
     private function setupFormBuilder(array &$listeners, array &$addedFields = []): FormBuilderInterface&Stub
     {
         $formBuilder = $this->createStub(FormBuilderInterface::class);
 
         $formBuilder->method('add')->willReturnCallback(
-            function ($field, $type, $options) use (&$addedFields, $formBuilder): Stub {
-                $addedFields[$field] = $options;
+            function (string $child, ?string $type = null, array $options = []) use (&$addedFields, $formBuilder): Stub {
+                $addedFields[$child] = $options;
 
                 return $formBuilder;
             }
         );
 
         $formBuilder->method('addEventListener')->willReturnCallback(
-            function ($eventName, $listener) use (&$listeners, $formBuilder): Stub {
+            function (string $eventName, $listener) use (&$listeners, $formBuilder): Stub {
                 $listeners[$eventName][] = $listener;
 
                 return $formBuilder;
@@ -1006,9 +1018,15 @@ class AddressFormBuilderTest extends TestCase
         return $formBuilder;
     }
 
+    /**
+     * @param array<string, callable[]> $listeners
+     */
     private function trigger(array $listeners, string $eventName, FormEvent $event): void
     {
-        foreach ($listeners[$eventName] ?? [] as $listener) {
+        /** @var callable[] $eventListeners */
+        $eventListeners = $listeners[$eventName] ?? [];
+
+        foreach ($eventListeners as $listener) {
             $listener($event);
         }
     }

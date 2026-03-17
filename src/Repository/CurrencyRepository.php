@@ -8,6 +8,9 @@ use BinSoul\Symfony\Bundle\Doctrine\Repository\AbstractRepository;
 use BinSoul\Symfony\Bundle\I18n\Entity\CurrencyEntity;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends AbstractRepository<CurrencyEntity>
+ */
 class CurrencyRepository extends AbstractRepository
 {
     /**

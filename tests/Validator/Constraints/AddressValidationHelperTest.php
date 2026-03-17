@@ -6,6 +6,7 @@ namespace BinSoul\Test\Symfony\Bundle\I18n\Validator\Constraints;
 
 use BinSoul\Common\I18n\Address;
 use BinSoul\Common\I18n\AddressFormatter;
+use BinSoul\Symfony\Bundle\I18n\Entity\CountryEntity;
 use BinSoul\Symfony\Bundle\I18n\Validator\Constraints\AddressValidationConfig;
 use BinSoul\Symfony\Bundle\I18n\Validator\Constraints\AddressValidationHelper;
 use BinSoul\Symfony\Bundle\I18n\Validator\Constraints\PostalCode;
@@ -85,18 +86,16 @@ class AddressValidationHelperTest extends TestCase
         // Using a stub: avoid with() to prevent PHPUnit deprecation; just return the template.
         $this->formatter->method('generateUsageTemplate')->willReturn($usageTemplateIT);
 
-        $countryEntity = new class() {
-            public function getIso2(): string
-            {
-                return 'IT';
-            }
-        };
+        $countryEntity = new CountryEntity();
+        $countryEntity->setIso2('IT');
+
         $object = new class($countryEntity) {
             public function __construct(
-                public $country
+                public CountryEntity $country
             ) {
             }
         };
+
         $context->method('getObject')->willReturn($object);
 
         $this->assertSame(['IT', 'IT'], $this->helper->resolveCountryCode($constraint, $context));
@@ -113,9 +112,10 @@ class AddressValidationHelperTest extends TestCase
                 return 'it';
             }
         };
+
         $object = new class($stringable) {
             public function __construct(
-                public $country
+                public object $country
             ) {
             }
         };
@@ -193,7 +193,7 @@ class AddressValidationHelperTest extends TestCase
         };
         $this->assertSame('bar', $this->helper->normalizeValue($obj, null));
 
-        $normalizer = fn ($v) => strtoupper((string) $v);
+        $normalizer = fn (?string $v) => strtoupper((string) $v);
         $this->assertSame('FOO', $this->helper->normalizeValue('foo', $normalizer));
     }
 

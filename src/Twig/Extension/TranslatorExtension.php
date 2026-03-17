@@ -47,7 +47,7 @@ class TranslatorExtension extends AbstractExtension
             ),
             new TwigFilter(
                 'inDomain',
-                fn (string|Message $key, ?string $domain = null): Message => $this->inDomain($key, $domain)
+                fn (string|Message|PluralizedMessage $key, ?string $domain = null): Message => $this->inDomain($key, $domain)
             ),
         ];
     }
@@ -55,14 +55,20 @@ class TranslatorExtension extends AbstractExtension
     /**
      * Translates the key.
      *
-     * @param string|Message|PluralizedMessage $key        The message key
-     * @param array                            $parameters An array of parameters for the message
-     * @param string|null                      $domain     The domain for the message or null to use the default
-     * @param Locale|string|null               $locale     The locale for the message or null to use the default
+     * @param string|Message          $key        The message key
+     * @param array<array-key, mixed> $parameters An array of parameters for the message
+     * @param string|null             $domain     The domain for the message or null to use the default
+     * @param Locale|string|null      $locale     The locale for the message or null to use the default
      */
-    public function translate(string|Message|PluralizedMessage $key, array $parameters = [], ?string $domain = null, Locale|string|null $locale = null): TranslatedMessage
+    public function translate(string|Message $key, array $parameters = [], ?string $domain = null, Locale|string|null $locale = null): TranslatedMessage
     {
-        return $this->getTranslator($locale)->translate($key, $parameters, $domain);
+        $parameterMap = [];
+
+        foreach ($parameters as $parameterKey => $parameterValue) {
+            $parameterMap[(string) $parameterKey] = $parameterValue;
+        }
+
+        return $this->getTranslator($locale)->translate($key, $parameterMap, $domain);
     }
 
     /**

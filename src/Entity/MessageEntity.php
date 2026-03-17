@@ -109,7 +109,7 @@ class MessageEntity implements StoredMessage
         $result = new self();
         $result->key = $this->key;
         $result->format = $this->format;
-        $result->domain = $domain;
+        $result->domain = $domain ?? 'messages';
         $result->locale = $this->locale;
 
         return $result;

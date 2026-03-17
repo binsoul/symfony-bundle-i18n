@@ -42,18 +42,12 @@ abstract class AbstractAddressFieldConstraint extends Constraint
         ?array $groups = null,
         public ?string $countryField = null,
         public ?string $countryCodeLiteral = null,
-        /**
-         * @var (callable(object|null, ExecutionContextInterface): ?string)|null
-         */
         public $countryResolver = null,
         public ?bool $forceOptional = null,
         public bool $forceRequired = false,
         public string $messageNotBlank = 'This value should not be blank.',
         public string $messageRegex = 'This value is not valid.',
         public string $messageCountryNotSupported = 'The country "{{ country }}" is not supported.',
-        /**
-         * @var (callable(string|null): (string|null))|null
-         */
         public $normalizer = null,
         public mixed $payload = null,
     ) {

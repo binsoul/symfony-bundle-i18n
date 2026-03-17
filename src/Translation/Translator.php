@@ -8,6 +8,8 @@ use BinSoul\Common\I18n\DefaultLocale;
 use BinSoul\Common\I18n\DefaultTranslatedMessage;
 use BinSoul\Common\I18n\DefaultTranslator;
 use BinSoul\Common\I18n\Locale;
+use BinSoul\Common\I18n\Message;
+use BinSoul\Common\I18n\PluralizedMessage;
 use BinSoul\Common\I18n\TranslatedMessage;
 use InvalidArgumentException;
 use Locale as IntlLocale;
@@ -25,20 +27,20 @@ class Translator extends DefaultTranslator
     /**
      * Constructs an instance of this class.
      *
-     * @param TranslatorInterface|TranslatorBagInterface|LocaleAwareInterface $translator
+     * @param TranslatorInterface&TranslatorBagInterface&LocaleAwareInterface $translator
      */
     public function __construct($translator, ?Locale $locale = null)
     {
         parent::__construct($locale ?? DefaultLocale::fromString(IntlLocale::getDefault()));
 
         if (! $translator instanceof TranslatorInterface || ! $translator instanceof TranslatorBagInterface || ! $translator instanceof LocaleAwareInterface) {
-            throw new InvalidArgumentException(sprintf('The Translator "%s" must implement TranslatorInterface, TranslatorBagInterface and LocaleAwareInterface.', $translator::class));
+            throw new InvalidArgumentException(sprintf('The Translator "%s" must implement TranslatorInterface, TranslatorBagInterface and LocaleAwareInterface.', get_class($translator)));
         }
 
         $this->translator = $translator;
     }
 
-    public function translate($key, array $parameters = [], ?string $domain = null): TranslatedMessage
+    public function translate(string|Message|PluralizedMessage $key, array $parameters = [], ?string $domain = null): TranslatedMessage
     {
         /** @var DefaultTranslatedMessage $message */
         $message = parent::translate($key, $parameters, $domain);

@@ -43,7 +43,7 @@ class AddressValidationHelper
      * @param AbstractAddressFieldConstraint $constraint The constraint being validated
      * @param ExecutionContextInterface      $context    The validation context
      *
-     * @return array{?string, ?string} A tuple containing [resolved country code, attempted country code]
+     * @return array{0: ?string, 1: ?string} A tuple containing [resolved country code, attempted country code]
      */
     public function resolveCountryCode(AbstractAddressFieldConstraint $constraint, ExecutionContextInterface $context): array
     {
@@ -56,8 +56,10 @@ class AddressValidationHelper
         }
 
         // 2. Country resolver
-        if ($attempted === null && $constraint->countryResolver !== null && is_callable($constraint->countryResolver)) {
-            $resolverValue = ($constraint->countryResolver)($object, $context);
+        if ($attempted === null && $constraint->countryResolver !== null) {
+            /** @var callable(object|null, ExecutionContextInterface): ?string $resolver */
+            $resolver = $constraint->countryResolver;
+            $resolverValue = $resolver($object, $context);
 
             if (is_string($resolverValue) && trim($resolverValue) !== '') {
                 $attempted = strtoupper(trim($resolverValue));
@@ -101,7 +103,7 @@ class AddressValidationHelper
      * @param string $country The ISO 3166-1 alpha-2 country code
      * @param string $field   The name of the address field
      *
-     * @return array{?string, ?string} A tuple containing usage (null, "required", "optional") and regex pattern
+     * @return array{0: ?string, 1: ?string} A tuple containing usage (null, "required", "optional") and regex pattern
      */
     public function getTemplates(string $country, string $field): array
     {
