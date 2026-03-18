@@ -8,11 +8,13 @@ use BinSoul\Symfony\Bundle\Doctrine\EventListener\AbstractPrefixListener;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\Events;
 
-#[AsDoctrineListener(event: Events::loadClassMetadata)]
-class TablePrefixListener extends AbstractPrefixListener
-{
-    public function __construct(string $prefix)
+if (class_exists(AbstractPrefixListener::class)) {
+    #[AsDoctrineListener(event: Events::loadClassMetadata)]
+    class TablePrefixListener extends AbstractPrefixListener
     {
-        parent::__construct($prefix, 'BinSoul\\Symfony\\Bundle\\I18n\\');
+        public function __construct(string $prefix)
+        {
+            parent::__construct($prefix, 'BinSoul\\Symfony\\Bundle\\I18n\\');
+        }
     }
 }
